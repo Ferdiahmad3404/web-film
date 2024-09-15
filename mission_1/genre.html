@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flowbite@1.5.1/dist/flowbite.min.css">
+    <link href="./output.css" rel="stylesheet">
     <title>Genre List</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
       /* Custom Styles for Sidebar */
       #sidebar {
@@ -33,114 +34,155 @@
 <body class=" bg-gray-100">
     <div class="flex">
         <!-- Sidebar -->
-        <aside class="w-64 h-screen bg-gray-100 border-r border-gray-300 text-gray-800 flex flex-col">
+        <aside class="w-64 h-screen bg-black bg-opacity-5 rounded-r-xl rounded-b-xl flex flex-col">
             <div class="p-6">
-                <h1 class="text-3xl font-bold mb-6">CMS Film List</h1>
+                <h1 class="text-3xl font-bold mb-6">DramaKu</h1>
             </div>
             <nav class="flex-1">
                 <ul>
-                    <li class="group">
-                        <a href="cms.html" class="flex items-center px-4 py-3 text-lg hover:bg-gray-200 rounded transition duration-200">
+                    <!-- Drama dropdown -->
+                    <li class="relative group">
+                        <a href="#" class="flex items-center px-4 py-3 text-lg hover:bg-yellow-900 hover:text-white rounded transition duration-200">
                             <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h1M4 6h16M4 14h16M4 18h16"></path>
                             </svg>
                             Drama
+                            <svg class="w-4 h-4 ml-auto transition-transform transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </a>
+                        <ul class="absolute left-0 hidden w-full text-gray-900 bg-neutral-300 rounded-lg shadow-lg group-hover:block">
+                            <li><a href="#" class="block px-4 py-2 hover:bg-yellow-900 hover:text-white rounded transition duration-150">Validate</a></li>
+                            <li><a href="#" class="block px-4 py-2 hover:bg-yellow-900 hover:text-white rounded transition duration-150">Input Drama</a></li>
+                        </ul>
+                    </li>
+                    <li class="group">
+                        <a href="#" class="flex items-center px-4 py-3 text-lg hover:bg-yellow-900 hover:text-white rounded transition duration-200">
+                            <svg class="w-6 h-6 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M4.37 7.657c2.063.528 2.396 2.806 3.202 3.87 1.07 1.413 2.075 1.228 3.192 2.644 1.805 2.289 1.312 5.705 1.312 6.705M20 15h-1a4 4 0 0 0-4 4v1M8.587 3.992c0 .822.112 1.886 1.515 2.58 1.402.693 2.918.351 2.918 2.334 0 .276 0 2.008 1.972 2.008 2.026.031 2.026-1.678 2.026-2.008 0-.65.527-.9 1.177-.9H20M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                            </svg>                                              
+                            Genres
                         </a>
                     </li>
                     <li class="group">
-                        <a href="countries.html" class="flex items-center px-4 py-3 text-lg hover:bg-gray-200 rounded transition duration-200">
-                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1M12 12V9"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 8h.01M8 12h.01M8 16h.01M12 8h.01M12 16h.01M16 8h.01M16 12h.01M16 16h.01M20 20h-16V4h16V20z"></path>
-                            </svg>
-                            Countries
+                        <a href="#" class="flex items-center px-4 py-3 text-lg hover:bg-yellow-900 hover:text-white rounded transition duration-200">
+                            <svg class="w-6 h-6 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m7.171 12.906-2.153 6.411 2.672-.89 1.568 2.34 1.825-5.183m5.73-2.678 2.154 6.411-2.673-.89-1.568 2.34-1.825-5.183M9.165 4.3c.58.068 1.153-.17 1.515-.628a1.681 1.681 0 0 1 2.64 0 1.68 1.68 0 0 0 1.515.628 1.681 1.681 0 0 1 1.866 1.866c-.068.58.17 1.154.628 1.516a1.681 1.681 0 0 1 0 2.639 1.682 1.682 0 0 0-.628 1.515 1.681 1.681 0 0 1-1.866 1.866 1.681 1.681 0 0 0-1.516.628 1.681 1.681 0 0 1-2.639 0 1.681 1.681 0 0 0-1.515-.628 1.681 1.681 0 0 1-1.867-1.866 1.681 1.681 0 0 0-.627-1.515 1.681 1.681 0 0 1 0-2.64c.458-.361.696-.935.627-1.515A1.681 1.681 0 0 1 9.165 4.3ZM14 9a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"/>
+                            </svg>                                              
+                            Awards
                         </a>
                     </li>
                     <li class="group">
-                        <a href="#" class="flex items-center px-4 py-3 text-lg hover:bg-gray-200 rounded transition duration-200">
-                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 11l1.65 1.528a2 2 0 002.708 0L12 9m0 0l4.642 3.528a2 2 0 002.708 0L21 11M12 9v10"></path>
-                            </svg>
-                            Award
+                        <a href="#" class="flex items-center px-4 py-3 text-lg bg-yellow-900 text-white hover:bg-yellow-900 hover:text-white rounded transition duration-200">
+                            <svg class="w-6 h-6 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5Zm16 14a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2ZM4 13a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-6Zm16-2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v6Z"/>
+                            </svg>                                              
+                            Genres
                         </a>
                     </li>
                     <li class="group">
-                        <a href="genre.html" class="flex items-center px-4 py-3 text-lg hover:bg-gray-200 rounded transition duration-200">
-                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422A12.083 12.083 0 0118 14.588M12 14v8"></path>
-                            </svg>
-                            Genre
-                        </a>
-                    </li>
-                    <li class="group">
-                        <a href="#" class="flex items-center px-4 py-3 text-lg hover:bg-gray-200 rounded transition duration-200">
-                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121a4.5 4.5 0 010-6.364M9.879 9.879a4.5 4.5 0 016.364 0M19.07 4.93a10 10 0 00-14.14 0M4.93 19.07a10 10 0 0114.14 0"></path>
-                            </svg>
+                        <a href="#" class="flex items-center px-4 py-3 text-lg hover:bg-yellow-900 hover:text-white rounded transition duration-200">
+                            <svg class="w-6 h-6 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M4.5 17H4a1 1 0 0 1-1-1 3 3 0 0 1 3-3h1m0-3.05A2.5 2.5 0 1 1 9 5.5M19.5 17h.5a1 1 0 0 0 1-1 3 3 0 0 0-3-3h-1m0-3.05a2.5 2.5 0 1 0-2-4.45m.5 13.5h-7a1 1 0 0 1-1-1 3 3 0 0 1 3-3h3a3 3 0 0 1 3 3 1 1 0 0 1-1 1Zm-1-9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"/>
+                            </svg>                                              
                             Actors
                         </a>
                     </li>
                     <li class="group">
-                        <a href="#" class="flex items-center px-4 py-3 text-lg hover:bg-gray-200 rounded transition duration-200">
-                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v12h2V5h8v10h2V3z"></path>
+                        <a href="#" class="flex items-center px-4 py-3 text-lg hover:bg-yellow-900 hover:text-white rounded transition duration-200">
+                            <svg class="w-6 h-6 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.556 8.5h8m-8 3.5H12m7.111-7H4.89a.896.896 0 0 0-.629.256.868.868 0 0 0-.26.619v9.25c0 .232.094.455.26.619A.896.896 0 0 0 4.89 16H9l3 4 3-4h4.111a.896.896 0 0 0 .629-.256.868.868 0 0 0 .26-.619v-9.25a.868.868 0 0 0-.26-.619.896.896 0 0 0-.63-.256Z"/>
                             </svg>
+                            Comments
+                        </a>
+                    </li>
+                    <li class="group">
+                        <a href="#" class="flex items-center px-4 py-3 text-lg hover:bg-yellow-900 hover:text-white rounded transition duration-200">
+                            <svg class="w-6 h-6 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-width="2" d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                            </svg>  
                             Users
                         </a>
                     </li>
                     <li class="group">
-                        <a href="#" class="flex items-center px-4 py-3 text-lg hover:bg-gray-200 rounded transition duration-200">
+                        <a href="#" class="flex items-center px-4 py-3 text-lg hover:bg-yellow-900 hover:text-white rounded transition duration-200">
                             <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7"></path>
                             </svg>
                             Logout
                         </a>
                     </li>
-                    <!-- Add more navigation items as needed -->
                 </ul>
             </nav>
         </aside>
     
         <!-- Main Content -->
         <main class="flex-1 bg-gray-100 p-6">
-            <h1 class="text-3xl font-bold mb-6">Genres</h1>
-    
-            <!-- Form to Add New Genre -->
-            <div class="mb-6">
-                <h2 class="text-xl mb-2">Add New Genre</h2>
-                <div class="flex items-center space-x-2">
-                    <input type="text" id="new-genre" class="border border-gray-400 px-4 py-2 rounded w-full" placeholder="Enter genre name">
-                    <button onclick="addGenre()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add</button>
+            <div class="w-full p-9">
+                <div class=" flex flex-col justify-between">
+                    <h1 class="text-2xl mb-5 font-medium">Add New Genres</h1>
+                    <div>
+                        <div class="flex justify-between items-center">
+                            <div class="relative items-center justify-between w-4/6 mb-10 space-x-2 z-0 group">
+                                <input type="text" name="floating_name" id="new-genres" class="block py-2.5 px-0 w-full text-sm text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                                <label for="floating_name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Genre Name</label>
+                            </div>
+                            <button onclick="addGenre()" class="flex w-1/6 h-10 mb-10 items-center justify-center bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600">Add</button>
+                        </div>
+
+                        <!-- Search and Sort Options -->
+                        <div class="flex justify-between mb-4">
+                            <!-- Search Bar -->
+                            <div class="flex items-center space-x-2">
+                                <input type="text" id="search-bar" class="border border-gray-400 px-4 py-2 rounded-full" placeholder="Search genre" oninput="filterGenres()">
+                            </div>
+                
+                            <!-- Sort Options -->
+                            <div class="flex items-center space-x-2 w-1/6">
+                                <label for="sort-options" class="mr-2 w-full">Sort by:</label>
+                                <select id="sort-options" class="w-full border border-gray-400 px-4 py-2 rounded-full" onchange="sortGenres()">
+                                    <option value="a-z">A-Z</option>
+                                    <option value="z-a">Z-A</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search and Sort Options -->
+                <div class="flex justify-between mb-4">
+                    <!-- Search Bar -->
+                    <div class="flex gap-3 w-full">
+                        
+                    </div>
+        
+                    <!-- Sort Options -->
+                    
+                </div>
+
+                <!-- Genre List -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-yellow-900 dark:text-white">
+                            <tr>
+                                <th scope="col" class="w-1/12 px-4 py-4 sr-only">No</th>
+                                <th scope="col" class="w-9/12 px-4 py-4">Genre</th>
+                                <th scope="col" class="w-2/12 px-4 py-3">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b dark:border-gray-700">
+                                <!--  -->
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-    
-            <!-- Search and Sort Options -->
-            <div class="flex justify-between mb-4">
-                <!-- Search Bar -->
-                <div class="flex items-center space-x-2">
-                    <input type="text" id="search-bar" class="border border-gray-400 px-4 py-2 rounded" placeholder="Search country" oninput="filterGenres()">
-                </div>
-    
-                <!-- Sort Options -->
-                <div class="flex items-center space-x-2">
-                    <label for="sort-options" class="mr-2">Sort by:</label>
-                    <select id="sort-options" class="border border-gray-400 px-4 py-2 rounded" onchange="sortGenres()">
-                        <option value="a-z">A-Z</option>
-                        <option value="z-a">Z-A</option>
-                    </select>
-                </div>
-            </div>
-    
-            <!-- Genre List -->
-            <ul id="genre-list" class="space-y-3 bg-white p-4 rounded shadow">
-                <!-- Genre items will be inserted here by JavaScript -->
-            </ul>
         </main>
     
         <!-- Sidenav -->
         <div class="flex z-30">
-            <div class="bg-yellow-900 bg-opacity-90 p-4 h-screen sticky top-0 ">
+            <div class="bg-yellow-900 p-4 h-screen sticky top-0 ">
                 <div class="text-2xl font-bold text-white flex flex-col justify-center">
                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M15.907 11.998 10.332 9.23a.9.9 0 0 1-.16-.037l-.018-.007v6.554c0 .017.008.034.01.051l2.388-2.974 3.355-.82Z"/>
@@ -159,7 +201,7 @@
         <!-- Sidebar Popup -->
             <div id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-yellow-900 shadow-lg z-50 p-8">
                 <div class="flex justify-between items-center mb-12">
-                    <h2 class="text-2xl font-bold text-white">Countries</h2>
+                    <h2 class="text-2xl font-bold text-white">Genres</h2>
                     <button id="close-btn" class="text-2xl text-white">&times;</button>
                 </div>
                 <nav>
@@ -176,123 +218,167 @@
     
   <!-- JavaScript for functionality -->
   <script>
-      let genres = ['Romance', 'Comedy', 'Sci-fi', 'Mystery', 'Horror'];
+        // 
+        // CRUD
+        // 
+        document.addEventListener('DOMContentLoaded', function() {
+        const genresTableBody= document.querySelector('tbody');
+        const newCountryInput = document.getElementById('new-genres');
+        const searchInput = document.getElementById('search-bar');
+        const sortSelect = document.getElementById('sort-options');
 
-      // Function to render the country list
-      function renderGenres(filteredGenres = genres) {
-          const genreList = document.getElementById('genre-list');
-          genreList.innerHTML = '';
+        let genres = [
+                {id: 1, name: 'Romance'},
+                {id: 2, name: 'Comedy'},
+                {id: 3, name: 'Sci-fi'},
+                {id: 4, name: 'Mystery'},
+                {id: 5, name: 'Horror'}
+        ];
 
-          filteredGenres.forEach((genre, index) => {
-              const li = document.createElement('li');
-              li.className = 'flex justify-between items-center p-3 bg-gray-100 rounded border border-gray-300';
-              li.innerHTML = `
-                  <span>${genre}</span>
-                  <button onclick="deleteGenre(${index})" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
-              `;
-              genreList.appendChild(li);
-          });
-      }
+        // Function to render the genres list
+        function renderGenres(filteredGenres = genres) {
+                genresTableBody.innerHTML = '';
 
-      // Function to add a new country
-      function addGenre() {
-          const newGenreInput = document.getElementById('new-genre');
-          const newGenre = newGenreInput.value.trim();
+                filteredGenres.forEach((genre, index) => {
+                    const row = document.createElement('tr');
+                    row.classList.add('border-b', 'dark:border-gray-700');
+                    
+                    row.innerHTML = `
+                        <th scope="row" class="px-4 py-3 font-medium dark:text-black">${index + 1}</th>
+                        <th scope="row" class="px-4 py-3 font-medium dark:text-black">${genre.name}</th>
+                        <td class="text-center flex items-center justify-end">
+                            <button onclick="editGenre(${genre.id})" class="flex py-2 px-4 hover:text-blue-600 dark:hover:text-blue-600 text-black">
+                                <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
+                                </svg>
+                                Edit
+                            </button>
+                            <span class="text-black">|</span>
+                            <button onclick="deleteGenre(${genre.id})" class="flex items-center py-2 px-4 hover:text-blue-600 dark:hover:text-red-600 text-black">
+                                <svg class="w-4 h-4 mr-2" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M6.09922 0.300781C5.93212 0.30087 5.76835 0.347476 5.62625 0.435378C5.48414 0.523281 5.36931 0.649009 5.29462 0.798481L4.64302 2.10078H1.59922C1.36052 2.10078 1.13161 2.1956 0.962823 2.36439C0.79404 2.53317 0.699219 2.76209 0.699219 3.00078C0.699219 3.23948 0.79404 3.46839 0.962823 3.63718C1.13161 3.80596 1.36052 3.90078 1.59922 3.90078V12.9008C1.59922 13.3782 1.78886 13.836 2.12643 14.1736C2.46399 14.5111 2.92183 14.7008 3.39922 14.7008H10.5992C11.0766 14.7008 11.5344 14.5111 11.872 14.1736C12.2096 13.836 12.3992 13.3782 12.3992 12.9008V3.90078C12.6379 3.90078 12.8668 3.80596 13.0356 3.63718C13.2044 3.46839 13.2992 3.23948 13.2992 3.00078C13.2992 2.76209 13.2044 2.53317 13.0356 2.36439C12.8668 2.1956 12.6379 2.10078 12.3992 2.10078H9.35542L8.70382 0.798481C8.62913 0.649009 8.5143 0.523281 8.37219 0.435378C8.23009 0.347476 8.06631 0.30087 7.89922 0.300781H6.09922ZM4.29922 5.70078C4.29922 5.46209 4.39404 5.23317 4.56282 5.06439C4.73161 4.8956 4.96052 4.80078 5.19922 4.80078C5.43791 4.80078 5.66683 4.8956 5.83561 5.06439C6.0044 5.23317 6.09922 5.46209 6.09922 5.70078V11.1008C6.09922 11.3395 6.0044 11.5684 5.83561 11.7372C5.66683 11.906 5.43791 12.0008 5.19922 12.0008C4.96052 12.0008 4.73161 11.906 4.56282 11.7372C4.39404 11.5684 4.29922 11.3395 4.29922 11.1008V5.70078ZM8.79922 4.80078C8.56052 4.80078 8.33161 4.8956 8.16282 5.06439C7.99404 5.23317 7.89922 5.46209 7.89922 5.70078V11.1008C7.89922 11.3395 7.99404 11.5684 8.16282 11.7372C8.33161 11.906 8.56052 12.0008 8.79922 12.0008C9.03791 12.0008 9.26683 11.906 9.43561 11.7372C9.6044 11.5684 9.69922 11.3395 9.69922 11.1008V5.70078C9.69922 5.46209 9.6044 5.23317 9.43561 5.06439C9.26683 4.8956 9.03791 4.80078 8.79922 4.80078Z" />
+                                </svg>
+                                Delete
+                            </button>
+                        </td>
+                    `;
 
-          if (newGenre && !genres.includes(newGenre)) {
-              genres.push(newGenre);
-              newGenreInput.value = '';
-              renderGenres();
-          }
-      }
+                    genresTableBody.appendChild(row);
+                });
+            }
 
-      // Function to delete a country
-      function deleteGenre(index) {
-          genres.splice(index, 1);
-          renderGenres();
-      }
+        // Add a new genre
+        window.addGenre = function() {
+            const genreName = newGenreInput.value.trim();
+            if (genreName && !genres.some(genre => genre.name === genreName)) {
+                const newId = genres.length > 0 ? Math.max(...genres.map(genre => genre.id)) + 1 : 1;
+                genres.push({ id: newId, name: genreName });
+                newGenreInput.value = '';
+                sortGenres();
+            }
+        };
 
-      // Function to sort genres alphabetically
-      function sortGenres() {
-          const sortOption = document.getElementById('sort-options').value;
-          const sortedGenres = [...genres];
+        // Edit genre
+        window.editGenre = function(id) {
+            const genre = genres.find(c => c.id === id);
+            const newName = prompt('Edit genre name:', genre.name);
+            if (newName && newName.trim() !== '') {
+                genre.name = newName.trim();
+                sortGenres();
+            }
+        };
 
-          if (sortOption === 'a-z') {
-              sortedGenres.sort();
-          } else if (sortOption === 'z-a') {
-              sortedGenres.sort().reverse();
-          }
+        // Delete genre
+        window.deleteGenre = function(id) {
+            if (confirm('Are you sure you want to delete this genre?')) {
+                genres = genres.filter(genre => genre.id !== id);
+                renderGenres();
+            }
+        };
 
-          renderGenres(sortedGenres);
-      }
+        // Sort genres
+        function sortGenres() {
+            const sortOption = sortSelect.value;
+            const sortedGenres = [...genres];
 
-      // Function to filter genres based on search input
-      function filterGenres() {
-          const searchInput = document.getElementById('search-bar').value.toLowerCase();
-          const filteredGenres = genres.filter(genre => genre.toLowerCase().includes(searchInput));
+            if (sortOption === 'a-z') {
+                sortedGenres.sort((a, b) => a.name.localeCompare(b.name));
+            } else if (sortOption === 'z-a') {
+                sortedGenres.sort((a, b) => b.name.localeCompare(a.name));
+            }
 
-          renderGenres(filteredGenres);
-      }
+            renderGenres(sortedGenres);
+        }
 
-      // Initial render
-      renderGenres();
+        // Filter genres
+        function filterGenres() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const filteredGenres = genres.filter(genre => genre.name.toLowerCase().includes(searchTerm));
+            renderGenres(filteredGenres);
+        }
 
-      const openBtn = document.getElementById('open-btn');
-            const closeBtn = document.getElementById('close-btn');
-            const sidebar = document.getElementById('sidebar');
+        // Attach event listeners
+        sortSelect.addEventListener('change', sortGenres);
+        searchInput.addEventListener('input', filterGenres);
 
-            openBtn.addEventListener('click', () => {
-                sidebar.classList.add('active');
-            });
+        // Initial render
+        renderGenres();
+    });
 
-            closeBtn.addEventListener('click', () => {
-                sidebar.classList.remove('active');
-            });
+        // 
+        // Sidebarrrrr
+        // 
+        const openBtn = document.getElementById('open-btn');
+                const closeBtn = document.getElementById('close-btn');
+                const sidebar = document.getElementById('sidebar');
 
-            document.addEventListener('DOMContentLoaded', function () {
-                const items = document.querySelectorAll('[data-carousel-item]');
-                const prevButton = document.querySelector('[data-carousel-prev]');
-                const nextButton = document.querySelector('[data-carousel-next]');
-                const indicators = document.querySelectorAll('[data-carousel-slide-to]');
-                let currentIndex = 0;
-
-                function showSlide(index) {
-                    items.forEach((item, i) => {
-                        item.classList.add('hidden');
-                        indicators[i].setAttribute('aria-current', 'false');
-                    });
-                    items[index].classList.remove('hidden');
-                    indicators[index].setAttribute('aria-current', 'true');
-                }
-
-                function nextSlide() {
-                    currentIndex = (currentIndex + 1) % items.length;
-                    showSlide(currentIndex);
-                }
-
-                function prevSlide() {
-                    currentIndex = (currentIndex - 1 + items.length) % items.length;
-                    showSlide(currentIndex);
-                }
-
-                prevButton.addEventListener('click', prevSlide);
-                nextButton.addEventListener('click', nextSlide);
-                indicators.forEach((indicator, index) => {
-                    indicator.addEventListener('click', () => {
-                        currentIndex = index;
-                        showSlide(currentIndex);
-                    });
+                openBtn.addEventListener('click', () => {
+                    sidebar.classList.add('active');
                 });
 
-                // Initialize carousel
-                showSlide(currentIndex);
+                closeBtn.addEventListener('click', () => {
+                    sidebar.classList.remove('active');
+                });
 
-                // Auto-slide (optional)
-                setInterval(nextSlide, 3000); // Change slide every 3 seconds
+        document.addEventListener('DOMContentLoaded', function () {
+            const items = document.querySelectorAll('[data-carousel-item]');
+            const prevButton = document.querySelector('[data-carousel-prev]');
+            const nextButton = document.querySelector('[data-carousel-next]');
+            const indicators = document.querySelectorAll('[data-carousel-slide-to]');
+            let currentIndex = 0;
+            function showSlide(index) {
+                items.forEach((item, i) => {
+                    item.classList.add('hidden');
+                    indicators[i].setAttribute('aria-current', 'false');
+                });
+                items[index].classList.remove('hidden');
+                indicators[index].setAttribute('aria-current', 'true');
+            }
+            function nextSlide() {
+                currentIndex = (currentIndex + 1) % items.length;
+                showSlide(currentIndex);
+            }
+            function prevSlide() {
+                currentIndex = (currentIndex - 1 + items.length) % items.length;
+                showSlide(currentIndex);
+            }
+            prevButton.addEventListener('click', prevSlide);
+            nextButton.addEventListener('click', nextSlide);
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => {
+                    currentIndex = index;
+                    showSlide(currentIndex);
+                });
             });
+            // Initialize carousel
+            showSlide(currentIndex);
+            // Auto-slide (optional)
+            setInterval(nextSlide, 3000); // Change slide every 3 seconds
+        });
   </script>
 </body>
-<footer class="bg-white shadow dark:bg-opacity-90 dark:bg-yellow-900 p-10">
+<footer class="shadow bg-yellow-900 p-10">
     <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
         <div class="sm:flex sm:items-center sm:justify-between">
             <a href="https://flowbite.com/" class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
