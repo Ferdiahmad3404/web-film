@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genre List</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+      /* Custom Styles for Sidebar */
+      #sidebar {
+          transform: translateX(750%);
+          transition: transform 0.3s ease-in-out;
+      }
+
+      #sidebar.active {
+          transform: translateX(650%);
+      }
+
+      .sidebar-link:hover::after {
+          width: 100%;
+      }
+
+      .sidebar-link::after {
+          content: '';
+          display: block;
+          width: 0;
+          height: 2px;
+          background: #fff;
+          transition: width 0.3s;
+      }
+  </style>
+</head>
+<body class=" bg-gray-100">
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside class="w-64 h-screen bg-gray-100 border-r border-gray-300 text-gray-800 flex flex-col">
+            <div class="p-6">
+                <h1 class="text-3xl font-bold mb-6">CMS Film List</h1>
+            </div>
+            <nav class="flex-1">
+                <ul>
+                    <li class="group">
+                        <a href="cms.html" class="flex items-center px-4 py-3 text-lg hover:bg-gray-200 rounded transition duration-200">
+                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h1M4 6h16M4 14h16M4 18h16"></path>
+                            </svg>
+                            Drama
+                        </a>
+                    </li>
+                    <li class="group">
+                        <a href="countries.html" class="flex items-center px-4 py-3 text-lg hover:bg-gray-200 rounded transition duration-200">
+                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1M12 12V9"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 8h.01M8 12h.01M8 16h.01M12 8h.01M12 16h.01M16 8h.01M16 12h.01M16 16h.01M20 20h-16V4h16V20z"></path>
+                            </svg>
+                            Countries
+                        </a>
+                    </li>
+                    <li class="group">
+                        <a href="#" class="flex items-center px-4 py-3 text-lg hover:bg-gray-200 rounded transition duration-200">
+                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 11l1.65 1.528a2 2 0 002.708 0L12 9m0 0l4.642 3.528a2 2 0 002.708 0L21 11M12 9v10"></path>
+                            </svg>
+                            Award
+                        </a>
+                    </li>
+                    <li class="group">
+                        <a href="genre.html" class="flex items-center px-4 py-3 text-lg hover:bg-gray-200 rounded transition duration-200">
+                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422A12.083 12.083 0 0118 14.588M12 14v8"></path>
+                            </svg>
+                            Genre
+                        </a>
+                    </li>
+                    <li class="group">
+                        <a href="#" class="flex items-center px-4 py-3 text-lg hover:bg-gray-200 rounded transition duration-200">
+                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121a4.5 4.5 0 010-6.364M9.879 9.879a4.5 4.5 0 016.364 0M19.07 4.93a10 10 0 00-14.14 0M4.93 19.07a10 10 0 0114.14 0"></path>
+                            </svg>
+                            Actors
+                        </a>
+                    </li>
+                    <li class="group">
+                        <a href="#" class="flex items-center px-4 py-3 text-lg hover:bg-gray-200 rounded transition duration-200">
+                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v12h2V5h8v10h2V3z"></path>
+                            </svg>
+                            Users
+                        </a>
+                    </li>
+                    <li class="group">
+                        <a href="#" class="flex items-center px-4 py-3 text-lg hover:bg-gray-200 rounded transition duration-200">
+                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7"></path>
+                            </svg>
+                            Logout
+                        </a>
+                    </li>
+                    <!-- Add more navigation items as needed -->
+                </ul>
+            </nav>
+        </aside>
+    
+        <!-- Main Content -->
+        <main class="flex-1 bg-gray-100 p-6">
+            <h1 class="text-3xl font-bold mb-6">Genres</h1>
+    
+            <!-- Form to Add New Genre -->
+            <div class="mb-6">
+                <h2 class="text-xl mb-2">Add New Genre</h2>
+                <div class="flex items-center space-x-2">
+                    <input type="text" id="new-genre" class="border border-gray-400 px-4 py-2 rounded w-full" placeholder="Enter genre name">
+                    <button onclick="addGenre()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add</button>
+                </div>
+            </div>
+    
+            <!-- Search and Sort Options -->
+            <div class="flex justify-between mb-4">
+                <!-- Search Bar -->
+                <div class="flex items-center space-x-2">
+                    <input type="text" id="search-bar" class="border border-gray-400 px-4 py-2 rounded" placeholder="Search country" oninput="filterGenres()">
+                </div>
+    
+                <!-- Sort Options -->
+                <div class="flex items-center space-x-2">
+                    <label for="sort-options" class="mr-2">Sort by:</label>
+                    <select id="sort-options" class="border border-gray-400 px-4 py-2 rounded" onchange="sortGenres()">
+                        <option value="a-z">A-Z</option>
+                        <option value="z-a">Z-A</option>
+                    </select>
+                </div>
+            </div>
+    
+            <!-- Genre List -->
+            <ul id="genre-list" class="space-y-3 bg-white p-4 rounded shadow">
+                <!-- Genre items will be inserted here by JavaScript -->
+            </ul>
+        </main>
+    
+        <!-- Sidenav -->
+        <div class="flex z-30">
+            <div class="bg-yellow-900 bg-opacity-90 p-4 h-screen sticky top-0 ">
+                <div class="text-2xl font-bold text-white flex flex-col justify-center">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M15.907 11.998 10.332 9.23a.9.9 0 0 1-.16-.037l-.018-.007v6.554c0 .017.008.034.01.051l2.388-2.974 3.355-.82Z"/>
+                        <path d="m11.463 4.054 5.579 3.323A4.02 4.02 0 0 1 18.525 9c.332.668.47 1.414.398 2.155a3.07 3.07 0 0 1-.745 1.65 3.108 3.108 0 0 1-1.55.951c-.022.007-.045.005-.07.01-.062.03-.126.057-.191.08l-2.72.667-1.992 2.48c-.18.227-.41.409-.67.534.047.034.085.077.137.107a2.05 2.05 0 0 0 1.995.035c.592-.33 2.15-1.201 4.636-2.892l.28-.19c1.328-.895 3.616-2.442 3.967-4.215a9.94 9.94 0 0 0-1.713-4.154 10.027 10.027 0 0 0-3.375-2.989 10.107 10.107 0 0 0-8.802-.418c1.162.287 2.287.704 3.354 1.243Z"/>
+                        <path d="M5.382 17.082v-6.457a3.7 3.7 0 0 1 .45-1.761 3.733 3.733 0 0 1 1.238-1.34 3.915 3.915 0 0 1 3.433-.245c.176.03.347.084.508.161l5.753 2.856c.082.05.161.105.236.165a2.128 2.128 0 0 0-.953-1.455l-5.51-3.284c-1.74-.857-3.906-1.523-5.244-1.097a9.96 9.96 0 0 0-2.5 3.496 9.895 9.895 0 0 0 .283 8.368 9.973 9.973 0 0 0 2.73 3.322 17.161 17.161 0 0 1-.424-2.729Z"/>
+                        <path d="m19.102 16.163-.272.183c-2.557 1.74-4.169 2.64-4.698 2.935a4.083 4.083 0 0 1-2 .53 3.946 3.946 0 0 1-1.983-.535 3.788 3.788 0 0 1-1.36-1.361 3.752 3.752 0 0 1-.51-1.85 1.812 1.812 0 0 1-.043-.26V9.143c0-.024.009-.046.01-.07-.056.02-.11.043-.162.07a1.796 1.796 0 0 0-.787 1.516v6.377a10.67 10.67 0 0 0 1.113 4.27 10.11 10.11 0 0 0 8.505-.53 10.022 10.022 0 0 0 3.282-2.858 9.936 9.936 0 0 0 1.75-3.97 19.615 19.615 0 0 1-2.845 2.216Z"/>
+                    </svg>
+                </div>
+                
+                <!-- Toggle Sidebar Button -->
+                <div class="absolute right-1/3 top-1/2">
+                    <button id="open-btn" class="text-3xl text-white">&equiv;</button>
+                </div>
+            </div>
+    
+        <!-- Sidebar Popup -->
+            <div id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-yellow-900 shadow-lg z-50 p-8">
+                <div class="flex justify-between items-center mb-12">
+                    <h2 class="text-2xl font-bold text-white">Countries</h2>
+                    <button id="close-btn" class="text-2xl text-white">&times;</button>
+                </div>
+                <nav>
+                    <ul>
+                        <li class="mb-4"><a href="#" class="sidebar-link text-lg text-white">Japan</a></li>
+                        <li class="mb-4"><a href="#" class="sidebar-link text-lg text-white">Korea</a></li>
+                        <li class="mb-4"><a href="#" class="sidebar-link text-lg text-white">China</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>  
+    </div>
+
+    
+  <!-- JavaScript for functionality -->
+  <script>
+      let genres = ['Romance', 'Comedy', 'Sci-fi', 'Mystery', 'Horror'];
+
+      // Function to render the country list
+      function renderGenres(filteredGenres = genres) {
+          const genreList = document.getElementById('genre-list');
+          genreList.innerHTML = '';
+
+          filteredGenres.forEach((genre, index) => {
+              const li = document.createElement('li');
+              li.className = 'flex justify-between items-center p-3 bg-gray-100 rounded border border-gray-300';
+              li.innerHTML = `
+                  <span>${genre}</span>
+                  <button onclick="deleteGenre(${index})" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
+              `;
+              genreList.appendChild(li);
+          });
+      }
+
+      // Function to add a new country
+      function addGenre() {
+          const newGenreInput = document.getElementById('new-genre');
+          const newGenre = newGenreInput.value.trim();
+
+          if (newGenre && !genres.includes(newGenre)) {
+              genres.push(newGenre);
+              newGenreInput.value = '';
+              renderGenres();
+          }
+      }
+
+      // Function to delete a country
+      function deleteGenre(index) {
+          genres.splice(index, 1);
+          renderGenres();
+      }
+
+      // Function to sort genres alphabetically
+      function sortGenres() {
+          const sortOption = document.getElementById('sort-options').value;
+          const sortedGenres = [...genres];
+
+          if (sortOption === 'a-z') {
+              sortedGenres.sort();
+          } else if (sortOption === 'z-a') {
+              sortedGenres.sort().reverse();
+          }
+
+          renderGenres(sortedGenres);
+      }
+
+      // Function to filter genres based on search input
+      function filterGenres() {
+          const searchInput = document.getElementById('search-bar').value.toLowerCase();
+          const filteredGenres = genres.filter(genre => genre.toLowerCase().includes(searchInput));
+
+          renderGenres(filteredGenres);
+      }
+
+      // Initial render
+      renderGenres();
+
+      const openBtn = document.getElementById('open-btn');
+            const closeBtn = document.getElementById('close-btn');
+            const sidebar = document.getElementById('sidebar');
+
+            openBtn.addEventListener('click', () => {
+                sidebar.classList.add('active');
+            });
+
+            closeBtn.addEventListener('click', () => {
+                sidebar.classList.remove('active');
+            });
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const items = document.querySelectorAll('[data-carousel-item]');
+                const prevButton = document.querySelector('[data-carousel-prev]');
+                const nextButton = document.querySelector('[data-carousel-next]');
+                const indicators = document.querySelectorAll('[data-carousel-slide-to]');
+                let currentIndex = 0;
+
+                function showSlide(index) {
+                    items.forEach((item, i) => {
+                        item.classList.add('hidden');
+                        indicators[i].setAttribute('aria-current', 'false');
+                    });
+                    items[index].classList.remove('hidden');
+                    indicators[index].setAttribute('aria-current', 'true');
+                }
+
+                function nextSlide() {
+                    currentIndex = (currentIndex + 1) % items.length;
+                    showSlide(currentIndex);
+                }
+
+                function prevSlide() {
+                    currentIndex = (currentIndex - 1 + items.length) % items.length;
+                    showSlide(currentIndex);
+                }
+
+                prevButton.addEventListener('click', prevSlide);
+                nextButton.addEventListener('click', nextSlide);
+                indicators.forEach((indicator, index) => {
+                    indicator.addEventListener('click', () => {
+                        currentIndex = index;
+                        showSlide(currentIndex);
+                    });
+                });
+
+                // Initialize carousel
+                showSlide(currentIndex);
+
+                // Auto-slide (optional)
+                setInterval(nextSlide, 3000); // Change slide every 3 seconds
+            });
+  </script>
+</body>
+<footer class="bg-white shadow dark:bg-opacity-90 dark:bg-yellow-900 p-10">
+    <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
+        <div class="sm:flex sm:items-center sm:justify-between">
+            <a href="https://flowbite.com/" class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
+                <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" />
+                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">DramaKu</span>
+            </a>
+            <ul class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
+                <li>
+                    <a href="#" class="hover:underline me-4 md:me-6">About</a>
+                </li>
+                <li>
+                    <a href="#" class="hover:underline me-4 md:me-6">Privacy Policy</a>
+                </li>
+                <li>
+                    <a href="#" class="hover:underline me-4 md:me-6">Licensing</a>
+                </li>
+                <li>
+                    <a href="#" class="hover:underline">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <hr class="my-6 border-gray-200 sm:mx-auto dark:border-white lg:my-8" />
+        <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2024 <a href="https://flowbite.com/" class="hover:underline">DramaKu™</a>. All Rights Reserved.</span>
+    </div>
+</footer>
+</html>
