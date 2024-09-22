@@ -113,59 +113,100 @@
             </nav>
         </aside>
 
-        <main class="flex-1 bg-gray-100 p-6">
-            <div class="w-full p-4">
-                <div class="mb-5 flex flex-col justify-between">
-                    <h1 class="text-2xl mb-5 font-medium">Drama Input</h1>
+        <main class="w-full">
+            <div class="flex w-full justify-between px-6 py-8 space-y-6 md:flex-row md:space-y-0">
+                <div class="w-2/6 max-w-sm p-5 flex flex-col">
+                    <button id="change-poster" class="hidden items-center justify-center px-2 py-1 bg-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-400">
+                        Change Poster
+                    </button>
+                    <div class="relative flex flex-col items-center justify-center space-y-4 border-2 border-dashed rounded-lg h-80">
+                        <img id="poster-preview" src="#" alt="Poster Preview" class="hidden w-full h-full object-cover rounded-lg"/>
+                        <label id="poster-label" for="poster-upload" class="cursor-pointer text-gray-500">Upload Poster</label>
+                        <input type="file" id="poster-upload" class="hidden" accept="image/*">
+                    </div>
+                    <button class="w-full px-6 py-3 mt-4 text-sm font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-600">
+                        Submit
+                    </button>
                 </div>
-                <!-- Drama Input Form -->
-                <form class="space-y-4">
-                    <!-- Drama Poster -->
-                    <div>
-                        <label for="poster" class="block text-sm font-medium text-gray-700">Poster Drama</label>
-                        <input type="file" id="poster" name="poster" accept="image/*" class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-yellow-900 focus:border-transparent">
+                <div class="w-full max-w-4xl space-y-6">
+                    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                        <div>
+                            <label for="title" class="block mb-2 text-sm font-medium text-gray-900">Title</label>
+                            <input type="text" id="title" name="title" class="block w-full p-2.5 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label for="alternative_title" class="block mb-2 text-sm font-medium text-gray-900">Alternative Title</label>
+                            <input type="text" id="alternative_title" name="alternative_title" class="block w-full p-2.5 border border-gray-300 rounded-lg">
+                        </div>
                     </div>
-        
-                    <!-- Drama Title -->
-                    <div>
-                        <label for="title" class="block text-sm font-medium text-gray-700">Judul Drama</label>
-                        <input type="text" id="title" name="title" class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-900 focus:border-transparent" placeholder="Masukkan judul drama">
+            
+                    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                        <div>
+                            <label for="year" class="block mb-2 text-sm font-medium text-gray-900">Year</label>
+                            <input type="text" id="year" name="year" class="block w-full p-2.5 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label for="country" class="block mb-2 text-sm font-medium text-gray-900">Country</label>
+                            <input type="text" id="country" name="country" class="block w-full p-2.5 border border-gray-300 rounded-lg">
+                        </div>
                     </div>
-        
-                    <!-- Drama Description -->
+            
                     <div>
-                        <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi</label>
-                        <textarea id="description" name="description" rows="4" class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-900 focus:border-transparent" placeholder="Masukkan deskripsi drama"></textarea>
+                        <label for="synopsis" class="block mb-2 text-sm font-medium text-gray-900">Synopsis</label>
+                        <textarea id="synopsis" name="synopsis" rows="3" class="block w-full p-2.5 border border-gray-300 rounded-lg"></textarea>
                     </div>
-        
-                    <!-- Drama Genre -->
+            
                     <div>
-                        <label for="genre" class="block text-sm font-medium text-gray-700">Genre</label>
-                        <select id="genre" name="genre" class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-900 focus:border-transparent">
-                            <option>Pilih genre</option>
-                            <option>Romance</option>
-                            <option>Comedy</option>
-                            <option>Action</option>
-                            <option>Thriller</option>
-                            <!-- Tambahkan genre lainnya sesuai kebutuhan -->
-                        </select>
+                        <label for="availability" class="block mb-2 text-sm font-medium text-gray-900">Availability</label>
+                        <input type="text" id="availability" name="availability" class="block w-full p-2.5 border border-gray-300 rounded-lg">
                     </div>
-        
-                    <!-- Drama Release Date -->
+            
                     <div>
-                        <label for="release_date" class="block text-sm font-medium text-gray-700">Tanggal Rilis</label>
-                        <input type="date" id="release_date" name="release_date" class="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-900 focus:border-transparent">
+                        <span class="block mb-2 text-sm font-medium text-gray-900">Add Genres</span>
+                        <div class="grid grid-cols-2 gap-2 md:grid-cols-4">
+                            <!-- Checkbox untuk genres -->
+                            <div>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" class="form-checkbox rounded-full">
+                                    <span class="ml-2">Action</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" class="form-checkbox rounded-full">
+                                    <span class="ml-2">Adventure</span>
+                                </label>
+                            </div>
+                            <!-- Tambahkan checkbox lainnya sesuai kebutuhan -->
+                        </div>
                     </div>
-        
-                    <!-- Submit Button -->
+            
                     <div>
-                        <button type="submit" class="mt-4 w-full bg-yellow-900 text-white py-2 px-4 rounded-lg shadow hover:bg-yellow-700 transition duration-200">
-                            Simpan Drama
-                        </button>
+                        <label for="actors" class="block mb-2 text-sm font-medium text-gray-900">Add Actors (Up to 9)</label>
+                        <input type="text" id="actors" name="actors" class="block w-full p-2.5 border border-gray-300 rounded-lg" placeholder="Search Actor Name(s)">
+                        <div class="grid grid-cols-3 gap-2 mt-4">
+                            <!-- Placeholder untuk aktor -->
+                            <div class="h-24 bg-gray-200 rounded-md flex items-center justify-center">Actor 1</div>
+                            <div class="h-24 bg-gray-200 rounded-md flex items-center justify-center">Actor 2</div>
+                            <div class="h-24 bg-gray-200 rounded-md flex items-center justify-center">Actor 3</div>
+                            <!-- Tambahkan hingga 9 aktor -->
+                        </div>
                     </div>
-                </form>
-            </div>
-        </main>        
+            
+                    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                        <div>
+                            <label for="trailer" class="block mb-2 text-sm font-medium text-gray-900">Link Trailer</label>
+                            <input type="text" id="trailer" name="trailer" class="block w-full p-2.5 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label for="award" class="block mb-2 text-sm font-medium text-gray-900">Award</label>
+                            <input type="text" id="award" name="award" class="block w-full p-2.5 border border-gray-300 rounded-lg">
+                        </div>
+                    </div>
+                </div>
+            </div>        
+        </main>
+             
         
         <!-- Sidenav -->
         <div class="flex z-30">
@@ -208,147 +249,45 @@
     
     <!-- Custom JavaScript -->
     <script>
-        // Javascript for Sidebar
-        const openBtn = document.getElementById('open-btn');
-        const closeBtn = document.getElementById('close-btn');
-        const sidebar = document.getElementById('sidebar');
-
-        openBtn.addEventListener('click', () => {
-            sidebar.classList.add('active');
-        });
-
-        closeBtn.addEventListener('click', () => {
-            sidebar.classList.remove('active');
-        });
-
-        // Initialize Flowbite components if needed
-        document.addEventListener('DOMContentLoaded', function () {
-            // Optional: Initialize any Flowbite components here
-        });
-
-
-        // 
-        // CRUD
-        // 
-        document.addEventListener('DOMContentLoaded', function() {
-            const dramasTableBody = document.querySelector('tbody');
-            const searchInput = document.getElementById('search-bar');
-            const sortSelect = document.getElementById('sort-options');
-
-        // Initial dummy data
-        let dramas = [
-            { id: 1, drama: '[2024] Japan - Eye Love You', actor:'Takuya Kimura, Takeuchi Yuko, Neinen Reina', genre: 'Romance, Adventures, Comedy', synopsis: 'I love this drama. It taught me a lot about money and finance. Love is not everything. We need to face the reality too. Being stoic is the best.', status: 'unapproved' },
-            { id: 2, drama: '[2024] Japan - Eye Love You', actor: 'Takuya Kimura, Takeuchi Yuko, Neinen Reina', genre: 'Romance, Adventures, Comedy', synopsis: 'Meh', status: 'approved' }
-        ];
-
-        // Function to render the dramas list
-        function renderDrama(filteredDrama = dramas) {
-            dramasTableBody.innerHTML = '';
-
-            filteredDrama.forEach((item, index) => {
-                const row = document.createElement('tr');
-                row.classList.add('border-b', 'dark:border-gray-700');
+        document.getElementById('poster-upload').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('poster-preview');
+        const changeButton = document.getElementById('change-poster');
+        const label = document.getElementById('poster-label');
+        
+        if (file) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                // Tampilkan poster di img tag
+                preview.src = e.target.result;
+                preview.classList.remove('hidden');
                 
-                row.innerHTML = `
-                    <td class="px-4 py-3 text-black">${index+1}</td>
-                    <td class="px-4 py-3 text-black">${item.drama}</td>
-                    <td class="px-4 py-3 text-black">${item.actor}</td>
-                    <td class="px-4 py-3 text-black">${item.genre}</td>
-                    <td class="px-4 py-3 text-black">${item.synopsis}</td>
-                    <td class="px-4 py-3 text-black">${item.status}</td>
-                    <td class="text-center">
-                        <div class="flex justify-center items-center">
-                            <button onclick="editDrama(${item.id})" class="flex py-2 px-4 hover:text-blue-600 dark:hover:text-blue-600 text-black">
-                                <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
-                                </svg>
-                                Edit
-                            </button>
-                            <span class="text-black">|</span>
-                            <button onclick="deleteDrama(${item.id})" class="flex items-center py-2 px-4 hover:text-blue-600 dark:hover:text-red-600 text-black">
-                                <svg class="w-4 h-4 mr-2" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                    <path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M6.09922 0.300781C5.93212 0.30087 5.76835 0.347476 5.62625 0.435378C5.48414 0.523281 5.36931 0.649009 5.29462 0.798481L4.64302 2.10078H1.59922C1.36052 2.10078 1.13161 2.1956 0.962823 2.36439C0.79404 2.53317 0.699219 2.76209 0.699219 3.00078C0.699219 3.23948 0.79404 3.46839 0.962823 3.63718C1.13161 3.80596 1.36052 3.90078 1.59922 3.90078V12.9008C1.59922 13.3782 1.78886 13.836 2.12643 14.1736C2.46399 14.5111 2.92183 14.7008 3.39922 14.7008H10.5992C11.0766 14.7008 11.5344 14.5111 11.872 14.1736C12.2096 13.836 12.3992 13.3782 12.3992 12.9008V3.90078C12.6379 3.90078 12.8668 3.80596 13.0356 3.63718C13.2044 3.46839 13.2992 3.23948 13.2992 3.00078C13.2992 2.76209 13.2044 2.53317 13.0356 2.36439C12.8668 2.1956 12.6379 2.10078 12.3992 2.10078H9.35542L8.70382 0.798481C8.62913 0.649009 8.5143 0.523281 8.37219 0.435378C8.23009 0.347476 8.06631 0.30087 7.89922 0.300781H6.09922ZM4.29922 5.70078C4.29922 5.46209 4.39404 5.23317 4.56282 5.06439C4.73161 4.8956 4.96052 4.80078 5.19922 4.80078C5.43791 4.80078 5.66683 4.8956 5.83561 5.06439C6.0044 5.23317 6.09922 5.46209 6.09922 5.70078V11.1008C6.09922 11.3395 6.0044 11.5684 5.83561 11.7372C5.66683 11.906 5.43791 12.0008 5.19922 12.0008C4.96052 12.0008 4.73161 11.906 4.56282 11.7372C4.39404 11.5684 4.29922 11.3395 4.29922 11.1008V5.70078ZM8.79922 4.80078C8.56052 4.80078 8.33161 4.8956 8.16282 5.06439C7.99404 5.23317 7.89922 5.46209 7.89922 5.70078V11.1008C7.89922 11.3395 7.99404 11.5684 8.16282 11.7372C8.33161 11.906 8.56052 12.0008 8.79922 12.0008C9.03791 12.0008 9.26683 11.906 9.43561 11.7372C9.6044 11.5684 9.69922 11.3395 9.69922 11.1008V5.70078C9.69922 5.46209 9.6044 5.23317 9.43561 5.06439C9.26683 4.8956 9.03791 4.80078 8.79922 4.80078Z" />
-                                </svg>
-                                Delete
-                            </button>
-                        </div?
-                    </td>
-                `;
-                dramasTableBody.appendChild(row);
-            });
-        }
-
-
-        // Function to approve selected dramas
-        window.approveComments = function() {
-            const checkboxes = document.querySelectorAll('.status-checkbox');
-            checkboxes.forEach(checkbox => {
-                if (checkbox.checked) {
-                    const id = parseInt(checkbox.value);
-                    editDrama(id, { status: 'approved' });
-                }
-            });
-        };
-
-        // Delete actor
-        window.deleteDrama = function(id) {
-            dramas = dramas.filter(drama => drama.id !== id);
-            renderDrama(); // Update the display after deletion
-        };
-
-        // Edit drama
-        window.editDrama = function(id) {
-            const index = dramas.findIndex(drama => drama.id === id);
-            if (index === -1) return;
-
-            const item = dramas[index];
-            const newDrama = prompt('Edit drama title:', item.drama);
-            const newActorName = prompt('Edit actor name:', item.actor);
-            const newGenre = prompt('Edit genre:', item.genre);
-            const newSynopsis = prompt('Edit synopsis:', item.synopsis);
-            const newStatus = prompt('Edit status:', item.status);
-
-            if (newDrama && newActorName && newGenre && newSynopsis && newStatus) {
-                dramas[index] = { ...item, drama: newDrama.trim(), actor: newActorName.trim(), genre: newGenre.trim(), synopsis: newSynopsis.trim(), status: newStatus.trim()};
-                sortDrama();
+                // Tampilkan tombol "Ganti Poster" dan sembunyikan label "Upload Poster"
+                changeButton.classList.remove('hidden');
+                label.classList.add('hidden');
             }
-        };
-
-        // Sort dramas
-        function sortDrama() {
-            const sortOption = sortSelect.value;
-            const sortedDramas = [...dramas];
-
-            if (sortOption === 'a-z') {
-                sortedDramas.sort((a, b) => a.drama.localeCompare(b.drama));
-            } else if (sortOption === 'z-a') {
-                sortedDramas.sort((a, b) => b.drama.localeCompare(a.drama));
-            }
-
-            renderDrama(sortedDramas);
+            
+            reader.readAsDataURL(file);
         }
+    });
 
-        // Filter dramas
-        function filterDrama() {
-            const searchInputValue = searchInput.value.toLowerCase();
-            const filteredDrama = dramas.filter(item =>
-                item.drama.toLowerCase().includes(searchInputValue) ||
-                item.drama.toLowerCase().includes(searchInputValue) ||
-                item.genre.toLowerCase().includes(searchInputValue) ||
-                item.synopsis.toLowerCase().includes(searchInputValue)
-            );
-
-            renderDrama(filteredDrama);
-        }
-
-        // Attach event listeners
-        sortSelect.addEventListener('change', sortDrama);
-        searchInput.addEventListener('input', filterDrama);
-
-        // Initial render
-        renderDrama();
-        });
+    // Event listener untuk tombol "Ganti Poster"
+    document.getElementById('change-poster').addEventListener('click', function() {
+        const preview = document.getElementById('poster-preview');
+        const changeButton = document.getElementById('change-poster');
+        const label = document.getElementById('poster-label');
+        const fileInput = document.getElementById('poster-upload');
+        
+        // Reset file input dan sembunyikan pratinjau poster
+        fileInput.value = null;
+        preview.src = '#';
+        preview.classList.add('hidden');
+        
+        // Tampilkan kembali label "Upload Poster" dan sembunyikan tombol "Ganti Poster"
+        label.classList.remove('hidden');
+        changeButton.classList.add('hidden');
+    });
     </script>
 </body>
 <footer class="bg-white shadow dark:bg-yellow-900 p-10">
