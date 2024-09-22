@@ -1,6 +1,4 @@
 // ActorsList.js
-import React from 'react';
-
 const ActorsList = ({ actors }) => {
     return (
         <div className="bg-white text-white p-4 rounded-lg shadow-lg w-full mb-6">
