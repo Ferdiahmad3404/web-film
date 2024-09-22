@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Vite + React</title>
+
+    <style>
+      /* Custom Styles for Sidebar */
+      #sidebar {
+          transform: translateX(-530%);
+          transition: transform 0.3s ease-in-out;
+      }
+
+      #sidebar.active {
+          transform: translateX(430%);
+      }
+      
+      .sidebar-link:hover::after {
+          width: 100%;
+      }
+
+      .sidebar-link::after {
+          content: '';
+          display: block;
+          width: 0;
+          height: 2px;
+          background: #fff;
+          transition: width 0.3s;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+  
+</html>

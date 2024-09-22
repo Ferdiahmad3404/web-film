@@ -54,50 +54,24 @@
 
     <div class="flex flex-row">
         <!-- First Sidebar (Top Movies) -->
-        <aside class="bg-gray-800 text-white p-4 sticky-title scrollbar rounded-lg shadow-lg mx-2">
+        <aside class="bg-gray-800 text-white p-4 sticky-title scrollbar rounded-lg shadow-lg mx-2 flex-none">
             <h1 class="text-xl font-bold mb-4 text-center sticky-title text-black">Top Movies</h1>
             <ul>
                 <li class="mb-4">
                     <a href="#" class="block bg-gray-700 shadow rounded-lg p-2">
-                        <img src="https://img.freepik.com/premium-psd/movie-poster-design-template_841014-16988.jpg" alt="Movie Title 1" class="w-full h-32 object-cover rounded mb-2">
+                        <img src="https://img.freepik.com/premium-psd/movie-poster-design-template_841014-16988.jpg" alt="Movie Title 1" class="w-full h-48 object-fit rounded mb-2">
                         <p class="text-center font-semibold text-sm">Movie Title 1</p>
                     </a>
                 </li>
                 <li class="mb-4">
                     <a href="#" class="block bg-gray-700 shadow rounded-lg p-2">
-                        <img src="https://img.freepik.com/premium-psd/movie-poster-design-template_841014-16988.jpg" alt="Movie Title 2" class="w-full h-32 object-cover rounded mb-2">
+                        <img src="https://img.freepik.com/premium-psd/movie-poster-design-template_841014-16988.jpg" alt="Movie Title 2" class="w-full h-48 object-fit rounded mb-2">
                         <p class="text-center font-semibold text-sm">Movie Title 2</p>
                     </a>
                 </li>
                 <li class="mb-4">
                     <a href="#" class="block bg-gray-700 shadow rounded-lg p-2">
-                        <img src="https://img.freepik.com/premium-psd/movie-poster-design-template_841014-16988.jpg" alt="Movie Title 3" class="w-full h-32 object-cover rounded mb-2">
-                        <p class="text-center font-semibold text-sm">Movie Title 3</p>
-                    </a>
-                </li>
-                <!-- Tambahkan lebih banyak film jika diinginkan -->
-            </ul>
-        </aside>
-
-        <!-- Second Sidebar (Trending Movies) -->
-        <aside class="bg-gray-800 text-white p-4 sticky-title scrollbar rounded-lg shadow-lg mx-2">
-            <h1 class="text-xl font-bold mb-4 text-center sticky-title text-black">Trending Movies</h1>
-            <ul>
-                <li class="mb-4">
-                    <a href="#" class="block bg-gray-700 shadow rounded-lg p-2">
-                        <img src="https://img.freepik.com/premium-psd/movie-poster-design-template_841014-16988.jpg" alt="Movie Title 1" class="w-full h-32 object-cover rounded mb-2">
-                        <p class="text-center font-semibold text-sm">Movie Title 1</p>
-                    </a>
-                </li>
-                <li class="mb-4">
-                    <a href="#" class="block bg-gray-700 shadow rounded-lg p-2">
-                        <img src="https://img.freepik.com/premium-psd/movie-poster-design-template_841014-16988.jpg" alt="Movie Title 2" class="w-full h-32 object-cover rounded mb-2">
-                        <p class="text-center font-semibold text-sm">Movie Title 2</p>
-                    </a>
-                </li>
-                <li class="mb-4">
-                    <a href="#" class="block bg-gray-700 shadow rounded-lg p-2">
-                        <img src="https://img.freepik.com/premium-psd/movie-poster-design-template_841014-16988.jpg" alt="Movie Title 3" class="w-full h-32 object-cover rounded mb-2">
+                        <img src="https://img.freepik.com/premium-psd/movie-poster-design-template_841014-16988.jpg" alt="Movie Title 3" class="w-full h-48 object-fit rounded mb-2">
                         <p class="text-center font-semibold text-sm">Movie Title 3</p>
                     </a>
                 </li>
@@ -106,8 +80,8 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="flex-auto p-4">
-            <div class="w-full mb-4 flex justify-between items-center">
+        <main class="w-full p-4">
+            <div class="mb-6 flex justify-between items-center">
                 <!-- Back Button and Search Bar -->
                 <div class="flex space-x-4 w-full">
                     <button class="bg-blue-500 text-white px-4 py-2 rounded">Back</button>
@@ -117,7 +91,7 @@
             </div>
 
             <!-- Movie Details -->
-            <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
+            <div class="bg-white shadow-lg rounded-lg p-6 mb-6 ">
                 <div class="flex flex-col md:flex-row">
                     <img src="https://img.freepik.com/premium-psd/movie-poster-design-template_841014-16988.jpg" alt="Film Cover" class="w-full md:w-64 h-auto rounded-md mb-4 md:mr-6">
                     <div>
@@ -135,13 +109,38 @@
             </div>
 
             <!-- Actors List -->
-            <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
-                <h2 class="text-2xl font-bold mb-4">Actors</h2>
-                <ul class="list-disc pl-5">
-                    <li>Jane Doe</li>
-                    <li>John Smith</li>
-                    <li>Mary Johnson</li>
-                </ul>
+            <div class="bg-white text-white p-4 rounded-lg shadow-lg w-full mb-6">
+                <h1 class="font-bold mb-4 text-black text-2xl font-bold">Actors</h1>
+                <div class="overflow-x-auto">
+                    <ul class="flex flex-nowrap">
+                        <li class="mr-4 flex-none">
+                            <a href="#" class="block bg-gray-700 shadow rounded-lg p-2">
+                                <img src="https://img.freepik.com/premium-psd/movie-poster-design-template_841014-16988.jpg" alt="Actor 1" class="w-48 h-72 object-cover rounded mb-2">
+                                <p class="text-center font-semibold text-sm">Actor 1</p>
+                            </a>
+                        </li>
+                        <li class="mr-4 flex-none">
+                            <a href="#" class="block bg-gray-700 shadow rounded-lg p-2">
+                                <img src="https://img.freepik.com/premium-psd/movie-poster-design-template_841014-16988.jpg" alt="Actor 2" class="w-48 h-72 object-cover rounded mb-2">
+                                <p class="text-center font-semibold text-sm">Actor 2</p>
+                            </a>
+                        </li>
+                        <li class="mr-4 flex-none">
+                            <a href="#" class="block bg-gray-700 shadow rounded-lg p-2">
+                                <img src="https://img.freepik.com/premium-psd/movie-poster-design-template_841014-16988.jpg" alt="Actor 3" class="w-48 h-72 object-cover rounded mb-2">
+                                <p class="text-center font-semibold text-sm">Actor 3</p>
+                            </a>
+                        </li>
+                        <li class="mr-4 flex-none">
+                            <a href="#" class="block bg-gray-700 shadow rounded-lg p-2">
+                                <img src="https://img.freepik.com/premium-psd/movie-poster-design-template_841014-16988.jpg" alt="Actor 3" class="w-48 h-72 object-cover rounded mb-2">
+                                <p class="text-center font-semibold text-sm">Actor 3</p>
+                            </a>
+                        </li>
+                        
+                        <!-- Add more movies as desired -->
+                    </ul>
+                </div>
             </div>
 
             <!-- Reactions and Comments -->
@@ -184,6 +183,42 @@
                 <!-- Add Comment -->
                 <textarea class="w-full p-2 border border-gray-300 rounded mt-4" rows="4" placeholder="Add your comment..."></textarea>
                 <button class="bg-blue-500 text-white px-4 py-2 rounded mt-2">Submit</button>
+            </div>
+
+
+            <!-- More Movies -->           
+            <div class="bg-white text-white p-4 rounded-lg shadow-lg w-full">
+                <h1 class="text-xl font-bold mb-4 text-black">More Movies</h1>
+                <div class="overflow-x-auto">
+                    <ul class="flex flex-nowrap">
+                        <li class="mr-4 flex-none">
+                            <a href="#" class="block bg-gray-700 shadow rounded-lg p-2">
+                                <img src="https://img.freepik.com/premium-psd/movie-poster-design-template_841014-16988.jpg" alt="Movie Title 1" class="w-48 h-72 object-cover rounded mb-2">
+                                <p class="text-center font-semibold text-sm">Movie Title 1</p>
+                            </a>
+                        </li>
+                        <li class="mr-4 flex-none">
+                            <a href="#" class="block bg-gray-700 shadow rounded-lg p-2">
+                                <img src="https://img.freepik.com/premium-psd/movie-poster-design-template_841014-16988.jpg" alt="Movie Title 2" class="w-48 h-72 object-cover rounded mb-2">
+                                <p class="text-center font-semibold text-sm">Movie Title 2</p>
+                            </a>
+                        </li>
+                        <li class="mr-4 flex-none">
+                            <a href="#" class="block bg-gray-700 shadow rounded-lg p-2">
+                                <img src="https://img.freepik.com/premium-psd/movie-poster-design-template_841014-16988.jpg" alt="Movie Title 3" class="w-48 h-72 object-cover rounded mb-2">
+                                <p class="text-center font-semibold text-sm">Movie Title 3</p>
+                            </a>
+                        </li>
+                        <li class="mr-4 flex-none">
+                            <a href="#" class="block bg-gray-700 shadow rounded-lg p-2">
+                                <img src="https://img.freepik.com/premium-psd/movie-poster-design-template_841014-16988.jpg" alt="Movie Title 3" class="w-48 h-72 object-cover rounded mb-2">
+                                <p class="text-center font-semibold text-sm">Movie Title 3</p>
+                            </a>
+                        </li>
+                        
+                        <!-- Add more movies as desired -->
+                    </ul>
+                </div>
             </div>
         </main>
         <!-- Sidenav -->
