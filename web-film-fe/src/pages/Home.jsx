@@ -1,10 +1,10 @@
-import Dashboard from '../components/Dashboard'
+import First from '../components/First'
 import Footer from '../components/Footer'
 
 const Home = () => {
     return (
         <>
-            <Dashboard />
+            <Firstz />
             <Footer />
         </>
     )
