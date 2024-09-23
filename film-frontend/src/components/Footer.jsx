@@ -8,15 +8,15 @@ const Footer = () => {
                             <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="Flowbite Logo" />
                             <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">DramaKu</span>
                         </a>
-                        <ul className="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
+                        <ul className="flex flex-wrap items-center mb-6 text-sm font-medium text-white sm:mb-0 dark:text-gray-400">
                             <li>
-                                <a href="#" className="hover:underline me-4 md:me-6">About</a>
+                                <a href="#" className="hover:underline mx-8 md:me-6">About</a>
                             </li>
                             <li>
-                                <a href="#" className="hover:underline me-4 md:me-6">Privacy Policy</a>
+                                <a href="#" className="hover:underline mx-8 md:me-6">Privacy Policy</a>
                             </li>
                             <li>
-                                <a href="#" className="hover:underline me-4 md:me-6">Licensing</a>
+                                <a href="#" className="hover:underline mx-8 md:me-6">Licensing</a>
                             </li>
                             <li>
                                 <a href="#" className="hover:underline">Contact</a>
@@ -24,7 +24,7 @@ const Footer = () => {
                         </ul>
                     </div>
                     <hr className="my-6 border-gray-200 sm:mx-auto dark:border-white lg:my-8" />
-                    <span className="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2024 <a href="https://flowbite.com/" className="hover:underline">DramaKu™</a>. All Rights Reserved.</span>
+                    <span className="block text-sm text-white sm:text-center dark:text-gray-400">© 2024 <a href="https://flowbite.com/" className="hover:underline">DramaKu™</a>. All Rights Reserved.</span>
                 </div>
             </footer>
         </>

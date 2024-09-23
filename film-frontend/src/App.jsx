@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Dashboard from './pages/dashboard';
-import DetailFilm from './pages/DetailFilm';
+import Dashboard from './pages/Dashboard';
+import DetailPage from './pages/DetailPage';
 import Login from './pages/Login';
 import Registrasi from './pages/Registrasi';
 import CMSCountries from './pages/CMSCountries';
@@ -15,7 +15,7 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/detailFilm" element={<DetailFilm />} />
+          <Route path="/detailpage" element={<DetailPage />} />
           <Route path='/login' element={<Login />} />
           <Route path='/registrasi' element={<Registrasi />} />
           <Route path='/cmscountries' element={<CMSCountries />} />
