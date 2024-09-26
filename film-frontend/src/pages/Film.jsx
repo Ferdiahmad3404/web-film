@@ -1,6 +1,5 @@
 import DetailCoverFilm from '../components/DetailCoverFilm'
 
-
 const Film = () => {
     return(
         <>
