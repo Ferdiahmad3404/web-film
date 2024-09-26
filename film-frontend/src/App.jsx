@@ -8,6 +8,8 @@ import CMSAwards from './pages/CMSAwards';
 import CMSGenres from './pages/CMSGenres';
 import CMSActors from './pages/CMSActors';
 
+import './App.css'
+
 function App() {
 
   return (

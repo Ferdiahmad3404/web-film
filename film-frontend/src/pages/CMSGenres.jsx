@@ -59,13 +59,16 @@ const CMSGenres = () => {
                                         <input
                                             type="text"
                                             id="new-genres"
-                                            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                            name="floating_name"
+                                            className="block py-2.5 px-0 w-full text-sm text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                             placeholder=" "
                                             value={newGenre}
                                             onChange={(e) => setNewGenre(e.target.value)}
                                             required
                                         />
-                                        <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Genre Name</label>
+                                        <label for="floating_name" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                                            Genre Name
+                                        </label>
                                     </div>
                                     <button onClick={addGenre} className="flex w-1/6 h-10 mb-10 items-center justify-center bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600">Add</button>
                                 </div>
@@ -104,7 +107,7 @@ const CMSGenres = () => {
                         {/* Genre List */}
                         <div className="overflow-x-auto">
                             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-yellow-900 dark:text-white">
+                                <thead className="text-xs uppercase bg-yellow-900 text-white">
                                     <tr>
                                         <th scope="col" className="w-1/12 px-4 py-4 sr-only">No</th>
                                         <th scope="col" className="w-9/12 px-4 py-4">Genre</th>
@@ -113,15 +116,15 @@ const CMSGenres = () => {
                                 </thead>
                                 <tbody>
                                     {sortedGenres.map((genre, index) => (
-                                        <tr key={genre.id} className="border-b dark:border-gray-700">
-                                            <th scope="row" className="px-4 py-3 font-medium dark:text-black">{index + 1}</th>
-                                            <th scope="row" className="px-4 py-3 font-medium dark:text-black">{genre.name}</th>
+                                        <tr key={genre.id} className="border-b border-gray-700">
+                                            <th scope="row" className="px-4 py-3 font-medium text-black">{index + 1}</th>
+                                            <th scope="row" className="px-4 py-3 font-medium text-black">{genre.name}</th>
                                             <td className="text-center flex items-center justify-end">
-                                                <button onClick={() => editGenre(genre.id)} className="flex py-2 px-4 hover:text-blue-600 dark:hover:text-blue-600 text-black">
+                                                <button onClick={() => editGenre(genre.id)} className="flex py-2 px-4 hover:text-blue-600 text-black">
                                                     Edit
                                                 </button>
                                                 <span className="text-black">|</span>
-                                                <button onClick={() => deleteGenre(genre.id)} className="flex items-center py-2 px-4 hover:text-blue-600 dark:hover:text-red-600 text-black">
+                                                <button onClick={() => deleteGenre(genre.id)} className="flex items-center py-2 px-4 hover:text-red-600 text-black">
                                                     Delete
                                                 </button>
                                             </td>
@@ -131,7 +134,7 @@ const CMSGenres = () => {
                             </table>
                         </div>
                     </div>
-                </main>
+                    </main>
                     <Sidenav />
                 </div>
             </div>

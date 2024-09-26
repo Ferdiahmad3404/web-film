@@ -16,8 +16,8 @@ const CMSCountries = () => {
     const renderCountries = (countriesToRender) => {
         return countriesToRender.map((country, index) => (
             <tr key={country.id} className="border-b dark:border-gray-700">
-                <th scope="row" className="px-4 py-3 font-medium dark:text-black">{index + 1}</th>
-                <td className="px-4 py-3 font-medium dark:text-black">{country.name}</td>
+                <th scope="row" className="px-4 py-3 font-medium text-black">{index + 1}</th>
+                <td className="px-4 py-3 font-medium text-black">{country.name}</td>
                 <td className="text-center flex items-center justify-end">
                     <button onClick={() => editCountry(country.id)} className="flex py-2 px-4 hover:text-blue-600 text-black">
                         Edit
