@@ -9,6 +9,7 @@ import CMSGenres from './pages/CMSGenres';
 import CMSActors from './pages/CMSActors';
 import CMSDramas from './pages/CMSDramas';
 import CMSDramaInput from './pages/CMSDramainput';
+import CMSComments from './pages/CMSComments';
 
 import './App.css'
 
@@ -28,6 +29,7 @@ function App() {
           <Route path='/cmsactors' element={<CMSActors />} />
           <Route path='/cmsdramas' element={<CMSDramas />} />
           <Route path='/cmsdramasinput' element={<CMSDramaInput />} />
+          <Route path='/cmscomments' element={<CMSComments />} />
         </Routes> 
       </div>
     </Router>
