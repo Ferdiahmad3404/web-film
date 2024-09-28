@@ -77,6 +77,8 @@ const CMSCountries = () => {
             <div className="bg-gray-100">
                 <div className="flex">
                     <CMSSidebar />
+
+                    {/* Main Content */}
                     <main className="flex-1 bg-gray-100 p-6">
                         <div className="w-full p-9">
                             <div className="flex flex-col justify-between">
@@ -138,6 +140,7 @@ const CMSCountries = () => {
                             </div>
                         </div>
                     </main>
+                    
                     <Sidenav />
                 </div>
             </div>
