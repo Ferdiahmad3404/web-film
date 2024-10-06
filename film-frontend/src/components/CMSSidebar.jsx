@@ -70,7 +70,7 @@ const CMSSidebar = () => {
                         </a>
                     </li>
                     <li className="group">
-                        <a href="#" className="flex items-center px-4 py-3 text-lg hover:bg-yellow-900 hover:text-white rounded transition duration-200">
+                        <a href="/" className="flex items-center px-4 py-3 text-lg hover:bg-yellow-900 hover:text-white rounded transition duration-200">
                             <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7"></path>
                             </svg>

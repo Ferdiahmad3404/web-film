@@ -82,21 +82,24 @@ const CMSCountries = () => {
                             <div className="flex flex-col justify-between">
                                 <h1 className="text-2xl mb-5 font-medium">Add New Countries</h1>
                                 <form className="flex justify-between items-center mb-10">
-                                    <div className="relative items-center justify-between w-4/6 space-x-2 z-0 group">
+                                    <div className="relative w-4/6">
                                         <input 
                                             type="text" 
-                                            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
+                                            name="floating_name" 
+                                            id="new-countries"
+                                            className="block py-2.5 px-0 w-full text-sm text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
                                             placeholder=" " 
                                             value={newCountry}
                                             onChange={(e) => setNewCountry(e.target.value)}
                                             required 
                                         />
-                                        <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                                        <label htmlFor="new-countries" className="peer-focus:font-medium absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                                             Country Name
                                         </label>
                                     </div>
-                                    <button onClick={addCountries} className="flex w-1/6 h-10 items-center justify-center bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600">Add</button>
+                                    <button type="button" onClick={addCountries} className="w-1/6 h-10 bg-blue-500 text-white rounded-full hover:bg-blue-600">Add</button>
                                 </form>
+
 
                                 <div className="flex justify-between mb-4">
                                     <div className="flex items-center space-x-2">

@@ -43,7 +43,7 @@ const Sidenav = () => {
                 {/* Sidebar Popup */}
                 <div id="sidebar" className="fixed top-0 left-0 h-full w-64 bg-yellow-900 shadow-lg z-50 p-8">
                     <div className="flex justify-between items-center mb-12">
-                        <h2 className="text-2xl font-bold text-white">Countries</h2>
+                        <h2 className="text-2xl font-bold text-white">DramaKu</h2>
                         <button id="close-btn" className="text-2xl text-white">&times;</button>
                     </div>
                     <nav>

@@ -7,12 +7,12 @@ import Sidenav from "../components/Sidenav";
 const Dashboard = () => {
   return (
     <div>
-        <div className="bg-neutral-200">
-            <div className="flex space-x-0">
-                <div id="home">
+        <div className="flex bg-neutral-200 w-full">
+            <div className="flex space-x-0 w-full">
+                <div id="home" className="w-full">
                     <Home />
-                    <div class="p-14 space-y-10">
-                        <FiltersAndSorting />
+                    <div className="p-14 w-full space-y-10">
+                        {/* <FiltersAndSorting /> */}
 
                         <DramaList />
                         <div className="w-full h-20 flex flex-auto justify-center">
