@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
 import Footer from "../components/Footer";
 import Sidenav from "../components/Sidenav";
+import Home from "../components/Home";
+import DramaList from "../components/DramaList";
 
 const Dashboard = () => {
   return (
@@ -12,7 +13,7 @@ const Dashboard = () => {
                     <div className="p-14 w-full space-y-10">
                         {/* <FiltersAndSorting /> */}
 
-                            {/* Shortcut button */}
+                            <DramaList />
                             <div className="w-full h-20 flex flex-auto justify-center">
                                 <a href="#home" className="px-3 py-3 text-base font-medium text-center bg-transparent rounded-full flex items-center justify-center">
                                     <svg className="animate-bounce w-20 h-20 justify-center stroke-current stroke-5 text-yellow-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
