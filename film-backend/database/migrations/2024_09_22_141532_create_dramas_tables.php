@@ -91,6 +91,7 @@ class CreateDramasTables extends Migration
             $table->integer('genre_id');
             $table->foreign('drama_id')->references('id')->on('dramas');
             $table->foreign('genre_id')->references('id')->on('genres');
+            $table->primary(['drama_id', 'genre_id']);
         });
 
         // Create 'dramas_actors' table
@@ -99,6 +100,7 @@ class CreateDramasTables extends Migration
             $table->integer('actors_id');
             $table->foreign('drama_id')->references('id')->on('dramas');
             $table->foreign('actors_id')->references('id')->on('actors');
+            $table->primary(['drama_id', 'actors_id']);
         });
     }
 
