@@ -25,24 +25,6 @@ const Carousel = () => {
     },
   ];
 
-  // const [films, setFilms] = useState([]);
-  // const [currentIndex, setCurrentIndex] = useState(0);
-
-  // // Fetch film data from the API
-  // const fetchFilms = async () => {
-  //   try {
-  //     const response = await fetch('http://localhost:8000/films');
-  //     const data = await response.json();
-  //     setFilms(data.data); // Assuming 'data.data' contains the list of films
-  //   } catch (error) {
-  //     console.error("Error fetching films:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchFilms();
-  // }, []);
-
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const nextSlide = () => {

@@ -4,11 +4,24 @@ import Home from "../components/Home";
 import DramaList from "../components/DramaList";
 
 const Dashboard = () => {
-  return (
+    const token = sessionStorage.getItem('token'); // Ambil token dari sessionStorage
+    const username = sessionStorage.getItem('username');
+    const handleLogout = () => {
+        sessionStorage.removeItem('token'); // Hapus token dari sessionStorage
+        sessionStorage.removeItem('username'); // Hapus username dari sessionStorage
+        window.location.href = '/login'; // Redirect ke halaman login
+    };
+
+    return (
     <div>
         <div className="flex bg-neutral-200 w-full">
             <div className="flex space-x-0 w-full">
                 <div id="home" className="w-full">
+                    <p>Token Anda: {token}</p> {/* Tampilkan token di halaman */}
+                    <p>Username Anda: {username}</p>
+                    <button onClick={handleLogout}>
+                        Logout
+                    </button>
                     <Home />
                     <div className="p-14 w-full space-y-10">
                         {/* <FiltersAndSorting /> */}

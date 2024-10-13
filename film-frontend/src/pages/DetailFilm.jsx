@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-const DetailPage = () => {
+const DetailFilm = () => {
     const { id } = useParams();
     const [filmData, setFilmData] = useState(null);
     const [actorData, setActorData] = useState([]);
@@ -180,4 +180,4 @@ const DetailPage = () => {
     );
 };
 
-export default DetailPage;
+export default DetailFilm;

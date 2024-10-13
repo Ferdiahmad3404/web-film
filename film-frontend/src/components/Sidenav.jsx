@@ -51,6 +51,11 @@ const Sidenav = () => {
                             <li className="mb-4"><a href="/cmscountries" className="sidebar-link text-lg text-white">CMS</a></li>
                         </ul>
                     </nav>
+                    <nav>
+                        <ul>
+                            <li className="mb-4"><a href="/cmscountries" className="sidebar-link text-lg text-white">Log Out</a></li>
+                        </ul>
+                    </nav>
                 </div>
             </div>         
         </>
