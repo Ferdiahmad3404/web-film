@@ -70,7 +70,7 @@ class AuthController extends Controller
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
-            'username' => $user->username, // Pastikan username ada di model User
+            'role_id' => $user->role_id, // Pastikan username ada di model User
         ]);
     }
 

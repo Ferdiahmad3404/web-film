@@ -5,12 +5,7 @@ import DramaList from "../components/DramaList";
 
 const Dashboard = () => {
     const token = sessionStorage.getItem('token'); // Ambil token dari sessionStorage
-    const username = sessionStorage.getItem('username');
-    const handleLogout = () => {
-        sessionStorage.removeItem('token'); // Hapus token dari sessionStorage
-        sessionStorage.removeItem('username'); // Hapus username dari sessionStorage
-        window.location.href = '/login'; // Redirect ke halaman login
-    };
+    const role_id = sessionStorage.getItem('role_id'); // Ambil role dari sessionStorage
 
     return (
     <div>
@@ -18,10 +13,7 @@ const Dashboard = () => {
             <div className="flex space-x-0 w-full">
                 <div id="home" className="w-full">
                     <p>Token Anda: {token}</p> {/* Tampilkan token di halaman */}
-                    <p>Username Anda: {username}</p>
-                    <button onClick={handleLogout}>
-                        Logout
-                    </button>
+                    <p>Role Anda: {role_id}</p>
                     <Home />
                     <div className="p-14 w-full space-y-10">
                         {/* <FiltersAndSorting /> */}

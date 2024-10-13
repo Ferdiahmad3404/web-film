@@ -19,7 +19,7 @@ const Login = () => {
         try {
             const response = await api.post('login', credentials);
             sessionStorage.setItem('token', response.data.access_token);
-            sessionStorage.setItem('username', response.data.username); // Simpan username
+            sessionStorage.setItem('role_id', response.data.role_id); // Simpan role_id
             navigate('/'); // Redirect ke dashboard setelah login berhasil
         } catch (error) {
             console.error("Login failed", error);
