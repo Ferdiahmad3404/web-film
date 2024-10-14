@@ -164,22 +164,27 @@ const DramaList = ({ searchTerm = ''}) => {
   }, []);
   
   return (
-    <div>
-      <FiltersAndSorting 
-        onNameChange={handleNameFilter} 
-        onFilterChange={handleFilter}
-        genres={genres} 
-        years={years}
-        platforms={platforms} 
-        initialSearchTerm={searchTerm}
-      />
-      {searchTerm.length > 0 ? (
-        <div className="flex w-full items-center justify-center">
-        <h2 className="ml-6 text-xl mt-6 mb-3">Hasil Pencarian untuk: {searchTerm}</h2>
+  <div>
+    <FiltersAndSorting
+      onNameChange={handleNameFilter}
+      onFilterChange={handleFilter}
+      genres={genres}
+      years={years}
+      platforms={platforms}
+      initialSearchTerm={searchTerm}
+    />
+
+    {searchTerm.length > 0 && (
+      <div className="flex w-full items-center justify-center">
+        <h2 className="ml-6 text-xl mt-6 mb-3">
+          Hasil Pencarian untuk: {searchTerm}
+        </h2>
       </div>
-      ) : ('')}
-      <div className="grid grid-cols-5 gap-4 p-4 mb-52 w-full h-full ">
-        {searchTerm.length > 0 ? (
+    )}
+
+    <div className="grid grid-cols-5 gap-4 p-4 mb-52 w-full h-full">
+      {searchTerm.length > 0 ? (
+        filteredData.length > 0 ? (
           filteredData.map((drama) => (
             <div key={drama.id}>
               <div className="relative group bg-opacity-0 rounded-lg overflow-hidden w-full h-5/6 z-10">
@@ -205,6 +210,14 @@ const DramaList = ({ searchTerm = ''}) => {
             </div>
           ))
         ) : (
+          <div className="flex w-full items-center justify-center">
+            <h2 className="ml-6 text-xl mt-6 mb-3">
+              Tidak ada hasil untuk "{searchTerm}"
+            </h2>
+          </div>
+        )
+      ) : (
+        dramaData.length > 0 ? (
           dramaData.map((drama) => (
             <div key={drama.id}>
               <div className="relative group bg-opacity-0 rounded-lg overflow-hidden w-full h-5/6 z-10">
@@ -229,10 +242,17 @@ const DramaList = ({ searchTerm = ''}) => {
               </div>
             </div>
           ))
-        ) }
-      </div>
+        ) : (
+          <div className="flex w-full items-center justify-center">
+            <h2 className="ml-6 text-xl mt-6 mb-3">
+              Tidak ada data drama yang tersedia.
+            </h2>
+          </div>
+        )
+      )}
     </div>
-  );
-};
+  </div>
+);
+        };
 
 export default DramaList;
