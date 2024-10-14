@@ -4,16 +4,16 @@ import Home from "../components/Home";
 import DramaList from "../components/DramaList";
 
 const Dashboard = () => {
-    const token = sessionStorage.getItem('token'); // Ambil token dari sessionStorage
-    const role_id = sessionStorage.getItem('role_id'); // Ambil role dari sessionStorage
+    // const token = sessionStorage.getItem('token'); // Ambil token dari sessionStorage
+    // const role_id = sessionStorage.getItem('role_id'); // Ambil role dari sessionStorage
 
     return (
     <div>
         <div className="flex bg-neutral-200 w-full">
             <div className="flex space-x-0 w-full">
                 <div id="home" className="w-full">
-                    <p>Token Anda: {token}</p> {/* Tampilkan token di halaman */}
-                    <p>Role Anda: {role_id}</p>
+                    {/* <p>Token Anda: {token}</p> 
+                    <p>Role Anda: {role_id}</p> */}
                     <Home />
                     <div className="p-14 w-full space-y-10">
                         {/* <FiltersAndSorting /> */}

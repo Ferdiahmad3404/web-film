@@ -36,17 +36,17 @@ const Sidenav = () => {
         <>
             {/* Sidenav */}
             <div className="flex">
-                <div className="bg-yellow-900 p-4 h-screen sticky top-0">
-                    <div className="text-2xl font-bold text-white flex flex-col justify-center">
+                <div className="bg-yellow-900 p-4 w-14 h-screen items-center justify-center sticky top-0">
+                    {/* <div className="text-2xl font-bold text-white flex flex-col justify-center">
                         <a href="#home">
                             <svg className="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                                {/* SVG path */}
+                                
                             </svg>
                         </a>
-                    </div>
+                    </div> */}
                     
                     {/* Toggle Sidebar Button */}
-                    <div className="absolute right-1/3 top-1/2">
+                    <div className="absolute items-center justify-center">
                         <button id="open-btn" className="text-3xl text-white">&equiv;</button>
                     </div>
                 </div>
@@ -59,18 +59,12 @@ const Sidenav = () => {
                     <nav>
                         <ul>
                             {/* Menu Umum */}
-                            <li className="mb-4">
-                                <a href="/home" className="sidebar-link text-lg text-white">Home</a>
-                            </li>
 
                             {/* Menu berdasarkan role */}
                             {role === 'admin' && (
                                 <>
                                     <li className="mb-4">
-                                        <a href="/admin-dashboard" className="sidebar-link text-lg text-white">Admin Dashboard</a>
-                                    </li>
-                                    <li className="mb-4">
-                                        <a href="/manage-users" className="sidebar-link text-lg text-white">Manage Users</a>
+                                        <a href="/" className="sidebar-link text-lg text-white">Profile</a>
                                     </li>
                                     <li className="mb-4">
                                         <a href="/" className="sidebar-link text-lg text-white"  onClick={handleLogout}>Log Out</a>
@@ -79,6 +73,12 @@ const Sidenav = () => {
                             )}
                             {role === 'user' && (
                                 <>
+                                    <li className="mb-4">
+                                        <a href="/" className="sidebar-link text-lg text-white">Profile</a>
+                                    </li>
+                                    <li className="mb-4">
+                                        <a href="/" className="sidebar-link text-lg text-white">Home</a>
+                                    </li>
                                     <li className="mb-4">
                                         <a href="/my-drama-list" className="sidebar-link text-lg text-white">My Drama List</a>
                                     </li>
@@ -96,7 +96,7 @@ const Sidenav = () => {
                                         <a href="/login" className="sidebar-link text-lg text-white">Login</a>
                                     </li>
                                     <li className="mb-4">
-                                        <a href="/signup" className="sidebar-link text-lg text-white">Sign Up</a>
+                                        <a href="/registrasi" className="sidebar-link text-lg text-white">Sign Up</a>
                                     </li>
                                 </>
                             )}

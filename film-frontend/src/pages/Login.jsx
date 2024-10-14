@@ -20,10 +20,19 @@ const Login = () => {
             const response = await api.post('login', credentials);
             sessionStorage.setItem('token', response.data.access_token);
             sessionStorage.setItem('role_id', response.data.role_id); // Simpan role_id
-            navigate('/'); // Redirect ke dashboard setelah login berhasil
+        
+            // Cek peran pengguna
+            const roleId = response.data.role_id;
+        
+            if (roleId === 'admin') {
+                navigate('/admin-dashboard'); // Redirect ke halaman dashboard admin
+            } else if (roleId === 'user') {
+                navigate('/'); // Redirect ke halaman dashboard pengguna
+            }
         } catch (error) {
             console.error("Login failed", error);
         }
+        
     };
 
     return (

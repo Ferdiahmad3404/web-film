@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const DetailFilm = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [filmData, setFilmData] = useState(null);
     const [actorData, setActorData] = useState([]);
+    const [searchInput, setSearchInput] = useState('');
 
     // Fungsi untuk mengambil data film berdasarkan ID
     const fetchFilmData = async () => {
@@ -30,7 +32,13 @@ const DetailFilm = () => {
         fetchFilmData();
     }, [id]);
 
-    
+    // Fungsi untuk menangani pencarian
+    const handleSearch = (event) => {
+        event.preventDefault(); // Mencegah refresh halaman
+        if (searchInput.trim()) { // Cek apakah input tidak kosong
+            navigate(`/search/${searchInput}`); // Arahkan ke route pencarian
+        }
+    };
 
     if (!filmData) {
         return  <div className="flex items-center justify-center w-full h-screen bg-yellow-900">
@@ -42,15 +50,26 @@ const DetailFilm = () => {
     }
     return (
         <div className="bg-yellow-900">
-            <div className="flex flex-row">
+            <div className="flex flex-row items-center justify-center">
                 {/* Main Content */}
-                <main className="w-full p-20">
+                <main className="w-5/6 p-20">
                     <div className="flex space-x-60 mb-6 items-center justify-between">
                         <a href="/"><h1 className="mb-4 text-center text-4xl font-extrabold leading-none tracking-tight text-neutral-200 md:text-5xl lg:text-6xl">DramaKu</h1></a>
                         <div className="flex w-full items-center">
                             <div className="flex space-x-4 items-center justify-center w-full">
-                                <input type="text" className="p-2 bg-neutral-200 border border-gray-300 rounded-full w-full" placeholder="Search..." />
-                                <button className="bg-blue-500 text-white px-4 py-2 rounded-full">Cari</button>
+                                <form onSubmit={handleSearch} className="flex w-full space-x-4 items-center justify-center">
+                                    <input 
+                                        type="text" 
+                                        className="p-2 bg-neutral-200 border border-gray-300 rounded-full w-full" 
+                                        placeholder="Search..." 
+                                        value={searchInput} 
+                                        onChange={(e) => setSearchInput(e.target.value)} // Update state saat input berubah
+                                    />
+                                    <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-full">Cari</button>
+                                </form>
+
+                                {/* <input type="text" className="p-2 bg-neutral-200 border border-gray-300 rounded-full w-full" placeholder="Search..." />
+                                <button className="bg-blue-500 text-white px-4 py-2 rounded-full">Cari</button> */}
                             </div>
                         </div>
                     </div>
@@ -76,7 +95,8 @@ const DetailFilm = () => {
                                     {/* <li><strong>Rating:</strong> {filmData.rating}</li> */}
                                 </ul>
                                 <h2 className="text-xl font-semibold mb-2">Synopsis</h2>
-                                <p className="text-gray-700 mb-4">{filmData.description}</p>
+                                <p className="text-gray-700 mb-16">{filmData.description}</p>
+                                <p className="text-gray-400 mb-4">posted by : {filmData.created_by}</p>
                             </div>
                         </div>
                     </div>
@@ -84,10 +104,10 @@ const DetailFilm = () => {
                     {/* Trailer */}
                     <div className="bg-neutral-200 text-white p-4 rounded-lg shadow-lg w-full mb-6">
                         <h1 className="font-bold mb-4 text-black text-2xl">Trailer</h1>
-                        <div className="overflow-x-auto">
+                        <div className="overflow-x-auto rounded-md">
                             <iframe
                                 width="100%"
-                                height="400"
+                                height="500"
                                 src={convertYoutubeLink(filmData.trailer)}
                                 title="YouTube video player"
                                 frameBorder="0"
