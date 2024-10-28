@@ -45,6 +45,10 @@ const Registrasi = () => {
         }
     };
 
+    const handleGoogleLogin = () => {
+        window.location.href = 'http://localhost:8000/api/auth/google';
+    };
+
     return (
         <div className="w-screen h-screen flex flex-col gap-10 justify-center bg-neutral-200 bg-center">
             <div className="flex justify-center text-4xl font-bold text-gray-900 dark:text-yellow-900">REGISTRATION</div>
@@ -131,7 +135,8 @@ const Registrasi = () => {
                 </button>
                 <button
                     type="button"
-                    className="w-full rounded-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    onClick={handleGoogleLogin}
+                    className="w-full rounded-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium text-sm px-5 py-2.5 text-center dark:bg-red-700 dark:hover:bg-red-800 dark:focus:ring-red-900"
                 >
                     SignUp with Google
                 </button>
