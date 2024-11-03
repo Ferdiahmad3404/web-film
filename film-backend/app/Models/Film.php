@@ -36,7 +36,7 @@ class Film extends Model
     // Relasi dengan Actor
     public function actors()
     {
-        return $this->belongsToMany(Actor::class, 'dramas_actors', 'drama_id', 'actors_id');
+        return $this->belongsToMany(Actor::class, 'dramas_actors', 'drama_id', 'actor_id');
     }
 
     // Relasi dengan Country
@@ -49,5 +49,11 @@ class Film extends Model
     public function awards()
     {
         return $this->hasMany(Award::class, 'drama_id');
+    }
+
+    // Film memiliki banyak komentar
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'drama_id');
     }
 }
