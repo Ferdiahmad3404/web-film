@@ -28,7 +28,7 @@ class FilmController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'url_cover' => 'required|url',
+            'poster' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', 
             'title' => 'required|string|max:255',
             'alt_title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
@@ -37,10 +37,32 @@ class FilmController extends Controller
             'year' => 'required|integer',
             'status' => 'required|string|max:50',
             'created_date' => 'required|date',
+            'created_by' => 'required|string|max:255',
             'country_id' => 'required|integer',
+            'genres' => 'nullable|array', // Validasi untuk genre
+            'genres.*' => 'integer|exists:genres,id', // Pastikan setiap genre yang dikirim ada di tabel genres
+            'actors' => 'nullable|array', // Validasi untuk aktor
+            'actors.*' => 'integer|exists:actors,id', // Pastikan setiap aktor yang dikirim ada di tabel actors
         ]);
 
-        $film = Film::create($request->all());
+        // Meng-upload file poster
+        $path = $request->file('poster')->store('posters', 'public'); // Simpan file di storage/app/public/posters
+
+        // Membuat film baru dengan url_cover yang diisi dengan path poster
+        $film = Film::create(array_merge($request->all(), [
+            'url_cover' => $path,
+            'created_date' => now(), // Mengisi created_date dengan timestamp saat ini
+        ]));
+
+        // Menghubungkan film dengan genre jika ada
+        if ($request->genres) {
+            $film->genres()->attach($request->genres);
+        }
+
+        // Menghubungkan film dengan aktor jika ada
+        if ($request->actors) {
+            $film->actors()->attach($request->actors);
+        }
 
         return response()->json(['message' => 'Film added successfully', 'data' => $film], 201);
     }

@@ -16,11 +16,19 @@ class Actor extends Model
     protected $fillable = [
         'name',
         'url_photo',
+        'birth_date',
+        'country_id',
     ];
 
     // Relasi dengan Film
     public function films()
     {
         return $this->belongsToMany(Film::class, 'dramas_actors', 'actors_id', 'drama_id');
+    }
+
+    // Relasi dengan Country
+    public function country()
+    {
+        return $this->belongsTo(Country::class, 'country_id');
     }
 }

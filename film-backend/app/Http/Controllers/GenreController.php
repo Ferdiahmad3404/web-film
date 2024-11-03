@@ -24,10 +24,10 @@ class GenreController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'genre' => 'required|string|max:255',
         ]);
 
-        $genre = Genre::create($request->only('name'));
+        $genre = Genre::create($request->only('genre'));
 
         return response()->json(['message' => 'Genre added successfully', 'data' => $genre], 201);
     }
@@ -49,10 +49,10 @@ class GenreController extends Controller
     public function update(Request $request, Genre $genre)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'genre' => 'required|string|max:255',
         ]);
 
-        $genre->update($request->only('name'));
+        $genre->update($request->only('genre'));
 
         return response()->json(['message' => 'Genre updated successfully', 'data' => $genre], 200);
     }

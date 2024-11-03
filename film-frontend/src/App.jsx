@@ -56,7 +56,8 @@ function App() {
           <Route path="/auth/google/callback" element={<GoogleCallback />} />
 
           {/* CMS */}
-          <Route path='/admin-dashboard' element={<PrivateRoute element={<CMSCountries />} requiredRoles={['admin']} />} />
+          <Route path='/admin-dashboard' element={<PrivateRoute element={<CMSDramas />} requiredRoles={['admin']} />} />
+          <Route path='/cmscountries' element={<PrivateRoute element={<CMSCountries />} requiredRoles={['admin']} />} />
           <Route path='/cmsawards' element={<PrivateRoute element={<CMSAwards />} requiredRoles={['admin']} />} />
           <Route path='/cmsgenres' element={<PrivateRoute element={<CMSGenres />} requiredRoles={['admin']} />} />
           <Route path='/cmsactors' element={<PrivateRoute element={<CMSActors />} requiredRoles={['admin']} />} />
