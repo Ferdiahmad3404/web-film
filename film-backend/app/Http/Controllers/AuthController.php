@@ -18,26 +18,33 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'username' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'role_id' => 'required|in:admin,user',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
-    
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
+        try {
+            $validator = Validator::make($request->all(), [
+                'username' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'role_id' => 'required|in:admin,user',
+                'password' => 'required|string|min:6|confirmed',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 400);
+            }
+
+            $user = User::create([
+                'username' => $request->username,
+                'email' => $request->email,
+                'role_id' => $request->role_id,
+                'password' => Hash::make($request->password),
+            ]);
+
+            return response()->json(['message' => 'Registrasi berhasil'], 201);
+        } catch (\Exception $e) {
+            // Tampilkan pesan error untuk debugging
+            return response()->json(['error' => $e->getMessage()], 500);
         }
-    
-        $user = User::create([
-            'username' => $request->username,
-            'email' => $request->email,
-            'role_id' => $request->role_id,
-            'password' => Hash::make($request->password),
-        ]);
-    
-        return response()->json(['message' => 'Registration successful'], 201);
     }
+
+
 
     /**
      * Login user and return a token.

@@ -12,9 +12,12 @@ class ActorController extends Controller
      */
     public function index()
     {
+        // Mengambil semua aktor dengan data negara
+        $actors = Actor::with('country')->get();
+
         return response()->json([
             'success' => true,
-            'data' => Actor::all(),
+            'data' => $actors,
         ], 200);
     }
 
@@ -25,10 +28,12 @@ class ActorController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'url_photo' => 'nullable|url',
+            'url_photos' => 'nullable|string|max:255',
+            'country_id' => 'required|integer|exists:countries.id', 
+            'birth_date' => 'nullable|date', 
         ]);
 
-        $actor = Actor::create($request->only('name', 'url_photo'));
+        $actor = Actor::create($request->only('name', 'url_photos', 'country_id', 'birth_date'));
 
         return response()->json(['message' => 'Actor added successfully', 'data' => $actor], 201);
     }
@@ -38,6 +43,9 @@ class ActorController extends Controller
      */
     public function show(Actor $actor)
     {
+        // Mengambil aktor dengan data negara
+        $actor->load('country');
+
         return response()->json([
             'success' => true,
             'data' => $actor,
@@ -47,17 +55,36 @@ class ActorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Actor $actor)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'url_photo' => 'nullable|url',
+        $actor = Actor::find($id);
+
+        if (!$actor) {
+            return response()->json(['message' => 'Actor not found'], 404);
+        }
+
+        $validatedData = $request->validate([
+            'name' => 'nullable|string|max:255',
+            'url_photos' => 'nullable|string|max:255',
+            'country_id' => 'nullable|integer|exists:countries,id',
+            'birth_date' => 'nullable|date',
         ]);
 
-        $actor->update($request->only('name', 'url_photo'));
-
-        return response()->json(['message' => 'Actor updated successfully', 'data' => $actor], 200);
+        try {
+            $actor->update($validatedData);
+            return response()->json([
+                'message' => 'Actor updated successfully',
+                'data' => $actor
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error updating actor',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
+
 
     /**
      * Remove the specified resource from storage.

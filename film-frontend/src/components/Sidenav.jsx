@@ -8,9 +8,14 @@ const Sidenav = () => {
         sessionStorage.removeItem('role_id'); // Hapus username dari sessionStorage
     };
 
+    const handleCMS = () => {
+        sessionStorage.setItem("selectedMenu", "drama");
+    };
+
     useEffect(() => {
         // Mengambil role dari sessionStorage
         const userRole = sessionStorage.getItem('role_id');
+        const storedMenu = sessionStorage.getItem('selectedMenu');
         setRole(userRole);
 
         // Sidebar functionality
@@ -57,7 +62,10 @@ const Sidenav = () => {
                             {role === 'admin' && (
                                 <>
                                     <li className="mb-4">
-                                        <a href="/" className="sidebar-link text-lg text-white">Profile</a>
+                                        <a href="/" className="sidebar-link text-lg text-white" onClick={handleCMS}>Home</a>
+                                    </li>
+                                    <li className="mb-4">
+                                        <a href="/admin-dashboard" className="sidebar-link text-lg text-white">CMS</a>
                                     </li>
                                     <li className="mb-4">
                                         <a href="/" className="sidebar-link text-lg text-white"  onClick={handleLogout}>Log Out</a>

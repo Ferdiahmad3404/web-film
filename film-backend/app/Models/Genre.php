@@ -12,7 +12,7 @@ class Genre extends Model
     // Tentukan nama tabel jika tidak menggunakan nama model yang di-plural
     protected $table = 'genres';
 
-    protected $fillable = ['name'];
+    protected $fillable = ['genre'];
 
     // Relasi dengan Film
     public function films()

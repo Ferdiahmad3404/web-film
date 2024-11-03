@@ -10,7 +10,8 @@ class Kernel extends HttpKernel
 {
     protected $middlewareGroups = [
         'web' => [
-            // Middleware untuk web
+            'throttle:api',
+            'bindings',
         ],
 
         'api' => [

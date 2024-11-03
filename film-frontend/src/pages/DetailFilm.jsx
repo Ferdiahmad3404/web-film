@@ -91,7 +91,8 @@ const DetailFilm = () => {
                                 <ul className="list-disc pl-5 mb-6">
                                     <li><strong>Genres:</strong> {filmData.genres.map(genre => genre.genre).join(', ')}</li> 
                                     <li><strong>Available:</strong> {filmData.stream_site}</li>
-                                    <li><strong>Awards:</strong> {filmData.awards.map(award => award.award).join(', ')}</li> 
+                                    <li><strong>Awards:</strong> {filmData.awards.map(award => award.award).join(', ')}</li>  
+                                    <li><strong>Status:</strong> {filmData.status}</li>
                                     {/* <li><strong>Rating:</strong> {filmData.rating}</li> */}
                                 </ul>
                                 <h2 className="text-xl font-semibold mb-2">Synopsis</h2>

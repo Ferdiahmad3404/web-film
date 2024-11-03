@@ -19,7 +19,8 @@ const Login = () => {
         try {
             const response = await api.post('login', credentials);
             sessionStorage.setItem('token', response.data.access_token);
-            sessionStorage.setItem('role_id', response.data.role_id); // Simpan role_id
+            sessionStorage.setItem('role_id', response.data.role_id);
+            sessionStorage.setItem('username', credentials.identifier)
         
             // Cek peran pengguna
             const roleId = response.data.role_id;

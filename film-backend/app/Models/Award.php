@@ -17,6 +17,8 @@ class Award extends Model
     protected $fillable = [
         'award',
         'drama_id',
+        'country_id',
+        'year',
     ];
 
     // Relasi dengan Film
