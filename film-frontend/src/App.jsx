@@ -9,6 +9,7 @@ import SearchResult from './pages/SearchResult';
 
 import Login from './pages/Login';
 import Registrasi from './pages/Registrasi';
+import GoogleCallback from './components/GoogleCallBack.jsx';
 
 import CMSCountries from './pages/CMSCountries';
 import CMSAwards from './pages/CMSAwards';
@@ -52,6 +53,7 @@ function App() {
           {/* Authentication */}
           <Route path='/login' element={<Login />} />
           <Route path='/registrasi' element={<Registrasi />} />
+          <Route path="/auth/google/callback" element={<GoogleCallback />} />
 
           {/* CMS */}
           <Route path='/admin-dashboard' element={<PrivateRoute element={<CMSDramas />} requiredRoles={['admin']} />} />
