@@ -9,7 +9,7 @@ const CMSGenres = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortOption, setSortOption] = useState('a-z');
     const [errorMessage, setErrorMessage] = useState('');
-    
+
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
     const genresPerPage = 10; // Set maximum genres per page
@@ -133,6 +133,19 @@ const CMSGenres = () => {
         setCurrentPage(pageNumber);
     };
 
+    // Handlers for previous and next buttons
+    const handlePrevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
     return (
         <>
             <div className="bg-gray-100">
@@ -210,19 +223,10 @@ const CMSGenres = () => {
                                         {currentGenres.map((genre, index) => (
                                             <tr key={genre.id} className="border-b border-gray-700">
                                                 <th scope="row" className="px-4 py-3 font-medium text-black">{index + 1 + (currentPage - 1) * genresPerPage}</th>
-                                                <th scope="row" 
-                                                    className="px-4 py-3 font-medium text-black cursor-pointer" 
-                                                    onDoubleClick={() => editGenre(genre.id)}>
-                                                    {genre.genre}
-                                                </th>
-                                                <td className="text-center flex items-center justify-end">
-                                                    <button onClick={() => editGenre(genre.id)} className="flex py-2 px-4 hover:text-blue-600 text-black">
-                                                        Edit
-                                                    </button>
-                                                    <span className="text-black">|</span>
-                                                    <button onClick={() => deleteGenre(genre.id)} className="flex items-center py-2 px-4 hover:text-red-600 text-black">
-                                                        Delete
-                                                    </button>
+                                                <td className="px-4 py-3 text-black">{genre.genre}</td>
+                                                <td className="px-4 py-3">
+                                                    <button onClick={() => editGenre(genre.id)} className="text-blue-500 hover:underline">Edit</button>
+                                                    <button onClick={() => deleteGenre(genre.id)} className="text-red-500 hover:underline ml-2">Delete</button>
                                                 </td>
                                             </tr>
                                         ))}
@@ -230,24 +234,29 @@ const CMSGenres = () => {
                                 </table>
                             </div>
 
-                            {/* Pagination Controls */}
-                            <div className="flex justify-center mt-6">
-                                {Array.from({ length: totalPages }, (_, index) => (
+                            {/* Pagination */}
+                            <div className="flex justify-center mt-5">
+                                <button onClick={handlePrevPage} className={`mx-2 ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'} text-white py-2 px-4 rounded`}>
+                                    Previous
+                                </button>
+                                {Array.from({ length: totalPages }, (_, i) => (
                                     <button
-                                        key={index + 1}
-                                        onClick={() => handlePageChange(index + 1)}
-                                        className={`mx-1 px-4 py-2 rounded ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-blue-300'}`}
+                                        key={i + 1}
+                                        onClick={() => handlePageChange(i + 1)}
+                                        className={`mx-1 ${currentPage === i + 1 ? 'bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'} text-white py-2 px-4 rounded`}
                                     >
-                                        {index + 1}
+                                        {i + 1}
                                     </button>
                                 ))}
+                                <button onClick={handleNextPage} className={`mx-2 ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'} text-white py-2 px-4 rounded`}>
+                                    Next
+                                </button>
                             </div>
                         </div>
                     </main>
-                    <Sidenav />
                 </div>
+                <Footer />
             </div>
-            <Footer />
         </>
     );
 };

@@ -135,20 +135,15 @@ const CMSActors = () => {
         return 0;
     });
 
-    // Filter actors based on search query
     const filteredActors = sortedActors.filter(item =>
         item.country.country.toLowerCase().includes(searchQuery.toLowerCase()) || 
         item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.birth_date.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    // Calculate total pages for pagination
     const totalPages = Math.ceil(filteredActors.length / actorsPerPage);
-
-    // Determine actors to display for the current page
     const currentActors = filteredActors.slice((currentPage - 1) * actorsPerPage, currentPage * actorsPerPage);
 
-    // Generate page numbers for pagination
     const getPageNumbers = () => {
         const pageNumbers = [];
         let startPage = Math.max(1, currentPage - 2);
@@ -207,12 +202,17 @@ const CMSActors = () => {
                                                 <option key={country.id} value={country.id}>{country.country}</option>
                                             ))}
                                         </select>
+                                        <label 
+                                            className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                                        >
+                                            Country
+                                        </label>
                                     </div>
                                     <div className="relative z-0 w-5/6 mb-5 group">
-                                        <input
-                                            type="text"
-                                            value={newActorName}
-                                            onChange={e => setNewActorName(e.target.value)}
+                                        <input 
+                                            type="text" 
+                                            value={newActorName} 
+                                            onChange={e => setNewActorName(e.target.value)} 
                                             className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                             placeholder=" "
                                             required
@@ -224,18 +224,24 @@ const CMSActors = () => {
                                         </label>
                                     </div>
                                     <div className="relative z-0 w-5/6 mb-5 group">
-                                        <input
-                                            type="date"
-                                            value={newBirthDate}
-                                            onChange={e => setNewBirthDate(e.target.value)}
+                                        <input 
+                                            type="date" 
+                                            value={newBirthDate} 
+                                            onChange={e => setNewBirthDate(e.target.value)} 
                                             className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                            placeholder=" "
                                             required
                                         />
+                                        <label 
+                                            className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                                        >
+                                            Birth Date
+                                        </label>
                                     </div>
                                     <div className="relative z-0 w-5/6 mb-5 group">
-                                        <input
-                                            type="text"
-                                            value={newPhoto}
+                                        <input 
+                                            type="text" 
+                                            value={newPhoto} 
                                             onChange={e => setNewPhoto(e.target.value)}
                                             className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                                             placeholder=" "
@@ -247,48 +253,56 @@ const CMSActors = () => {
                                             Photo URL
                                         </label>
                                     </div>
-                                    <div className="flex justify-center">
-                                        <button
-                                            type="submit"
-                                            className="inline-flex items-center px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"
-                                        >
-                                            Add Actor
-                                        </button>
+                                    <div className="w-full flex items-center mb-5">
+                                        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Add Actor</button>
                                     </div>
-                                    {message && <div className={`text-center text-${messageType}`}>{message}</div>}
-                                </div>
-                                <div className="w-5/6 mb-5">
-                                    {posterPreview && (
-                                        <button
-                                            onClick={handleChangePoster}
-                                            className="w-full bg-red-500 hover:bg-red-600 text-white rounded-md mb-2"
-                                        >
-                                            Remove Poster
-                                        </button>
-                                    )}
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handlePosterChange}
-                                        className="w-full mb-2"
-                                    />
-                                    {posterPreview && <img src={posterPreview} alt="Poster Preview" className="w-40 h-40" />}
                                 </div>
                             </form>
+                            {message && (
+                                <div className={`mt-4 text-${messageType === 'error' ? 'red' : 'green'}-500`}>
+                                    {message}
+                                </div>
+                            )}
                         </div>
-                    </div>
-                    <ActorList actors={currentActors} editActors={editActors} deleteActors={deleteActors} />
-
-                    <div className="pagination flex justify-center mt-4">
-                        {getPageNumbers().map(page => (
-                            <button
-                                key={page}
-                                onClick={() => handlePageChange(page)}
-                                className={`mx-1 px-3 py-1 rounded ${currentPage === page ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 border'}`}
-                            >
-                                {page}
-                            </button>
-                        ))}
+                        <input 
+                            type="text" 
+                            placeholder="Search..." 
+                            value={searchQuery} 
+                            onChange={e => setSearchQuery(e.target.value)} 
+                            className="w-full mb-4 p-2 border border-gray-300 rounded"
+                        />
+                        <ActorList actors={currentActors} editActors={editActors} deleteActors={deleteActors} />
+                        
+                        {/* Pagination Section */}
+                        <div className="flex justify-center mt-4">
+                            <div className="flex items-center">
+                                {currentPage > 1 && (
+                                    <button
+                                        onClick={() => handlePageChange(currentPage - 1)}
+                                        className="mx-1 px-3 py-1 rounded bg-white text-blue-500 border"
+                                    >
+                                        Prev
+                                    </button>
+                                )}
+                                {getPageNumbers().map(page => (
+                                    <button
+                                        key={page}
+                                        onClick={() => handlePageChange(page)}
+                                        className={`mx-1 px-3 py-1 rounded ${currentPage === page ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 border'}`}
+                                    >
+                                        {page}
+                                    </button>
+                                ))}
+                                {currentPage < totalPages && (
+                                    <button
+                                        onClick={() => handlePageChange(currentPage + 1)}
+                                        className="mx-1 px-3 py-1 rounded bg-white text-blue-500 border"
+                                    >
+                                        Next
+                                    </button>
+                                )}
+                            </div>
+                        </div>
                     </div>
                 </main>
             </div>

@@ -15,7 +15,7 @@ const CMSCountries = () => {
     
     // Pagination states
     const [currentPage, setCurrentPage] = useState(1);
-    const [countriesPerPage] = useState(10); // Set the number of countries to display per page
+    const itemsPerPage = 10; // Number of items per page
 
     useEffect(() => {
         fetchCountries();
@@ -123,22 +123,14 @@ const CMSCountries = () => {
     };
 
     // Pagination Logic
-    const indexOfLastCountry = currentPage * countriesPerPage;
-    const indexOfFirstCountry = indexOfLastCountry - countriesPerPage;
+    const indexOfLastCountry = currentPage * itemsPerPage;
+    const indexOfFirstCountry = indexOfLastCountry - itemsPerPage;
     const currentCountries = getFilteredAndSortedCountries().slice(indexOfFirstCountry, indexOfLastCountry);
 
-    const totalPages = Math.ceil(getFilteredAndSortedCountries().length / countriesPerPage);
+    const totalPages = Math.ceil(getFilteredAndSortedCountries().length / itemsPerPage);
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
-    };
-
-    const getPageNumbers = () => {
-        const pageNumbers = [];
-        for (let i = 1; i <= totalPages; i++) {
-            pageNumbers.push(i);
-        }
-        return pageNumbers.slice(Math.max(0, currentPage - 3), Math.min(totalPages, currentPage + 3));
     };
 
     return (
@@ -194,16 +186,31 @@ const CMSCountries = () => {
                             deleteCountry={deleteCountry}
                         />
 
-                        <div className="pagination flex justify-center mt-4">
-                            {getPageNumbers().map(page => (
+                        {/* Pagination Section */}
+                        <div className="mt-4 flex justify-center space-x-4">
+                            <button
+                                disabled={currentPage === 1}
+                                onClick={() => handlePageChange(currentPage - 1)}
+                                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+                            >
+                                Previous
+                            </button>
+                            {[...Array(totalPages).keys()].map((page) => (
                                 <button
-                                    key={page}
-                                    onClick={() => handlePageChange(page)}
-                                    className={`mx-1 px-3 py-1 rounded ${currentPage === page ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 border'}`}
+                                    key={page + 1}
+                                    onClick={() => handlePageChange(page + 1)}
+                                    className={`px-4 py-2 rounded ${currentPage === page + 1 ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
                                 >
-                                    {page}
+                                    {page + 1}
                                 </button>
                             ))}
+                            <button
+                                disabled={currentPage === totalPages}
+                                onClick={() => handlePageChange(currentPage + 1)}
+                                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+                            >
+                                Next
+                            </button>
                         </div>
                     </div>
                 </main>
