@@ -70,6 +70,7 @@ class AuthController extends Controller
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
             'role_id' => $user->role_id,
+            'id' => $user->id,
         ]);
     }
 
@@ -165,6 +166,6 @@ class AuthController extends Controller
 
         $jwt = JWT::encode($payload, env('JWT_SECRET'), 'HS256');
 
-        return redirect()->away(env('FRONTEND_URL') . '/auth/google/callback?access_token=' . $jwt . '&role_id=' . $user->role_id);
+        return redirect()->away(env('FRONTEND_URL') . '/auth/google/callback?access_token=' . $jwt . '&role_id=' . $user->role_id . '&username=' . $user->username);
     }
 }

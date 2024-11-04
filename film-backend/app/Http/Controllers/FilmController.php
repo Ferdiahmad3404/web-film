@@ -22,6 +22,7 @@ class FilmController extends Controller
         ], 200);
     }
 
+
     /**
      * Store a newly created resource in storage.
      */
@@ -77,14 +78,23 @@ class FilmController extends Controller
      */
     public function show(Request $request, $id)
     {
-        // Ambil satu film beserta genre dan actor-nya
-        $film = Film::with(['genres', 'actors', 'country', 'awards'])->find($id);
+        // Ambil satu film beserta genre, actor, dan hanya komentar yang berstatus 'approved'
+        $film = Film::with([
+            'genres',
+            'actors',
+            'country',
+            'awards',
+            // 'comments' => function ($query) {
+            //     $query->approved(); // Memanggil scope approved di model Comment
+            // }
+        ])->find($id);
 
         return response()->json([
             'success' => true,
             'data' => $film,
         ], 200);
     }
+
 
     /**
      * Update the specified resource in storage.

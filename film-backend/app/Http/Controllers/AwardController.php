@@ -8,21 +8,21 @@ use Illuminate\Support\Facades\Validator;
 
 class AwardController extends Controller
 {
-    // Fungsi untuk menampilkan semua penghargaan
+    // Function to display all awards
     public function index()
     {
-        $awards = Award::with('film')->get(); // Mengambil semua penghargaan beserta relasi film
+        $awards = Award::with('film', 'country')->get(); // Fetch all awards along with the film relationship
         return response()->json(['success' => true, 'data' => $awards]);
     }
 
-    // Fungsi untuk menyimpan penghargaan baru
+    // Function to store a new award
     public function store(Request $request)
     {
-        // Validasi input
+        // Input validation
         $validator = Validator::make($request->all(), [
             'award' => 'required|string|max:255',
-            'drama_id' => 'nullable|exists:films,id', // Pastikan drama_id ada di tabel films
-            'country_id' => 'nullable|exists:countries,id', // Pastikan country_id ada di tabel countries
+            'drama_id' => 'nullable|exists:films,id', // Ensure drama_id exists in films table
+            'country_id' => 'nullable|exists:countries,id', // Ensure country_id exists in countries table
             'year' => 'required|integer|min:1900|max:' . date('Y'),
         ]);
 
@@ -30,15 +30,15 @@ class AwardController extends Controller
             return response()->json(['success' => false, 'errors' => $validator->errors()], 400);
         }
 
-        // Buat penghargaan baru
+        // Create a new award
         $award = Award::create($request->all());
         return response()->json(['success' => true, 'data' => $award], 201);
     }
 
-    // Fungsi untuk memperbarui penghargaan yang ada
+    // Function to update an existing award
     public function update(Request $request, $id)
     {
-        // Validasi input
+        // Input validation
         $validator = Validator::make($request->all(), [
             'award' => 'required|string|max:255',
             'drama_id' => 'nullable|exists:films,id',
@@ -50,27 +50,27 @@ class AwardController extends Controller
             return response()->json(['success' => false, 'errors' => $validator->errors()], 400);
         }
 
-        // Temukan penghargaan berdasarkan ID
+        // Find award by ID
         $award = Award::find($id);
         if (!$award) {
             return response()->json(['success' => false, 'message' => 'Award not found'], 404);
         }
 
-        // Perbarui data penghargaan
+        // Update award data
         $award->update($request->all());
         return response()->json(['success' => true, 'data' => $award]);
     }
 
-    // Fungsi untuk menghapus penghargaan
+    // Function to delete an award
     public function destroy($id)
     {
-        // Temukan penghargaan berdasarkan ID
+        // Find award by ID
         $award = Award::find($id);
         if (!$award) {
             return response()->json(['success' => false, 'message' => 'Award not found'], 404);
         }
 
-        // Hapus penghargaan
+        // Delete award
         $award->delete();
         return response()->json(['success' => true, 'message' => 'Award deleted successfully']);
     }
