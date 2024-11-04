@@ -41,19 +41,28 @@ class CountryController extends Controller
     // Mengupdate data negara
     public function update(Request $request, $id)
     {
-        $country = Countries::find($id);
+    $country = Countries::find($id);
 
-        if (!$country) {
-            return response()->json(['message' => 'Country not found'], 404);
-        }
-
-        $validatedData = $request->validate([
-            'country' => 'required|string|max:255|unique:countries,country,' . $id,
-        ]);
-
-        $country->update($validatedData);
-        return response()->json(['message' => 'Country updated successfully', 'data' => $country], 200);
+    if (!$country) {
+        return response()->json(['message' => 'Country not found'], 404);
     }
+
+    // Validasi yang akan memeriksa apakah nama negara sudah ada (case insensitive)
+    $validatedData = $request->validate([
+        'country' => 'required|string|max:255',
+    ]);
+
+    // Cek jika nama negara sudah ada (case insensitive)
+    $existingCountry = Countries::where('country', 'ILIKE', $validatedData['country'])->where('id', '!=', $id)->first();
+
+    if ($existingCountry) {
+        return response()->json(['message' => 'Country name must be unique (case insensitive)'], 400);
+    }
+
+    $country->update($validatedData);
+    return response()->json(['message' => 'Country updated successfully', 'data' => $country], 200);
+    }
+
 
     // Menghapus negara berdasarkan ID
     public function destroy($id)
@@ -64,8 +73,12 @@ class CountryController extends Controller
             return response()->json(['message' => 'Country not found'], 404);
         }
 
-        $country->delete();
-        return response()->json(['message' => 'Country deleted successfully'], 200);
+        try {
+            $country->delete();
+            return response()->json(['message' => 'Country deleted successfully'], 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json(['message' => 'Cannot delete country, it is still referenced by actors.'], 409);
+        }
     }
 
 

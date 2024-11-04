@@ -7,6 +7,8 @@ use App\Http\Controllers\ActorController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\AwardController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\CMSCommentController;
 
 // Rute untuk Film
 Route::prefix('films')->group(function () {
@@ -52,3 +54,9 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('jwt.auth');
 Route::post('/refresh', [AuthController::class, 'refresh'])->middleware('jwt.auth');
+
+// Rute untuk komentar
+Route::get('/comments', [CMSCommentController::class, 'index']);
+Route::put('/comments/{id}/approve', [CMSCommentController::class, 'approve']);
+Route::delete('/comments/{id}', [CMSCommentController::class, 'destroy']);
+Route::delete('/comments/bulk-delete', [CMSCommentController::class, 'bulkDelete']); // For bulk deletion

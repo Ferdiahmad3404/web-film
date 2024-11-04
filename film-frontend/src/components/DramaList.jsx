@@ -22,7 +22,7 @@ const DramaList = () => {
   // Fetch semua data dan ambil nilai unik
   const fetchData = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/films');
+      const response = await fetch('http://localhost:8000/films');
       const data = await response.json();
 
       setDramaData(data.data);

@@ -16,6 +16,7 @@ class CommentController extends Controller
         $comments = Comment::with(['user', 'replies.user'])
                             ->where('drama_id', $id)
                             ->whereNull('parent_id')
+                            ->where('status', 'approved') 
                             ->get();
 
         if ($comments->isEmpty()) {
@@ -27,29 +28,27 @@ class CommentController extends Controller
 
     // Menambahkan komentar baru
     public function addComment(Request $request, $id)
-{
-    $request->validate([
-        'comment' => 'required|string',
-        'rating' => 'nullable|integer|min:1|max:5'
-    ]);
+    {
+        $request->validate([
+            'comment' => 'required|string',
+            'rating' => 'nullable|integer|min:1|max:5'
+        ]);
 
-    // Menggunakan ID dari token JWT
-    $userId = $request->user()->id;
+        $comment = Comment::create([
+            'user_id' => $request->userId, // Ambil ID dari token JWT
+            'drama_id' => $id,
+            'comment' => $request->comment,
+            'status' => 'unapproved', // Status default
+            'rating' => $request->rating, // Pastikan rating juga dikirim jika diperlukan
+            'parent_id' => null // null jika komentar utama
+        ]);
 
-    $comment = Comment::create([
-        'user_id' => $userId, // Ambil ID dari token JWT
-        'drama_id' => $id,
-        'comment' => $request->comment,
-        'rating' => $request->rating, // Pastikan rating juga dikirim jika diperlukan
-        'parent_id' => $request->parent_id // null jika komentar utama
-    ]);
-
-    return response()->json($comment, 201);
+        return response()->json($comment, 201);
     }
 
 
     // Menambahkan reply ke komentar tertentu
-    public function addReply(Request $request, $commentId)
+    public function addReply(Request $request, $id, $commentId)
     {
         $request->validate([
             'comment' => 'required|string'
@@ -57,8 +56,9 @@ class CommentController extends Controller
 
         $comment = Comment::findOrFail($commentId);
         $reply = Comment::create([
-            'user_id' => $userId,
-            'drama_id' => $comment->film_id,
+            'user_id' => $request->userId,
+            'drama_id' => $id,
+            'status' => 'unapproved', // Status default
             'comment' => $request->comment,
             'parent_id' => $commentId
         ]);

@@ -9,6 +9,8 @@ class Country extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     // Tentukan nama tabel jika tidak menggunakan nama model yang di-plural
     protected $table = 'countries';
 

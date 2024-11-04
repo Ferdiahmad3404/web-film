@@ -9,11 +9,15 @@ class Award extends Model
 {
     use HasFactory;
 
-    // Tentukan nama tabel jika tidak menggunakan nama model yang di-plural
+    public $timestamps = false;
+
+    // Define the table name
     protected $table = 'awards';
+
+    // Define the primary key field
     protected $primaryKey = 'id';
 
-    // Kolom-kolom yang dapat diisi secara massal
+    
     protected $fillable = [
         'award',
         'drama_id',
@@ -21,9 +25,14 @@ class Award extends Model
         'year',
     ];
 
-    // Relasi dengan Film
+    // Define a relationship with the Film model
     public function film()
     {
-        return $this->belongsTo(Film::class, 'drama_id');
+        return $this->belongsTo(Film::class, 'drama_id'); // 'drama_id' is the foreign key in the awards table
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class, 'country_id'); // 'country_id' is the foreign key in the awards table
     }
 }

@@ -7,20 +7,28 @@ const CommentsSection = ({ id }) => {
     const [newRating, setNewRating] = useState(0);
     const [replyComment, setReplyComment] = useState('');
     const [replyToCommentId, setReplyToCommentId] = useState(null);
-    const isLoggedIn = sessionStorage.getItem('role_id') === 'user';
+    const [replySuccess, setReplySuccess] = useState(false);
+    const [commentSuccess, setCommentSuccess] = useState(false); // New state for comment success message
+    const isLoggedIn = sessionStorage.getItem('role_id') === 'user' || sessionStorage.getItem('role_id') === 'admin';
 
     useEffect(() => {
         fetchComments();
     }, []);
 
-    // Fetch comments from API
     const fetchComments = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/api/films/${id}/comments`);
+            const response = await fetch(`http://localhost:8000/films/${id}/comments`);
             const data = await response.json();
-            setComments(data);
+
+            if (Array.isArray(data)) {
+                setComments(data);
+            } else {
+                console.error('Data is not an array:', data);
+                setComments([]);
+            }
         } catch (error) {
             console.error('Error fetching comments:', error);
+            setComments([]); // Ensure comments is empty if there's an error
         }
     };
 
@@ -34,53 +42,62 @@ const CommentsSection = ({ id }) => {
 
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
-        const token = sessionStorage.getItem('token'); // Ambil token JWT dari sessionStorage
+        const userId = sessionStorage.getItem('id'); 
+        const token = sessionStorage.getItem('token');
         if (newComment.trim()) {
             try {
-                const response = await fetch(`http://localhost:8000/api/films/${id}/comments`, {
+                const response = await fetch(`http://localhost:8000/films/${id}/comments`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`, // Kirim token JWT dalam header
+                        "Authorization": `Bearer ${token}`
                     },
                     body: JSON.stringify({
+                        userId: userId,
                         comment: newComment,
-                        rating: newRating,
+                        rating: null,
                     }),
                 });
-                if (!response.ok) {
-                    throw new Error('Failed to submit comment');
-                }
-                const newCommentData = await response.json();
-                setComments([...comments, newCommentData]);
+
+                // Reset the new comment input and show success message
                 setNewComment('');
-                setNewRating(0);
+                setCommentSuccess(true);
+
+                // Hide the success message after 2 seconds
+                setTimeout(() => setCommentSuccess(false), 2000);
             } catch (error) {
                 console.error('Error submitting comment:', error);
             }
         }
     };
-    
 
     const handleReplySubmit = async (e, commentId) => {
         e.preventDefault();
         if (replyComment.trim()) {
             try {
-                const response = await fetch(`http://localhost:8000/api/films/comments/${commentId}/replies`, {
+                const userId = sessionStorage.getItem('id');
+                const token = sessionStorage.getItem('token');
+                const response = await fetch(`http://localhost:8000/films/${id}/comments/${commentId}/reply`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ comment: replyComment }),
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        "Authorization": `Bearer ${token}` 
+                    },
+                    body: JSON.stringify({ 
+                        userId: userId,
+                        comment: replyComment 
+                    }),
                 });
-                const replyData = await response.json();
-                const updatedComments = comments.map(comment => {
-                    if (comment.id === commentId) {
-                        return { ...comment, replies: [...(comment.replies || []), replyData] };
-                    }
-                    return comment;
-                });
-                setComments(updatedComments);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to submit reply');
+                }
+
+                setReplySuccess(true);
                 setReplyComment('');
-                setReplyToCommentId(null);
+
+                setTimeout(() => setReplySuccess(false), 2000);
+
             } catch (error) {
                 console.error('Error submitting reply:', error);
             }
@@ -111,7 +128,9 @@ const CommentsSection = ({ id }) => {
             <h2 className="text-2xl font-semibold mb-4">Komentar</h2>
 
             <div className="mb-4">
-                <h3 className="font-semibold">Average Rating: {(comments.reduce((acc, comment) => acc + comment.rating, 0) / (comments.length || 1)).toFixed(1)} ★</h3>
+                <h3 className="font-semibold">Average Rating: {comments.length > 0 
+                    ? (comments.reduce((acc, comment) => acc + comment.rating, 0) / comments.length).toFixed(1) 
+                    : 'N/A'} ★</h3>
             </div>
 
             <div className="max-h-64 overflow-y-auto space-y-4 border p-4 rounded-lg shadow-md bg-white">
@@ -141,6 +160,9 @@ const CommentsSection = ({ id }) => {
                                     >
                                         Kirim Balasan
                                     </button>
+                                    {replySuccess && (
+                                        <p className="text-green-600 mt-2">Balasan terkirim! Menunggu Persetujuan Admin</p>
+                                    )}
                                 </form>
                             )}
 
@@ -188,11 +210,14 @@ const CommentsSection = ({ id }) => {
                         >
                             Kirim Komentar
                         </button>
+                        {commentSuccess && (
+                            <p className="text-green-600 mt-2">Komentar berhasil ditambahkan! Menunggu Persetujuan Admin</p> // Success message
+                        )}
                     </form>
                 </>
             ) : (
                 <div className="mt-6 bg-gray-100 p-4 rounded-lg">
-                    <p className="text-gray-600">Anda harus <a href="/login" className="text-blue-500 hover:underline">Login</a> atau <a href="/signup" className="text-blue-500 hover:underline">Signup</a> untuk menulis komentar.</p>
+                    <p className="text-gray-600">Anda harus <a href="/login" className="text-blue-500 hover:underline">Login</a> atau <a href="/signup" className="text-blue-500 hover:underline">Daftar</a> untuk menambahkan komentar.</p>
                 </div>
             )}
         </div>

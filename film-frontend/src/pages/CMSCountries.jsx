@@ -56,20 +56,29 @@ const CMSCountries = () => {
 
     const updateCountry = async (id, newName) => {
         try {
-            await fetch(`http://localhost:8000/countries/${id}`, {
+            const response = await fetch(`http://localhost:8000/countries/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ country: newName }),
             });
+    
+            if (!response.ok) {
+                // Jika respons tidak ok, ambil isi respons sebagai JSON
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Error updating country!'); // Ambil pesan dari backend
+            }
+    
+            // Jika sukses, perbarui daftar negara
             setCountries(
                 countries.map((c) => (c.id === id ? { ...c, country: newName } : c))
             );
             showMessage('Country updated successfully!', 'success');
         } catch (error) {
             console.error('Error updating country:', error);
-            showMessage('Error updating country!', 'error');
+            showMessage("Nama Country Tidak Boleh Sama  ", 'error'); // Tampilkan pesan kesalahan
         }
     };
+    
 
     const deleteCountry = async (id) => {
         if (window.confirm('Are you sure you want to delete this country?')) {
@@ -77,19 +86,24 @@ const CMSCountries = () => {
                 const response = await fetch(`http://localhost:8000/countries/${id}`, {
                     method: 'DELETE',
                 });
-
+    
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    // Mencoba untuk mengambil body dari respons jika status bukan OK
+                    const errorData = await response.json(); // Parse JSON response
+                    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
                 }
-
+    
+                // Menghapus negara dari state setelah sukses
                 setCountries(countries.filter(country => country.id !== id));
                 showMessage('Countries deleted successfully!', 'success');
             } catch (error) {
                 console.error('Error deleting country:', error);
-                showMessage('Error deleting country!', 'error');
+                // Menampilkan pesan kesalahan dari backend
+                showMessage(error.message, 'error'); // Menggunakan pesan kesalahan dari backend
             }
         }
     };
+    
 
     const showMessage = (msg, type) => {
         setMessage(msg);

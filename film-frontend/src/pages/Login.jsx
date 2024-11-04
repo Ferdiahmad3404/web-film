@@ -21,6 +21,7 @@ const Login = () => {
             sessionStorage.setItem('token', response.data.access_token);
             sessionStorage.setItem('role_id', response.data.role_id);
             sessionStorage.setItem('username', credentials.identifier)
+            sessionStorage.setItem('id', response.data.id);
         
             // Cek peran pengguna
             const roleId = response.data.role_id;

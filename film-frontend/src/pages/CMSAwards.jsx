@@ -1,194 +1,252 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CMSSidebar from '../components/CMSSidebar';
 import Sidenav from '../components/Sidenav';
 import Footer from '../components/Footer';
+import axios from 'axios';
 
 const CMSAwards = () => {
-    const [awards_, setAwards_] = useState([
-        { id: 1, name: 'Japan', year: 2024, awards: 'Japanese Drama Award Spring 2024' },
-        { id: 2, name: 'Korea', year: 2022, awards: 'Korean Drama Award Summer 2022' }
-    ]);
+    const [awards, setAwards] = useState([]);
+    const [countries, setCountries] = useState([]);
     const [newCountry, setNewCountry] = useState('');
     const [newYear, setNewYear] = useState('');
     const [newAwards, setNewAwards] = useState('');
     const [sortOption, setSortOption] = useState('a-z');
     const [searchInput, setSearchInput] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+    const [statusMessage, setStatusMessage] = useState('');
+    const [statusType, setStatusType] = useState('');
 
-    // Function to render the award list
-    const renderAwards = () => {
-        const filteredAwards = awards_.filter(item => 
-            item.name.toLowerCase().includes(searchInput.toLowerCase()) ||
-            item.year.toString().includes(searchInput) ||
-            item.awards.toLowerCase().includes(searchInput.toLowerCase())
-        );
+    useEffect(() => {
+        fetchAwards();
+        fetchCountries();
+    }, []);
 
-        return filteredAwards.sort((a, b) => {
-            if (sortOption === 'a-z') {
-                return a.name.localeCompare(b.name);
+    useEffect(() => {
+        if (statusMessage) {
+            const timer = setTimeout(() => {
+                setStatusMessage('');
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [statusMessage]);
+
+    const fetchAwards = async () => {
+        try {
+            const response = await fetch('http://localhost:8000/awards');
+            const data = await response.json();
+            console.log('Full Awards response:', data);
+            if (data && Array.isArray(data.data)) {
+                setAwards(data.data);
             } else {
-                return b.name.localeCompare(a.name);
+                console.error('Awards data is not an array:', data);
+                setAwards([]);
+                setStatusMessage('Unexpected awards data format.');
+                setStatusType('error');
             }
-        }).map((item, index) => (
+        } catch (error) {
+            console.error('Failed to fetch awards:', error);
+            setStatusMessage('Failed to fetch awards.');
+            setStatusType('error');
+        }
+    };
+
+    const fetchCountries = async () => {
+        try {
+            const response = await fetch('http://localhost:8000/countries');
+            const data = await response.json();
+            console.log('Countries response:', data);
+            if (Array.isArray(data)) {
+                setCountries(data);
+            } else {
+                console.error('Countries data is not an array:', data);
+                setCountries([]);
+            }
+        } catch (error) {
+            console.error('Failed to fetch countries:', error);
+            setCountries([]);
+            setStatusMessage('Failed to fetch countries.');
+            setStatusType('error');
+        }
+    };
+
+    const filteredAwards = () => {
+        return awards.filter(item =>
+            item.country.country.toLowerCase().includes(searchInput.toLowerCase()) ||
+            item.year.toString().includes(searchInput) ||
+            item.award.toLowerCase().includes(searchInput.toLowerCase())
+        ).sort((a, b) => {
+            return sortOption === 'a-z' ?
+                a.country.country.localeCompare(b.country.country) :
+                b.country.country.localeCompare(a.country.country);
+        });
+    };
+
+    const paginatedAwards = () => {
+        const filtered = filteredAwards();
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        return filtered.slice(startIndex, startIndex + itemsPerPage);
+    };
+
+    const renderAwards = () => {
+        return paginatedAwards().map((item, index) => (
             <tr key={item.id} className="border-b dark:border-gray-700">
-                <th scope="row" className="px-4 py-3 font-medium dark:text-black">{index + 1}</th>
-                <td className="px-4 py-3 font-medium dark:text-black">{item.name}</td>
-                <td className="px-4 py-3 font-medium dark:text-black">{item.year}</td>
-                <td className="px-4 py-3 font-medium dark:text-black">{item.awards}</td>
+                <th scope="row" className="px-4 py-3 font-medium dark:text-black">{(currentPage - 1) * itemsPerPage + index + 1}</th>
+                <td className="px-4 py-3">{item.country.country}</td>
+                <td className="px-4 py-3">{item.year}</td>
+                <td className="px-4 py-3">{item.award}</td>
                 <td className="text-center flex items-center justify-end">
-                    <button onClick={() => editAwards(item.id)} className="flex py-2 px-4 hover:text-blue-600 dark:hover:text-blue-600 text-black">
-                        Edit
-                    </button>
-                    <span className="text-black">|</span>
-                    <button onClick={() => deleteAwards(item.id)} className="flex items-center py-2 px-4 hover:text-blue-600 dark:hover:text-red-600 text-black">
-                        Delete
-                    </button>
+                    <button onClick={() => deleteAwards(item.id)} className="flex items-center py-2 px-4 hover:text-red-600 text-black">Delete</button>
                 </td>
             </tr>
         ));
     };
 
-    // Add a new award
-    const addAwards = (e) => {
+    const addAwards = async (e) => {
         e.preventDefault();
-        if (newCountry && newYear && newAwards && !awards_.some(c => c.awards === newAwards)) {
-            setAwards_(prevAwards => [
-                ...prevAwards,
-                { id: prevAwards.length + 1, name: newCountry, year: newYear, awards: newAwards }
-            ]);
-            setNewCountry('');
-            setNewYear('');
-            setNewAwards('');
-        }
-    };
-
-    // Edit award by ID
-    const editAwards = (id) => {
-        const item = awards_.find(a => a.id === id);
-        if (!item) return;
-
-        const newCountry = prompt('Edit country name:', item.name);
-        const newYear = prompt('Edit year:', item.year);
-        const newAwards = prompt('Edit awards:', item.awards);
-
         if (newCountry && newYear && newAwards) {
-            setAwards_(prev => prev.map(a => a.id === id ? { ...a, name: newCountry, year: newYear, awards: newAwards } : a));
+            try {
+                // const response = await axios.post('http://localhost:8000/awards', {
+                //     country_id: newCountry,
+                //     year: newYear,
+                //     award: newAwards
+                // });
+                const response = await fetch('http://localhost:8000/awards', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ country_id: newCountry, year: newYear, award: newAwards }),
+                });
+
+                setAwards(prev => [...prev, response.data.data]);
+                resetForm();
+                setStatusMessage('Award added successfully.');
+                setStatusType('success');
+            } catch (error) {
+                console.error('Failed to add award:', error);
+                setStatusMessage('Failed to add award.');
+                setStatusType('error');
+            }
         }
     };
 
-    // Delete award by ID
-    const deleteAwards = (id) => {
+    const deleteAwards = async (id) => {
         if (window.confirm('Are you sure you want to delete this award?')) {
-            setAwards_(awards_.filter(a => a.id !== id));
+            try {
+                await axios.delete(`http://localhost:8000/awards/${id}`);
+                setAwards(awards.filter(a => a.id !== id));
+                setStatusMessage('Award deleted successfully.');
+                setStatusType('success');
+            } catch (error) {
+                console.error('Failed to delete award:', error);
+                setStatusMessage('Failed to delete award.');
+                setStatusType('error');
+            }
         }
+    };
+
+    const resetForm = () => {
+        setNewCountry('');
+        setNewYear('');
+        setNewAwards('');
+    };
+
+    const totalPages = () => {
+        return Math.ceil(filteredAwards().length / itemsPerPage);
+    };
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
     };
 
     return (
         <>
-            <div className="bg-gray-100">
+            <div className="bg-grey-100">
                 <div className="flex">
                     <CMSSidebar />
-                    <main className="flex-1 bg-gray-100 p-6">
-                        <div className="w-full p-9">
-                            <div className="mb-5 flex flex-col justify-between">
-                                <h1 className="text-2xl mb-5 font-medium">Add New Awards</h1>
-                                <form onSubmit={addAwards} className="flex w-full">
-                                    <div className="flex-col justify-between w-full">
-                                        <div className="relative z-0 w-5/6 mb-5 group">
-                                            <select
-                                                value={newCountry}
-                                                onChange={(e) => setNewCountry(e.target.value)}
-                                                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                                required
-                                            >
-                                                <option value="" disabled hidden>Select country</option>
-                                                <option value="Japan">Japan</option>
-                                                <option value="Korea">Korea</option>
-                                            </select>
-                                        </div>
-                                        <div className="relative z-0 w-5/6 mb-5 group">
-                                            <select
-                                                value={newYear}
-                                                onChange={(e) => setNewYear(e.target.value)}
-                                                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                                required
-                                            >
-                                                <option value="" disabled hidden>Select year</option>
-                                                <option value="2021">2021</option>
-                                                <option value="2022">2022</option>
-                                                <option value="2023">2023</option>
-                                                <option value="2024">2024</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="flex-col flex items-center w-full">
-                                        <div className="relative z-0 w-5/6 mb-5 group">
-                                            <input
-                                                type="text"
-                                                value={newAwards}
-                                                onChange={(e) => setNewAwards(e.target.value)}
-                                                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                                                placeholder=" "
-                                                required
-                                            />
-                                            <label className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                                                Awards
-                                            </label>
-                                        </div>
-                                        <button type="submit" className="w-3/6 h-10 bg-blue-500 text-white rounded-full hover:bg-blue-600">Add</button>
-                                    </div>
-                                </form>
-                            </div>
-
-                            {/* Search and Sort Options */}
-                            <div className="flex justify-between mb-4">
-                                {/* Search Bar */}
-                                <div className="flex items-center space-x-2">
-                                    <input
-                                        type="text"
-                                        value={searchInput}
-                                        onChange={(e) => setSearchInput(e.target.value)}
-                                        className="border border-gray-400 px-4 py-2 rounded-full"
-                                        placeholder="Search country"
-                                    />
+                    <main className="flex-1">
+                        <div className="p-5">
+                            <h2 className="text-2xl font-bold mb-4">Manage Awards</h2>
+                            {statusMessage && (
+                                <div className={`alert ${statusType === 'success' ? 'alert-success' : 'alert-error'}`}>
+                                    {statusMessage}
                                 </div>
-
-                                {/* Sort Options */}
-                                <div className="flex items-center space-x-2 w-1/6">
-                                    <label className="mr-2 w-full">Sort by:</label>
+                            )}
+                            <form onSubmit={addAwards} className="mb-5 space-y-4">
+                                <div>
+                                    <label htmlFor="country" className="block mb-2">Country</label>
                                     <select
-                                        value={sortOption}
-                                        onChange={(e) => setSortOption(e.target.value)}
-                                        className="w-full border border-gray-400 px-4 py-2 rounded-full"
+                                        id="country"
+                                        value={newCountry}
+                                        onChange={(e) => setNewCountry(e.target.value)}
+                                        required
+                                        className="border-2 border-gray-300 rounded p-1 w-full"
                                     >
-                                        <option value="a-z">A-Z</option>
-                                        <option value="z-a">Z-A</option>
+                                        <option value="">Select a country</option>
+                                        {Array.isArray(countries) && countries.map(country => (
+                                            <option key={country.id} value={country.id}>{country.country}</option>
+                                        ))}
                                     </select>
                                 </div>
-                            </div>
-
-                            {/* Country List */}
-                            <div className="overflow-x-auto">
-                                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-yellow-900 dark:text-white">
-                                        <tr>
-                                            <th scope="col" className="w-1/12 px-4 py-4 sr-only">No</th>
-                                            <th scope="col" className="w-2/12 px-4 py-4">Countries</th>
-                                            <th scope="col" className="w-1/12 px-4 py-4">Years</th>
-                                            <th scope="col" className="w-6/12 px-4 py-4">Awards</th>
-                                            <th scope="col" className="w-2/12 px-4 py-3">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {renderAwards()}
-                                    </tbody>
-                                </table>
+                                <div>
+                                    <label htmlFor="year" className="block mb-2">Year</label>
+                                    <input
+                                        type="text"
+                                        id="year"
+                                        value={newYear}
+                                        onChange={(e) => setNewYear(e.target.value)}
+                                        required
+                                        className="border-2 border-gray-300 rounded p-1 w-full"
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="awards" className="block mb-2">Award</label>
+                                    <input
+                                        type="text"
+                                        id="awards"
+                                        value={newAwards}
+                                        onChange={(e) => setNewAwards(e.target.value)}
+                                        required
+                                        className="border-2 border-gray-300 rounded p-1 w-full"
+                                    />
+                                </div>
+                                <button type="submit" className="mt-4 bg-blue-600 text-white px-4 py-2 rounded">Add Award</button>
+                            </form>
+                            <table className="min-w-full">
+                                <thead>
+                                    <tr>
+                                        <th className="px-4 py-2">#</th>
+                                        <th className="px-4 py-2">Country</th>
+                                        <th className="px-4 py-2">Year</th>
+                                        <th className="px-4 py-2">Award</th>
+                                        <th className="px-4 py-2">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {renderAwards()}
+                                </tbody>
+                            </table>
+                            <div className="mt-4">
+                                <button
+                                    disabled={currentPage === 1}
+                                    onClick={() => handlePageChange(currentPage - 1)}
+                                    className="mr-2"
+                                >
+                                    Previous
+                                </button>
+                                <button
+                                    disabled={currentPage === totalPages()}
+                                    onClick={() => handlePageChange(currentPage + 1)}
+                                >
+                                    Next
+                                </button>
                             </div>
                         </div>
+                        
                     </main>
                     <Sidenav />
                 </div>
+                <Footer />
             </div>
-            <Footer />
         </>
     );
 };

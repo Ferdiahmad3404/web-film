@@ -15,7 +15,7 @@ class CommentsTableSeeder extends Seeder
         $userIds = User::pluck('id')->toArray();
         $filmIds = Film::pluck('id')->toArray();
 
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             // Array contoh konten untuk komentar utama
             $mainComments = [
                 'Film yang sangat menginspirasi!',
@@ -34,23 +34,25 @@ class CommentsTableSeeder extends Seeder
                 'Review yang bagus, terima kasih!',
             ];
         
-            // Buat beberapa komentar utama untuk setiap film
-            Comment::create([
+            // Buat komentar utama untuk setiap film
+            $mainComment = Comment::create([
                 'user_id' => $userIds[array_rand($userIds)],
                 'drama_id' => $filmIds[array_rand($filmIds)],
                 'parent_id' => null, // Komentar utama
                 'comment' => $mainComments[array_rand($mainComments)], // Konten acak dari array
                 'rating' => rand(1, 5),
-            ])->each(function ($comment) use ($userIds, $filmIds, $replies) {
-                // Tambahkan beberapa reply untuk setiap komentar utama
+            ]);
+        
+            // Tambahkan beberapa balasan untuk setiap komentar utama
+            for ($j = 0; $j < rand(1, 3); $j++) { // Menentukan jumlah balasan secara acak antara 1 sampai 3
                 Comment::create([
                     'user_id' => $userIds[array_rand($userIds)],
                     'drama_id' => $filmIds[array_rand($filmIds)],
-                    'parent_id' => $comment->id, // Reply pada komentar utama
+                    'parent_id' => $mainComment->id, // Reply pada komentar utama
                     'comment' => $replies[array_rand($replies)], // Konten acak dari array reply
+                    'rating' => rand(1, 5), // Opsional, bisa tambahkan rating pada balasan
                 ]);
-            });
+            }
         }
-        
     }
 }

@@ -12,13 +12,13 @@ class CreateDramasTables extends Migration
         // Create 'genres' table
         Schema::create('genres', function (Blueprint $table) {
             $table->id();
-            $table->string('genre');
+            $table->string('genre')->unique();
         });
 
         // Create 'countries' table
         Schema::create('countries', function (Blueprint $table) {
             $table->id();
-            $table->string('country');
+            $table->string('country')->unique();
         });
 
         // Create 'actors' table
@@ -27,7 +27,7 @@ class CreateDramasTables extends Migration
             $table->string('name');
             $table->string('url_photos')->nullable();
             $table->date('birth_date')->nullable();
-            $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
+            $table->foreignId('country_id')->constrained('countries')->onDelete('restrict');
         });
 
         // Create 'users' table
@@ -50,11 +50,11 @@ class CreateDramasTables extends Migration
             $table->text('description')->nullable();
             $table->string('trailer')->nullable();
             $table->string('stream_site')->nullable();
-            $table->string('status')->default('unapproved'); // Status tidak menggunakan enum
+            $table->string('status')->default('unapproved');
             $table->timestamp('created_date')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
+            $table->foreignId('country_id')->constrained('countries')->onDelete('restrict');
             $table->string('created_by')->nullable();
-            $table->smallInteger('year');
+            $table->Integer('year');
         });
 
         // Create 'comments' table
@@ -65,7 +65,7 @@ class CreateDramasTables extends Migration
             $table->string('status')->default('unapproved');
             $table->foreignId('drama_id')->constrained('dramas')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('parent_id')->nullable()->constrained('comments')->onDelete('cascade');
+            $table->foreignId('parent_id')->nullable()->constrained('comments')->onDElete('cascade');
             $table->timestamp('created_date')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
 
@@ -73,22 +73,22 @@ class CreateDramasTables extends Migration
         Schema::create('awards', function (Blueprint $table) {
             $table->id();
             $table->string('award');
-            $table->foreignId('drama_id')->constrained('dramas')->onDelete('cascade');
+            $table->foreignId('drama_id')->constrained('dramas')->onDelete('cascade')->nullable();
             $table->smallInteger('year');
-            $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
+            $table->foreignId('country_id')->constrained('countries')->onDelete('restrict')->nullable();
         });
 
         // Create 'dramas_genres' table
         Schema::create('dramas_genres', function (Blueprint $table) {
             $table->foreignId('drama_id')->constrained('dramas')->onDelete('cascade');
-            $table->foreignId('genre_id')->constrained('genres')->onDelete('cascade');
+            $table->foreignId('genre_id')->constrained('genres')->onDelete('restrict');
             $table->primary(['drama_id', 'genre_id']);
         });
 
         // Create 'dramas_actors' table
         Schema::create('dramas_actors', function (Blueprint $table) {
             $table->foreignId('drama_id')->constrained('dramas')->onDelete('cascade');
-            $table->foreignId('actor_id')->constrained('actors')->onDelete('cascade');
+            $table->foreignId('actor_id')->constrained('actors')->onDelete('restrict');
             $table->primary(['drama_id', 'actor_id']);
         });
     }
@@ -108,6 +108,6 @@ class CreateDramasTables extends Migration
 
         // Drop the custom types
         DB::statement("DROP TYPE IF EXISTS roles");
-        DB::statement("DROP TYPE IF EXISTS statuss");
+        DB::statement("DROP TYPE IF EXISTS status");
     }
 }
