@@ -25,7 +25,7 @@ class Actor extends Model
     // Relasi dengan Film
     public function films()
     {
-        return $this->belongsToMany(Film::class, 'dramas_actors', 'actors_id', 'drama_id');
+        return $this->belongsToMany(Film::class, 'dramas_actors', 'actor_id', 'drama_id');
     }
 
     // Relasi dengan Country
