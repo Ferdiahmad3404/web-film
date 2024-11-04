@@ -96,7 +96,10 @@ const CMSActors = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(updatedActor),
+                body: JSON.stringify({
+                    name: updatedActor.name,
+                    birth_date: updatedActor.birth_date,
+                }),
             });
             const updatedActors = [...actors];
             updatedActors[index] = { ...item, ...updatedActor };

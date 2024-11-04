@@ -1,135 +1,147 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const FiltersAndSorting = ({ onFilterChange, applyFilters, clearFilters, distinctValues }) => {
-  const [filters, setFilters] = useState({
-    year: '',
-    genre: '',
-    streamsite: '',
-    awards: '',
-    searchTerm: ''
-  });
+const FiltersAndSorting = ({ onFilterChange, onNameChange, genres, years, platforms, searchTerm : initialSearchTerm }) => {
+  const [selectedYear, setSelectedYear] = useState('');
+  const [selectedGenre, setSelectedGenre] = useState('');
+  const [selectedPlatform, setSelectedPlatform] = useState('');
+  const [selectedAwards, setSelectedAwards] = useState('');
+  const [sortOrder, setSortOrder] = useState('');
+  const [searchTerm, setSearchTerm] = useState(initialSearchTerm || '');
+  const [isSearched, setIsSearched] = useState(false); // Menyimpan status pencarian
+  const navigate = useNavigate();
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    const newFilters = { ...filters, [name]: value };
-    setFilters(newFilters);
-    onFilterChange(newFilters);
-  };
-
-  const handleApplyFilter = () => {
-    applyFilters();
-  };
-
-  const handleClearFilter = () => {
-    setFilters({
-      year: '',
-      genre: '',
-      streamsite: '',
-      awards: '',
-      searchTerm: ''
-    });
+  const title = searchTerm;
+  const handleFilterChange = () => {
     onFilterChange({
-      year: '',
-      genre: '',
-      streamsite: '',
-      awards: '',
-      searchTerm: ''
+      year: selectedYear,
+      genre: selectedGenre,
+      platform: selectedPlatform,
+      awards: selectedAwards,
+      sortOrder,
+      searchTerm,
     });
-    clearFilters();
   };
 
-  const handleKeyDown = (e) => {
+  const handleNameChange = () => {
+    onNameChange({
+      searchTerm,
+    });
+  };
+
+  // Fungsi untuk menangani pencarian
+  const handleSearch = () => {
+    handleNameChange(); 
+    setIsSearched(true); // Menandai bahwa pencarian telah dilakukan
+    navigate(`/search/${encodeURIComponent(searchTerm)}`); // Redirect dengan search term
+  };
+
+  // Fungsi untuk mendeteksi tombol Enter di input search
+  const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
-      handleApplyFilter();
+      e.preventDefault(); 
+      handleFilterChange();
+      handleSearch();
     }
   };
 
+  // Mengatur ulang search term saat initialSearchTerm berubah
+  useEffect(() => {
+    setSearchTerm(initialSearchTerm);
+    handleNameChange();
+  }, [initialSearchTerm]);
+
+  useEffect(() => {
+    handleFilterChange(); // Panggil setiap kali salah satu filter berubah
+  }, [selectedYear, selectedGenre, selectedPlatform, selectedAwards, sortOrder]);
+
   return (
-    <div className="p-3 bg-white rounded-lg shadow-md border border-gray-200">
-      <div className="flex flex-wrap items-center space-x-2">
-        {/* Search Bar */}
-        <input
-          type="text"
-          name="searchTerm"
-          value={filters.searchTerm}
-          placeholder="Search Title..."
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-          className="w-full sm:w-2/3 p-2 rounded-md border border-gray-300 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-
-        {/* Dropdown Tahun */}
-        <select
-          name="year"
-          value={filters.year}
-          onChange={handleInputChange}
-          className="w-28 p-2 rounded-md border border-gray-300 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          onKeyDown={handleKeyDown}
-        >
-          <option value="">Year</option>
-          {distinctValues.years.map((year, index) => (
-            <option key={index} value={year}>{year}</option>
-          ))}
-        </select>
-
-        {/* Dropdown Genre */}
-        <select
-          name="genre"
-          value={filters.genre}
-          onChange={handleInputChange}
-          className="w-28 p-2 rounded-md border border-gray-300 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          onKeyDown={handleKeyDown}
-        >
-          <option value="">Genre</option>
-          {distinctValues.genres.map((genre, index) => (
-            <option key={index} value={genre.genre}>{genre.genre}</option>
-          ))}
-        </select>
-
-        {/* Dropdown Platform */}
-        <select
-          name="streamsite"
-          value={filters.streamsite}
-          onChange={handleInputChange}
-          className="w-28 p-2 rounded-md border border-gray-300 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          onKeyDown={handleKeyDown}
-        >
-          <option value="">Platform</option>
-          {distinctValues.streamsites.map((streamsite, index) => (
-            <option key={index} value={streamsite}>{streamsite}</option>
-          ))}
-        </select>
-
-        {/* Dropdown Awards */}
-        <select
-          name="awards"
-          value={filters.awards}
-          onChange={handleInputChange}
-          className="w-28 p-2 rounded-md border border-gray-300 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          onKeyDown={handleKeyDown}
-        >
-          <option value="">Awards</option>
-          <option value="true">With Awards</option>
-          <option value="false">No Awards</option>
-        </select>
-
-        {/* Apply Filter Button */}
-        <button
-          onClick={handleApplyFilter}
-          className="p-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-400 transition ease-in-out"
-        >
-          Apply
-        </button>
-
-        {/* Clear Filter Button */}
-        <button
-          onClick={handleClearFilter}
-          className="p-2 bg-gray-300 text-gray-700 rounded-md shadow-md hover:bg-gray-200 transition ease-in-out"
-        >
-          Clear
-        </button>
+    <>
+      <div id="content" className="mb-3 p-4 w-full flex space-x-4">
+        <form>
+          <select
+            id="years"
+            value={selectedYear}
+            onChange={(e) => { setSelectedYear(e.target.value); }}
+            className="cursor-pointer border text-sm rounded-full block w-full p-2.5 bg-yellow-900 hover:bg-yellow-700 text-white focus:ring-white focus:border-white"
+          >
+            <option value="">Choose a year</option>
+            {years.map(year => (
+              <option key={year.id} value={year.year}>{year.year}</option>
+            ))}
+          </select>
+        </form>
+        <form>
+          <select
+            id="genre"
+            value={selectedGenre}
+            onChange={(e) => { setSelectedGenre(e.target.value); }}
+            className="cursor-pointer border text-sm rounded-full block w-full p-2.5 bg-yellow-900 hover:bg-yellow-700 placeholder-yellow-900 text-white focus:ring-white focus:border-white"
+          >
+            <option value="">Choose a genre</option>
+            {genres.map((genre) => (
+              <option key={genre.id} value={genre.genre}>{genre.genre}</option>
+            ))}
+          </select>
+        </form>
+        <form>
+          <select
+            id="platform"
+            value={selectedPlatform}
+            onChange={(e) => { setSelectedPlatform(e.target.value); }}
+            className="cursor-pointer border text-sm rounded-full block w-full p-2.5 bg-yellow-900 hover:bg-yellow-700 placeholder-yellow-900 text-white focus:ring-white focus:border-white"
+          >
+            <option value="">Choose a platform</option>
+            {platforms.map(platform => (
+              <option key={platform.id} value={platform.platform}>{platform.platform}</option>
+            ))}
+          </select>
+        </form>
+        <form>
+          <select
+            id="awards"
+            value={selectedAwards}
+            onChange={(e) => { setSelectedAwards(e.target.value); }}
+            className="cursor-pointer border text-sm rounded-full block w-full p-2.5 bg-yellow-900 hover:bg-yellow-700 placeholder-yellow-900 text-white focus:ring-white focus:border-white"
+          >
+            <option value="">Awards</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </form>
+        <form>
+          <select
+            id="alphabetics"
+            value={sortOrder}
+            onChange={(e) => { setSortOrder(e.target.value); }}
+            className="cursor-pointer border text-sm rounded-full block w-full p-2.5 bg-yellow-900 hover:bg-yellow-700 placeholder-yellow-900 text-white focus:ring-white focus:border-white"
+          >
+            <option value="">Alphabetics</option>
+            <option value="asc">A-Z</option>
+            <option value="desc">Z-A</option>
+          </select>
+        </form>
+        <form className="flex-auto">
+          <div className="flex w-full items-center">
+            <div className="flex space-x-4 items-center justify-center w-full">
+              <input
+                type="text"
+                className="p-2 bg-neutral-200 border border-yellow-900 rounded-full w-full"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={(e) => { setIsSearched(false); setSearchTerm(e.target.value); }}
+                onKeyPress={handleKeyPress} // Menambahkan event handler untuk KeyPress
+              />
+              <button type="button"
+                onClick={handleSearch} // Menggunakan handleSearch untuk pencarian manual
+                className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-full">
+                Cari
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
-    </div>
+    </>
   );
 };
 

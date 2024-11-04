@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import CMSSidebar from '../components/CMSSidebar';
 import Sidenav from '../components/Sidenav';
 import Footer from '../components/Footer';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const CMSDramaInput = () => {
+    const navigate = useNavigate();
     // State untuk menyimpan data file dan preview poster
     const [posterPreview, setPosterPreview] = useState(null);
     const [file, setFile] = useState(null);
     const [formData, setFormData] = useState({
+        poster: '',
         title: '',
         alt_title: '',
         description: '',
@@ -112,6 +114,10 @@ const CMSDramaInput = () => {
         fetchGenres();
         fetchActors();
         fetchAwards();
+        setFormData(prevData => ({
+            ...prevData,
+            created_by: sessionStorage.getItem('username')
+        }));
     }, []);
 
     useEffect(() => {
@@ -150,14 +156,16 @@ const CMSDramaInput = () => {
     // Handler untuk perubahan input form
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prevData => ({
-            ...prevData,
-            [name]: value,
-        }));
 
         // If the input is for the actors, update the search term
         if (name === 'actors') {
             setSearchTerm(value);
+        }
+        else {
+            setFormData(prevData => ({
+                ...prevData,
+                [name]: value,
+            }));
         }
     };
 
@@ -192,68 +200,73 @@ const CMSDramaInput = () => {
         }
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault(); // Mencegah reload halaman
-    
+    const handleSubmit = async (event) => {
+        event.preventDefault();
         const data = new FormData();
-        data.append('poster', file); // Menambahkan file poster
-        for (const key in formData) {
-            data.append(key, formData[key]); // Menambahkan semua data form
-        }
-    
-        // Menambahkan genres dan actors sebagai string JSON
-        data.append('genres', JSON.stringify(selectedGenres));
-        data.append('actors', JSON.stringify(selectedActor.map(actor => actor.id))); // Mengambil ID dari selectedActor
-    
-        // Tambahkan `created_date` dan `created_by` jika diperlukan
-        data.append('created_date', new Date().toISOString());
-        data.append('created_by', 'User Name'); // Ganti dengan nama pengguna yang sesuai
-    
-        console.log('Form Data:', formData);
-        
+
+        // Menambahkan semua field ke FormData
+        data.append('poster', file); // pastikan file terpilih
+        data.append('title', formData.title);
+        data.append('alt_title', formData.alt_title);
+        data.append('description', formData.description);
+        data.append('trailer', formData.trailer); // pastikan ini adalah URL yang valid
+        data.append('stream_site', formData.stream_site);
+        data.append('year', formData.year);
+        data.append('status', formData.status);
+        data.append('created_date', new Date().toISOString()); // mengisi tanggal saat ini
+        data.append('country_id', formData.country_id);
+        data.append('created_by', formData.created_by);
+        data.append('award', formData.award);
+
+        selectedGenres.forEach(genre => {
+            data.append('genres[]', genre); // gunakan 'genres[]' untuk mengindikasikan array
+        });
+        selectedActor.forEach(actor => {
+            data.append('actors[]', actor.id); // gunakan 'actors[]' untuk mengindikasikan array
+        });
+
+        data.forEach((value, key) => {
+            console.log(key, value);
+        });
+
+        setFormData({
+            poster: '',
+            title: '',
+            alt_title: '',
+            description: '',
+            trailer: '',
+            stream_site: '',
+            year: '',
+            status: '',
+            created_date: '',
+            country_id: '',
+            created_by: '',
+            genres: [],
+            actors: [],
+            award: '',
+        });
+
         try {
             const response = await fetch('http://localhost:8000/films', {
                 method: 'POST',
                 body: data,
             });
-    
-            if (response.ok) {
-                const result = await response.json();
-                console.log(result);
-                // Reset form setelah berhasil
-                setPosterPreview(null);
-                setFile(null);
-                setFormData({
-                    title: '',
-                    alt_title: '',
-                    description: '',
-                    trailer: '',
-                    stream_site: '',
-                    year: '',
-                    status: 'unapproved',
-                    created_date: '',
-                    country_id: '',
-                    created_by: '',
-                    genres: [],
-                    actors: [],
-                    award: '',
-                });
-                showMessage('Film added successfully!', 'success');
-                // Navigasi ke halaman lain
-                setTimeout(() => {
-                    Navigate("/cmsdramas");
-                }, 5000);
-            } else {
-                console.error('Failed to add film:', response.status);
-                showMessage('Failed to add film. Please try again.', 'error');
+            const result = await response.json();
+            if (!response.ok) {
+                throw new Error(result.message);
             }
+            console.log('Film added successfully:', result);
+            showMessage('Film added successfully...', 'success');
+
+            // Navigasi ke halaman lain setelah 5 detik
+            setTimeout(() => {
+                navigate('/admin-dashboard');
+            }, 5000);
         } catch (error) {
             console.error('Error submitting form:', error);
-            showMessage('Error submitting form. Please check the console for details.', 'error');
+            showMessage('Error adding film: ' + error.message, 'error');
         }
     };
-    
-    
 
     const showMessage = (msg, type) => {
         setMessage(msg);
@@ -497,8 +510,8 @@ const CMSDramaInput = () => {
                                             Award
                                         </label>
                                         <select
-                                            id="country"
-                                            name="country"
+                                            id="award"
+                                            name="award"
                                             value={formData.award}
                                             onChange={handleInputChange}
                                             className="block w-full p-2.5 border border-gray-300 rounded-lg"

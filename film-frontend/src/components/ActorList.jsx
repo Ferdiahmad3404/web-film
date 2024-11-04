@@ -19,7 +19,7 @@ const ActorList = ({ actors, editActors, deleteActors }) => {
 
     const handleSaveClick = (actor) => {
         editActors(actor.id, { name: updatedName, birth_date: updatedBirthDate });
-        setEditingActorId(null); // Keluar dari mode edit
+        setEditingActorId(null); 
     };
 
     return (
