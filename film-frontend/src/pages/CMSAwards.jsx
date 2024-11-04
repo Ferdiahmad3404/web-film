@@ -13,7 +13,7 @@ const CMSAwards = () => {
     const [sortOption, setSortOption] = useState('a-z');
     const [searchInput, setSearchInput] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10;
+    const itemsPerPage = 10; // Number of items per page
     const [statusMessage, setStatusMessage] = useState('');
     const [statusType, setStatusType] = useState('');
 
@@ -35,17 +35,14 @@ const CMSAwards = () => {
         try {
             const response = await fetch('http://localhost:8000/awards');
             const data = await response.json();
-            console.log('Full Awards response:', data);
             if (data && Array.isArray(data.data)) {
                 setAwards(data.data);
             } else {
-                console.error('Awards data is not an array:', data);
                 setAwards([]);
                 setStatusMessage('Unexpected awards data format.');
                 setStatusType('error');
             }
         } catch (error) {
-            console.error('Failed to fetch awards:', error);
             setStatusMessage('Failed to fetch awards.');
             setStatusType('error');
         }
@@ -55,15 +52,12 @@ const CMSAwards = () => {
         try {
             const response = await fetch('http://localhost:8000/countries');
             const data = await response.json();
-            console.log('Countries response:', data);
             if (Array.isArray(data)) {
                 setCountries(data);
             } else {
-                console.error('Countries data is not an array:', data);
                 setCountries([]);
             }
         } catch (error) {
-            console.error('Failed to fetch countries:', error);
             setCountries([]);
             setStatusMessage('Failed to fetch countries.');
             setStatusType('error');
@@ -106,23 +100,18 @@ const CMSAwards = () => {
         e.preventDefault();
         if (newCountry && newYear && newAwards) {
             try {
-                // const response = await axios.post('http://localhost:8000/awards', {
-                //     country_id: newCountry,
-                //     year: newYear,
-                //     award: newAwards
-                // });
                 const response = await fetch('http://localhost:8000/awards', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ country_id: newCountry, year: newYear, award: newAwards }),
                 });
 
-                setAwards(prev => [...prev, response.data.data]);
+                const data = await response.json();
+                setAwards(prev => [...prev, data.data]);
                 resetForm();
                 setStatusMessage('Award added successfully.');
                 setStatusType('success');
             } catch (error) {
-                console.error('Failed to add award:', error);
                 setStatusMessage('Failed to add award.');
                 setStatusType('error');
             }
@@ -137,7 +126,6 @@ const CMSAwards = () => {
                 setStatusMessage('Award deleted successfully.');
                 setStatusType('success');
             } catch (error) {
-                console.error('Failed to delete award:', error);
                 setStatusMessage('Failed to delete award.');
                 setStatusType('error');
             }
@@ -225,23 +213,32 @@ const CMSAwards = () => {
                                     {renderAwards()}
                                 </tbody>
                             </table>
-                            <div className="mt-4">
+                            <div className="mt-4 flex justify-center space-x-4">
                                 <button
                                     disabled={currentPage === 1}
                                     onClick={() => handlePageChange(currentPage - 1)}
-                                    className="mr-2"
+                                    className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
                                 >
                                     Previous
                                 </button>
+                                {[...Array(totalPages()).keys()].map((page) => (
+                                    <button
+                                        key={page + 1}
+                                        onClick={() => handlePageChange(page + 1)}
+                                        className={`px-4 py-2 rounded ${currentPage === page + 1 ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
+                                    >
+                                        {page + 1}
+                                    </button>
+                                ))}
                                 <button
                                     disabled={currentPage === totalPages()}
                                     onClick={() => handlePageChange(currentPage + 1)}
+                                    className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
                                 >
                                     Next
                                 </button>
                             </div>
                         </div>
-                        
                     </main>
                     <Sidenav />
                 </div>

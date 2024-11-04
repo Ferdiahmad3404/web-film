@@ -38,7 +38,7 @@ class CommentController extends Controller
             'user_id' => $request->userId, // Ambil ID dari token JWT
             'drama_id' => $id,
             'comment' => $request->comment,
-            'status' => 'unapproved', // Status default
+            'status' => 'pending', // Status default
             'rating' => $request->rating, // Pastikan rating juga dikirim jika diperlukan
             'parent_id' => null // null jika komentar utama
         ]);

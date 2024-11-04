@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'; 
 import CMSSidebar from '../components/CMSSidebar';
 import ActorList from '../components/ActorList'; 
-import Sidenav from '../components/Sidenav'; 
 
 const CMSActors = () => {
     const [actors, setActors] = useState([]);
@@ -15,11 +14,10 @@ const CMSActors = () => {
     const [message, setMessage] = useState('');
     const [messageType, setMessageType] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [actorsPerPage] = useState(10); // Number of actors per page
+    const [actorsPerPage] = useState(10); 
     const [posterPreview, setPosterPreview] = useState(null);
     const [file, setFile] = useState(null);
 
-    // Fetch actors and countries from the database
     useEffect(() => {
         fetchActors();
         fetchCountries();
@@ -68,7 +66,7 @@ const CMSActors = () => {
                     body: JSON.stringify(newActor),
                 });
                 const savedActor = await response.json();
-                setActors([...actors, savedActor]);
+                setActors(prevActors => [...prevActors, savedActor]); // Update actors state
                 resetForm();
                 showMessage('Actor added successfully!', 'success');
             } catch (error) {
@@ -134,27 +132,37 @@ const CMSActors = () => {
         return 0;
     });
 
+    // Filter actors based on search query
     const filteredActors = sortedActors.filter(item =>
         item.country.country.toLowerCase().includes(searchQuery.toLowerCase()) || 
         item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.birth_date.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    // Calculate pagination
-    const indexOfLastActor = currentPage * actorsPerPage;
-    const indexOfFirstActor = indexOfLastActor - actorsPerPage;
-    const currentActors = filteredActors.slice(indexOfFirstActor, indexOfLastActor);
+    // Calculate total pages for pagination
     const totalPages = Math.ceil(filteredActors.length / actorsPerPage);
+
+    // Determine actors to display for the current page
+    const currentActors = filteredActors.slice((currentPage - 1) * actorsPerPage, currentPage * actorsPerPage);
+
+    // Generate page numbers for pagination
+    const getPageNumbers = () => {
+        const pageNumbers = [];
+        let startPage = Math.max(1, currentPage - 2);
+        let endPage = Math.min(totalPages, startPage + 5);
+
+        if (endPage - startPage < 5) {
+            startPage = Math.max(1, endPage - 5);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            pageNumbers.push(i);
+        }
+        return pageNumbers;
+    };
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
-    };
-
-    const handleJumpToPage = (event) => {
-        const pageNumber = Number(event.target.value);
-        if (pageNumber > 0 && pageNumber <= totalPages) {
-            setCurrentPage(pageNumber);
-        }
     };
 
     const handlePosterChange = (event) => {
@@ -221,12 +229,36 @@ const CMSActors = () => {
                                             required
                                         />
                                     </div>
+                                    <div className="relative z-0 w-5/6 mb-5 group">
+                                        <input
+                                            type="text"
+                                            value={newPhoto}
+                                            onChange={e => setNewPhoto(e.target.value)}
+                                            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                            placeholder=" "
+                                            required
+                                        />
+                                        <label 
+                                            className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                                        >
+                                            Photo URL
+                                        </label>
+                                    </div>
+                                    <div className="flex justify-center">
+                                        <button
+                                            type="submit"
+                                            className="inline-flex items-center px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"
+                                        >
+                                            Add Actor
+                                        </button>
+                                    </div>
+                                    {message && <div className={`text-center text-${messageType}`}>{message}</div>}
                                 </div>
-                                <div className="w-52 h-52 p-5 flex flex-col gap-5">
+                                <div className="w-5/6 mb-5">
                                     {posterPreview && (
                                         <button
                                             onClick={handleChangePoster}
-                                            className="items-center justify-center px-4 py-2 bg-red-500 rounded-md hover:bg-red-400 text-white"
+                                            className="w-full bg-red-500 hover:bg-red-600 text-white rounded-md mb-2"
                                         >
                                             Remove Poster
                                         </button>
@@ -235,73 +267,25 @@ const CMSActors = () => {
                                         type="file"
                                         accept="image/*"
                                         onChange={handlePosterChange}
-                                        className="mt-3"
+                                        className="w-full mb-2"
                                     />
-                                    {posterPreview && (
-                                        <img src={posterPreview} alt="Poster Preview" className="object-cover h-full w-full" />
-                                    )}
+                                    {posterPreview && <img src={posterPreview} alt="Poster Preview" className="w-40 h-40" />}
                                 </div>
-                                <button
-                                    type="submit"
-                                    className="ml-3 items-center justify-center px-4 py-2 bg-blue-600 rounded-md hover:bg-blue-500 text-white"
-                                >
-                                    Add Actor
-                                </button>
                             </form>
                         </div>
+                    </div>
+                    <ActorList actors={currentActors} editActors={editActors} deleteActors={deleteActors} />
 
-                        {message && (
-                            <div className={`text-center ${messageType === 'success' ? 'text-green-500' : 'text-red-500'}`}>
-                                {message}
-                            </div>
-                        )}
-
-                        <div className="relative flex flex-col mt-4">
-                            <div className="flex justify-between mb-2">
-                                <h2 className="text-lg font-bold">Actors List</h2>
-                                <div className="flex items-center">
-                                    <input
-                                        type="text"
-                                        placeholder="Search..."
-                                        value={searchQuery}
-                                        onChange={e => setSearchQuery(e.target.value)}
-                                        className="border p-1"
-                                    />
-                                </div>
-                            </div>
-
-                            <ActorList actors={currentActors} onEdit={editActors} onDelete={deleteActors} />
-
-                            <div className="flex justify-between mt-4">
-                                <div>
-                                    <span>Page {currentPage} of {totalPages}</span>
-                                </div>
-                                <div className="flex items-center">
-                                    <button
-                                        disabled={currentPage === 1}
-                                        onClick={() => handlePageChange(currentPage - 1)}
-                                        className="border px-2 py-1 mx-1 bg-gray-300 hover:bg-gray-200 rounded"
-                                    >
-                                        Prev
-                                    </button>
-                                    <button
-                                        disabled={currentPage === totalPages}
-                                        onClick={() => handlePageChange(currentPage + 1)}
-                                        className="border px-2 py-1 mx-1 bg-gray-300 hover:bg-gray-200 rounded"
-                                    >
-                                        Next
-                                    </button>
-                                    <input
-                                        type="number"
-                                        min="1"
-                                        max={totalPages}
-                                        onChange={handleJumpToPage}
-                                        placeholder="Jump to Page"
-                                        className="border p-1 w-24 mx-1"
-                                    />
-                                </div>
-                            </div>
-                        </div>
+                    <div className="pagination flex justify-center mt-4">
+                        {getPageNumbers().map(page => (
+                            <button
+                                key={page}
+                                onClick={() => handlePageChange(page)}
+                                className={`mx-1 px-3 py-1 rounded ${currentPage === page ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 border'}`}
+                            >
+                                {page}
+                            </button>
+                        ))}
                     </div>
                 </main>
             </div>
