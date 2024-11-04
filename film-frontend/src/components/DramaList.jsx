@@ -85,7 +85,10 @@ const DramaList = ({ searchTerm = ''}) => {
 
     // Filter berdasarkan pencarian judul
     if (searchTerm) {
-      filtered = filtered.filter(drama => drama.title.toLowerCase().includes(searchTerm.toLowerCase()));
+      filtered = filtered.filter(drama => 
+        drama.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        drama.actors.some(actor => actor.name.toLowerCase().includes(searchTerm.toLowerCase()))
+      );
     }
 
     setFilteredData(filtered);

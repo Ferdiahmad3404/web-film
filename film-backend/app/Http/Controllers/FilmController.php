@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Film;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class FilmController extends Controller
 {
@@ -26,44 +27,49 @@ class FilmController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'poster' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', 
-            'title' => 'required|string|max:255',
-            'alt_title' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-            'trailer' => 'nullable|url',
-            'stream_site' => 'nullable|url',
-            'year' => 'required|integer',
-            'status' => 'required|string|max:50',
-            'created_date' => 'required|date',
-            'created_by' => 'required|string|max:255',
-            'country_id' => 'required|integer',
-            'genres' => 'nullable|array', // Validasi untuk genre
-            'genres.*' => 'integer|exists:genres,id', // Pastikan setiap genre yang dikirim ada di tabel genres
-            'actors' => 'nullable|array', // Validasi untuk aktor
-            'actors.*' => 'integer|exists:actors,id', // Pastikan setiap aktor yang dikirim ada di tabel actors
-        ]);
+        try {
+            // Validasi data yang diterima
+            $request->validate([
+                'poster' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'title' => 'required|string|max:255',
+                'alt_title' => 'nullable|string|max:255',
+                'description' => 'nullable|string',
+                'trailer' => 'nullable|string',
+                'stream_site' => 'nullable|string',
+                'year' => 'required|integer',
+                'status' => 'required|string|max:50',
+                'created_date' => 'required|date',
+                'created_by' => 'nullable|string|max:255',
+                'country_id' => 'required|integer',
+                'genres' => 'nullable|array',
+                'actors' => 'nullable|array',
+            ]);
 
-        // Meng-upload file poster
-        $path = $request->file('poster')->store('posters', 'public'); // Simpan file di storage/app/public/posters
+            // Meng-upload file poster
+            $path = $request->file('poster')->store('posters', 'public');
 
-        // Membuat film baru dengan url_cover yang diisi dengan path poster
-        $film = Film::create(array_merge($request->all(), [
-            'url_cover' => $path,
-            'created_date' => now(), // Mengisi created_date dengan timestamp saat ini
-        ]));
+            // Membuat film baru
+            $film = Film::create(array_merge($request->all(), [
+                'url_cover' => $path,
+                'created_date' => now(), // Mengisi created_date dengan timestamp saat ini
+            ]));
 
-        // Menghubungkan film dengan genre jika ada
-        if ($request->genres) {
-            $film->genres()->attach($request->genres);
+            // Menghubungkan film dengan genre
+            if ($request->has('genres')) {
+                $film->genres()->attach($request->genres);
+            }
+
+            // Menghubungkan film dengan aktor
+            if ($request->has('actors') && !empty($request->actors)) {
+                $film->actors()->attach($request->actors);
+            }
+            
+
+            return response()->json(['message' => 'Film added successfully', 'data' => $film], 201);
+        } catch (\Exception $e) {
+            // Menangkap kesalahan dan mengembalikan respons JSON
+            return response()->json(['error' => 'Internal Server Error', 'message' => $e->getMessage()], 500);
         }
-
-        // Menghubungkan film dengan aktor jika ada
-        if ($request->actors) {
-            $film->actors()->attach($request->actors);
-        }
-
-        return response()->json(['message' => 'Film added successfully', 'data' => $film], 201);
     }
 
     /**
@@ -108,6 +114,11 @@ class FilmController extends Controller
      */
     public function destroy(Film $film)
     {
+        // Hapus file poster dari storage jika ada
+        if ($film->url_cover) {
+            Storage::disk('public')->delete($film->url_cover);
+        }
+
         $film->delete();
 
         return response()->json(['message' => 'Film deleted successfully'], 200);

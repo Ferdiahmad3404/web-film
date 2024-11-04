@@ -12,6 +12,7 @@ class Film extends Model
     // Tentukan nama tabel jika tidak menggunakan nama model yang di-plural
     protected $table = 'dramas';
     protected $primaryKey = 'id';
+    
 
     // Kolom-kolom yang dapat diisi secara massal
     protected $fillable = [
@@ -23,7 +24,8 @@ class Film extends Model
         'stream_site',
         'year',
         'status',
-        'created_date',
+        'created_at',
+        'created_by',
         'country_id',
     ];
 

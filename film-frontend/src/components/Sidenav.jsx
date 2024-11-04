@@ -15,7 +15,6 @@ const Sidenav = () => {
     useEffect(() => {
         // Mengambil role dari sessionStorage
         const userRole = sessionStorage.getItem('role_id');
-        const storedMenu = sessionStorage.getItem('selectedMenu');
         setRole(userRole);
 
         // Sidebar functionality
@@ -23,16 +22,13 @@ const Sidenav = () => {
         const closeBtn = document.getElementById('close-btn');
         const sidebar = document.getElementById('sidebar');
 
-
         if (openBtn && closeBtn && sidebar) {
             openBtn.addEventListener('click', () => {
-                sidebar.classList.add('active');
-                sidebar.style.display = 'block';
+                sidebar.style.transform = 'translateX(0)';
             });
 
             closeBtn.addEventListener('click', () => {
-                sidebar.classList.remove('active');
-                sidebar.style.display = 'none';
+                sidebar.style.transform = 'translateX(100%)';
             });
         }
     }, []);
@@ -49,15 +45,17 @@ const Sidenav = () => {
                     </div>
                 </div>
                 {/* Sidebar Popup */}
-                <div id="sidebar" className="fixed top-0 left-0 h-full w-64 bg-yellow-900 shadow-lg z-50 p-8">
+                <div 
+                    id="sidebar" 
+                    className="fixed top-0 right-0 h-full w-64 bg-yellow-900 shadow-lg z-50 p-8" 
+                    style={{ transform: 'translateX(100%)', transition: 'transform 0.3s ease' }}
+                >
                     <div className="flex justify-between items-center mb-12">
                         <h2 className="text-2xl font-bold text-white">DramaKu</h2>
                         <button id="close-btn" className="text-2xl text-white">&times;</button>
                     </div>
                     <nav>
                         <ul>
-                            {/* Menu Umum */}
-
                             {/* Menu berdasarkan role */}
                             {role === 'admin' && (
                                 <>
@@ -68,7 +66,7 @@ const Sidenav = () => {
                                         <a href="/admin-dashboard" className="sidebar-link text-lg text-white">CMS</a>
                                     </li>
                                     <li className="mb-4">
-                                        <a href="/" className="sidebar-link text-lg text-white"  onClick={handleLogout}>Log Out</a>
+                                        <a href="/" className="sidebar-link text-lg text-white" onClick={handleLogout}>Log Out</a>
                                     </li>
                                 </>
                             )}
@@ -87,14 +85,14 @@ const Sidenav = () => {
                                         <a href="/user-profile" className="sidebar-link text-lg text-white">Profile</a>
                                     </li>
                                     <li className="mb-4">
-                                        <a href="/" className="sidebar-link text-lg text-white"  onClick={handleLogout}>Log Out</a>
+                                        <a href="/" className="sidebar-link text-lg text-white" onClick={handleLogout}>Log Out</a>
                                     </li>   
                                 </>
                             )}
                             {!role && (
                                 <>
                                     <li className="mb-4">
-                                        <a href="/login" className="sidebar-link text-lg text-white">Login</a>
+                                        <a href="/login" className="sidebar-link text-lg text-white" onClick={handleCMS}>Login</a>
                                     </li>
                                     <li className="mb-4">
                                         <a href="/registrasi" className="sidebar-link text-lg text-white">Sign Up</a>
