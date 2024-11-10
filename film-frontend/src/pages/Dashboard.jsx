@@ -4,8 +4,7 @@ import Home from "../components/Home";
 import DramaList from "../components/DramaList";
 
 const Dashboard = () => {
-    // const token = sessionStorage.getItem('token'); // Ambil token dari sessionStorage
-    // const role_id = sessionStorage.getItem('role_id'); // Ambil role dari sessionStorage
+    console.log('token', sessionStorage.getItem('token'));
 
     return (
     <div>

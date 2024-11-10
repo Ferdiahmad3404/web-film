@@ -25,14 +25,6 @@ Route::prefix('countries')->group(function () {
     Route::delete('/{id}', [CountryController::class, 'destroy']);
 });
 
-// Rute untuk Actor
-Route::prefix('actors')->group(function () {
-    Route::post('/', [ActorController::class, 'store']);
-    Route::get('/', [ActorController::class, 'index']);
-    Route::put('/{id}', [ActorController::class, 'update']);
-    Route::delete('/{id}', [ActorController::class, 'destroy']);
-});
-
 // Rute untuk Genre
 Route::prefix('genres')->group(function () {
     Route::post('/', [GenreController::class, 'store']);
@@ -41,12 +33,35 @@ Route::prefix('genres')->group(function () {
     Route::delete('/{id}', [GenreController::class, 'destroy']);
 });
 
+// Rute untuk Actor
+Route::prefix('actors')->group(function () {
+    Route::post('/', [ActorController::class, 'store']);
+    Route::get('/', [ActorController::class, 'index']);
+    Route::put('/{id}', [ActorController::class, 'update']);
+    Route::delete('/{id}', [ActorController::class, 'destroy']);
+});
+
 // Rute untuk Award
 Route::prefix('awards')->group(function () {
     Route::post('/', [AwardController::class, 'store']);
     Route::get('/', [AwardController::class, 'index']);
     Route::put('/{id}', [AwardController::class, 'update']);
     Route::delete('/{id}', [AwardController::class, 'destroy']);
+});
+
+// Rute untuk Comments
+Route::prefix('CMScomments')->group(function () {
+    // Menampilkan semua komentar
+    Route::get('/', [CMSCommentController::class, 'index'])->name('comments.index');
+    
+    // Menyetujui komentar atau menandai sebagai unapproved berdasarkan status
+    Route::patch('/{id}/status', [CMSCommentController::class, 'toggleStatus'])->name('comments.toggleStatus');
+    
+    // Menghapus komentar berdasarkan ID
+    Route::delete('/{id}', [CMSCommentController::class, 'destroy'])->name('comments.destroy');
+    
+    // Menghapus semua komentar berdasarkan ID film (bulk delete)
+    Route::delete('/bulk/{filmId}', [CMSCommentController::class, 'bulkDeleteByFilm'])->name('comments.bulkDeleteByFilm');
 });
 
 // Rute untuk otentikasi

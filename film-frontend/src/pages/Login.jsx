@@ -1,10 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api.js";
 
 const Login = () => {
     const [credentials, setCredentials] = useState({ identifier: "", password: "" });
     const navigate = useNavigate(); // Untuk navigasi setelah login berhasil
+
+    // Cek apakah ada access_token pada URL (Google login callback)
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const accessToken = urlParams.get('access_token');
+        const roleId = urlParams.get('role_id');
+        const username = urlParams.get('username');
+    
+        console.log("Response Google :", urlParams);
+        console.log("Access Token from URL:", accessToken);
+    
+        if (accessToken) {
+            // Simpan token dan data pengguna di sessionStorage
+            sessionStorage.setItem('token', accessToken);
+            sessionStorage.setItem('role_id', roleId);
+            sessionStorage.setItem('username', username);
+    
+            // Tambahkan sedikit penundaan sebelum memeriksa isi sessionStorage
+            setTimeout(() => {
+                console.log("Stored in sessionStorage:", {
+                    token: sessionStorage.getItem('token'),
+                    role_id: sessionStorage.getItem('role_id'),
+                    username: sessionStorage.getItem('username'),
+                });
+    
+                // Redirect pengguna berdasarkan role setelah memastikan penyimpanan selesai
+                if (roleId === 'admin') {
+                    navigate('/admin-dashboard');
+                } else {
+                    navigate('/');
+                }
+            }, 100); // Penundaan 100ms
+        }
+    }, [navigate]);
+    
 
     const handleChange = (e) => {
         setCredentials({
@@ -34,8 +69,8 @@ const Login = () => {
         } catch (error) {
             console.error("Login failed", error);
         }
-        
     };
+
     const handleGoogleLogin = async () => {
         try {
             window.location.href = 'http://localhost:8000/api/auth/google';
@@ -86,8 +121,8 @@ const Login = () => {
                     Login with Google
                 </button>
             </form>
-            </div>
+        </div>
     );
-}
+};
 
 export default Login;

@@ -2,31 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment; // Make sure to import your Comment model
+use App\Models\Comment;
+use App\Models\Film;
 use Illuminate\Http\Request;
 
 class CMSCommentController extends Controller
 {
-    // Fetch all comments
+    // Fungsi untuk menampilkan semua komentar
     public function index()
     {
-        $comments = Comment::all(); // You might want to paginate this
-        return response()->json($comments);
+        $comments = Comment::with('user', 'film')->get();  // Menambahkan relasi untuk user dan film
+        return response()->json($comments, 200);
     }
 
-    // Approve a comment
-    public function approve($id)
+    // Fungsi untuk mengganti status komentar
+    public function toggleStatus($id, Request $request)
     {
-        $comment = Comment::find($id);
-        if ($comment) {
-            $comment->status = 'approved'; // Update this based on your requirements
-            $comment->save();
-            return response()->json(['message' => 'Comment approved successfully.']);
+        $status = $request->input('status');
+
+        if (!in_array($status, ['approved', 'unapproved'])) {
+            return response()->json(['message' => 'Invalid status.'], 400);
         }
-        return response()->json(['message' => 'Comment not found.'], 404);
+
+        $comment = Comment::find($id);
+        if (!$comment) {
+            return response()->json(['message' => 'Comment not found.'], 404);
+        }
+
+        $comment->status = $status;
+        $comment->save();
+
+        return response()->json(['message' => "Comment status updated to {$status}."]);
     }
 
-    // Delete a comment
+
+    // Menghapus komentar berdasarkan ID
     public function destroy($id)
     {
         $comment = Comment::find($id);
@@ -37,11 +47,17 @@ class CMSCommentController extends Controller
         return response()->json(['message' => 'Comment not found.'], 404);
     }
 
-    // Bulk delete comments
-    public function bulkDelete(Request $request)
+    // Menghapus semua komentar berdasarkan film ID
+    public function bulkDeleteByFilm($filmId)
     {
-        $ids = $request->input('ids'); // Expecting an array of comment IDs
-        Comment::destroy($ids);
-        return response()->json(['message' => 'Selected comments deleted successfully.']);
+        $film = Film::find($filmId);
+        
+        if ($film) {
+            $film->comments()->delete();
+            return response()->json(['message' => 'All comments for this film have been deleted.']);
+        }
+
+        return response()->json(['message' => 'Film not found.'], 404);
     }
 }
+

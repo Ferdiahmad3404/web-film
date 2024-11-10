@@ -3,6 +3,7 @@ import CMSSidebar from '../components/CMSSidebar';
 import Sidenav from '../components/Sidenav';
 import Footer from '../components/Footer';
 import CountryList from '../components/CountryList';
+import ErrorMessage from '../components/ErrorMessage';
 
 const CMSCountries = () => {
     const [countries, setCountries] = useState([]);
@@ -11,11 +12,12 @@ const CMSCountries = () => {
     const [sortOption, setSortOption] = useState('a-z');
     const [message, setMessage] = useState('');
     const [messageType, setMessageType] = useState('');
+    const [error, setError] = useState(null);
     const [newlyAddedCountry, setNewlyAddedCountry] = useState(null);
-    
+
     // Pagination states
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10; // Number of items per page
+    const itemsPerPage = 10;
 
     useEffect(() => {
         fetchCountries();
@@ -27,6 +29,7 @@ const CMSCountries = () => {
             const data = await response.json();
             setCountries(data);
         } catch (error) {
+            setError('Failed to fetch countries.');
             console.error('Error fetching countries:', error);
         }
     };
@@ -34,25 +37,27 @@ const CMSCountries = () => {
     const addCountry = async () => {
         if (newCountry.trim()) {
             try {
-                const requestData = {
-                    country: newCountry.trim(),
-                };
+                const requestData = { country: newCountry.trim() };
 
                 const response = await fetch('http://localhost:8000/countries', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(requestData),
                 });
-
+                console.log(response);
                 const data = await response.json();
+                console.log(data);
+                if (!response.ok) {
+                    throw new Error(data.message || 'Failed to add country.');
+                }
+
                 setNewlyAddedCountry(data.data);
                 setNewCountry('');
                 showMessage('Country added successfully!', 'success');
+                setError(null);
             } catch (error) {
+                setError(error.message);
                 console.error('Error adding country:', error);
-                showMessage('Error adding country!', 'error');
             }
         }
     };
@@ -65,18 +70,18 @@ const CMSCountries = () => {
                 body: JSON.stringify({ country: newName }),
             });
 
+            const data = await response.json();
+
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Error updating country!');
+                throw new Error(data.message || 'Error updating country!');
             }
 
-            setCountries(
-                countries.map((c) => (c.id === id ? { ...c, country: newName } : c))
-            );
+            setCountries(countries.map((c) => (c.id === id ? { ...c, country: newName } : c)));
             showMessage('Country updated successfully!', 'success');
+            setError(null);
         } catch (error) {
+            setError(error.message);
             console.error('Error updating country:', error);
-            showMessage("Country names must be unique.", 'error');
         }
     };
 
@@ -87,16 +92,18 @@ const CMSCountries = () => {
                     method: 'DELETE',
                 });
 
+                const data = await response.json();
+
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+                    throw new Error(data.message || 'Error deleting country!');
                 }
 
-                setCountries(countries.filter(country => country.id !== id));
+                setCountries(countries.filter((country) => country.id !== id));
                 showMessage('Country deleted successfully!', 'success');
+                setError(null);
             } catch (error) {
+                setError(error.message);
                 console.error('Error deleting country:', error);
-                showMessage(error.message, 'error');
             }
         }
     };
@@ -108,7 +115,7 @@ const CMSCountries = () => {
     };
 
     const getFilteredAndSortedCountries = () => {
-        const filteredCountries = countries.filter(country =>
+        const filteredCountries = countries.filter((country) =>
             country.country && country.country.toLowerCase().includes(searchTerm.toLowerCase())
         );
 
@@ -142,13 +149,15 @@ const CMSCountries = () => {
                         <h1 className="text-2xl mb-5 font-medium">Add New Countries</h1>
 
                         {message && (
-                            <div className={`mb-4 p-2 text-white rounded ${messageType === 'success' ? 'bg-green-500' : 'bg-red-500'}`}>
+                            <div
+                                className={`mb-4 p-2 text-white rounded ${messageType === 'success' ? 'bg-green-500' : 'bg-red-500'}`}
+                            >
                                 {message}
                             </div>
                         )}
 
-                        <form className="flex justify-between items-center mb-10" onSubmit={(e) => { e.preventDefault(); addCountry(); }}>
-                            <div className="relative z-0 w-4/6 group">
+                        <form className="flex flex-col mb-10" onSubmit={(e) => { e.preventDefault(); addCountry(); }}>
+                            <div className="relative z-0 w-full mb-4 group">
                                 <input
                                     type="text"
                                     className="block py-2.5 px-0 w-full text-sm text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
@@ -161,20 +170,25 @@ const CMSCountries = () => {
                                     Country Name
                                 </label>
                             </div>
-                            <button type="submit" className="w-1/6 h-10 bg-blue-500 text-white rounded-full hover:bg-blue-600">Add</button>
+                            <button type="submit" className="w-full h-10 bg-blue-500 text-white rounded-full hover:bg-blue-600">Add</button>
                         </form>
 
+                        {/* Error message display for addCountry */}
+                        <ErrorMessage message={error} />
+
                         <div className="flex justify-between mb-4">
-                            <div className="flex items-center space-x-2">
-                                <input
-                                    type="text"
-                                    className="border border-gray-400 px-4 py-2 rounded-full"
-                                    placeholder="Search country"
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                />
-                            </div>
-                            <select value={sortOption} onChange={(e) => setSortOption(e.target.value)} className="border border-gray-400 px-4 py-2 rounded-full">
+                            <input
+                                type="text"
+                                className="border border-gray-400 px-4 py-2 rounded-full"
+                                placeholder="Search country"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                            <select
+                                value={sortOption}
+                                onChange={(e) => setSortOption(e.target.value)}
+                                className="border border-gray-400 px-4 py-2 rounded-full"
+                            >
                                 <option value="a-z">A-Z</option>
                                 <option value="z-a">Z-A</option>
                             </select>

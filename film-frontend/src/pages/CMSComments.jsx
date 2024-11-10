@@ -3,194 +3,196 @@ import CMSSidebar from '../components/CMSSidebar';
 import Sidenav from '../components/Sidenav';
 import Footer from '../components/Footer';
 
-const CMDComments = () => {
+const CMSComments = () => {
     const [comments, setComments] = useState([]);
-    const [searchInput, setSearchInput] = useState('');
-    const [sortOption, setSortOption] = useState('a-z');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filterOption, setFilterOption] = useState('all');
+    const [message, setMessage] = useState('');
+    const [messageType, setMessageType] = useState('');
+    const [error, setError] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     useEffect(() => {
         fetchComments();
     }, []);
 
-    useEffect(() => {
-        // Re-render comments when search or sort options change
-        renderComments();
-    }, [searchInput, sortOption]);
-
     const fetchComments = async () => {
         try {
-            const response = await fetch('/api/comments'); // Adjust the endpoint as necessary
+            const response = await fetch('http://localhost:8000/CMScomments');
             const data = await response.json();
             setComments(data);
         } catch (error) {
-            console.error('Error fetching comments:', error);
+            setError('Failed to fetch comments.');
         }
     };
 
-    const renderComments = () => {
-        const filteredComments = comments.filter((item) =>
-            item.username.toLowerCase().includes(searchInput.toLowerCase()) ||
-            item.comment.toLowerCase().includes(searchInput.toLowerCase())
-        );
-
-        const sortedComments = [...filteredComments];
-        if (sortOption === 'a-z') {
-            sortedComments.sort((a, b) => a.username.localeCompare(b.username));
-        } else if (sortOption === 'z-a') {
-            sortedComments.sort((a, b) => b.username.localeCompare(a.username));
-        }
-
-        return sortedComments;
-    };
-
-    const approveComment = async (id) => {
+    const updateCommentStatus = async (id, status) => {
         try {
-            const response = await fetch(`/api/comments/${id}/approve`, {
-                method: 'PUT',
+            await fetch(`http://localhost:8000/CMScomments/${id}/status`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status }),
             });
-            if (response.ok) {
-                fetchComments(); // Refresh the comments after approval
-            }
+            setComments((prevComments) =>
+                prevComments.map((comment) =>
+                    comment.id === id ? { ...comment, status } : comment
+                )
+            );
+            setMessage(`Comment ${status} successfully!`);
+            console.loh('comment :', status);
         } catch (error) {
-            console.error('Error approving comment:', error);
+            setError('Failed to update comment status.');
         }
     };
 
-    const deleteComments = async () => {
-        const selectedComments = comments.filter(comment => comment.check);
-        const deletePromises = selectedComments.map(comment =>
-            fetch(`/api/comments/${comment.id}`, {
-                method: 'DELETE',
-            })
-        );
+    const getFilteredAndSearchedComments = () => {
+        let filteredComments = comments;
 
-        try {
-            await Promise.all(deletePromises);
-            fetchComments(); // Refresh the comments after deletion
-        } catch (error) {
-            console.error('Error deleting comments:', error);
+        // Filter by status
+        if (filterOption !== 'all') {
+            filteredComments = filteredComments.filter(
+                (comment) => comment.status === filterOption
+            );
         }
-    };
 
-    const selectAllComments = () => {
-        const updatedComments = comments.map(comment => ({
-            ...comment,
-            check: true,
-        }));
-        setComments(updatedComments);
-    };
-
-    const handleCheckboxChange = (id) => {
-        const updatedComments = comments.map((comment) =>
-            comment.id === id ? { ...comment, check: !comment.check } : comment
+        // Search by film
+        return filteredComments.filter((comment) =>
+            comment.film.title.toLowerCase().includes(searchTerm.toLowerCase())
         );
-        setComments(updatedComments);
     };
+
+    const indexOfLastComment = currentPage * itemsPerPage;
+    const indexOfFirstComment = indexOfLastComment - itemsPerPage;
+    const currentComments = getFilteredAndSearchedComments().slice(indexOfFirstComment, indexOfLastComment);
+    const totalPages = Math.ceil(getFilteredAndSearchedComments().length / itemsPerPage);
+
+    const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
     return (
-        <>
-            <div className="bg-gray-100">
-                <div className="flex">
-                    <CMSSidebar />
+        <div className="bg-gray-100">
+            <div className="flex">
+                <CMSSidebar />
+                <main className="flex-1 bg-gray-100 p-6">
+                    <div className="w-full p-9">
+                        <h1 className="text-2xl mb-5 font-medium">Manage Comments</h1>
 
-                    {/* Main Content */}
-                    <main className="flex-1 bg-gray-100 p-6">
-                        <div className="w-full p-9">
-                            <div className="mb-5 flex flex-col justify-between">
-                                <h1 className="text-2xl mb-5 font-medium">Comments</h1>
+                        {message && (
+                            <div
+                                className={`mb-4 p-2 text-white rounded ${
+                                    messageType === 'success' ? 'bg-green-500' : 'bg-red-500'
+                                }`}
+                            >
+                                {message}
                             </div>
+                        )}
 
-                            {/* Search and Sort Options */}
-                            <div className="flex justify-between mb-4">
-                                {/* Search Bar */}
-                                <div className="flex items-center space-x-2">
-                                    <input
-                                        type="text"
-                                        id="search-bar"
-                                        className="border border-gray-400 px-4 py-2 rounded-full"
-                                        placeholder="Search comments"
-                                        value={searchInput}
-                                        onChange={(e) => setSearchInput(e.target.value)}
-                                    />
-                                </div>
-
-                                {/* Sort Options */}
-                                <div className="flex items-center space-x-2 w-1/6">
-                                    <label htmlFor="sort-options" className="mr-2 w-full">Sort by:</label>
-                                    <select
-                                        id="sort-options"
-                                        className="w-full border border-gray-400 px-4 py-2 rounded-full"
-                                        value={sortOption}
-                                        onChange={(e) => setSortOption(e.target.value)}
-                                    >
-                                        <option value="a-z">A-Z</option>
-                                        <option value="z-a">Z-A</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            {/* Comments List */}
-                            <div className="overflow-x-auto">
-                                <table className="w-full text-sm text-left mb-10 text-gray-500 dark:text-gray-400">
-                                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-yellow-900 dark:text-white">
-                                        <tr>
-                                            <th scope="col" className="w-1/12 px-4 py-4 sr-only">No</th>
-                                            <th scope="col" className="w-1/12 px-4 py-4">Username</th>
-                                            <th scope="col" className="w-1/12 px-4 py-4">Rate</th>
-                                            <th scope="col" className="w-3/12 px-4 py-4">Drama</th>
-                                            <th scope="col" className="w-5/12 px-4 py-4">Comments</th>
-                                            <th scope="col" className="w-1/12 px-4 py-4">Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {renderComments().map((item) => (
-                                            <tr key={item.id} className="border-b dark:border-gray-700">
-                                                <td className="px-4 py-3">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={item.check || false}
-                                                        onChange={() => handleCheckboxChange(item.id)}
-                                                        className="status-checkbox w-4 h-4 text-black bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-300 dark:border-gray-600"
-                                                    />
-                                                </td>
-                                                <td className="px-4 py-3 text-black">{item.username}</td>
-                                                <td className="px-4 py-3">
-                                                    <div className="flex items-center">
-                                                        <svg className="w-4 h-4 text-yellow-300 me-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                                        </svg>
-                                                        <p className="ms-2 text-sm text-black">{item.rate}</p>
-                                                    </div>
-                                                </td>
-                                                <td className="px-4 py-3 text-black">{item.drama}</td>
-                                                <td className="px-4 py-3 text-black">{item.comment}</td>
-                                                <td className="px-4 py-3 text-black">{item.status}</td>
-                                                <td className="px-4 py-3">
-                                                    <button onClick={() => approveComment(item.id)} className="text-blue-500 hover:underline">Approve</button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div className="flex-col gap-5 w-2/6">
-                                <div>
-                                    <button onClick={selectAllComments} className="w-2/6 h-10 text-black rounded-full hover:text-blue-600">Select All</button>
-                                </div>
-                                <div className="flex gap-5">
-                                    <button onClick={deleteComments} className="w-3/6 h-10 bg-red-500 text-white rounded-full hover:bg-red-600">Delete</button>
-                                </div>
-                            </div>
+                        <div className="flex justify-between mb-4">
+                            <input
+                                type="text"
+                                className="border border-gray-400 px-4 py-2 rounded-full"
+                                placeholder="Search by film"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                            <select
+                                value={filterOption}
+                                onChange={(e) => setFilterOption(e.target.value)}
+                                className="border border-gray-400 px-4 py-2 rounded-full"
+                            >
+                                <option value="all">All</option>
+                                <option value="approved">Approved</option>
+                                <option value="pending">Pending</option>
+                                <option value="unapproved">Unapproved</option>
+                            </select>
                         </div>
-                    </main>
 
-                    <Sidenav />
-                </div>
+                        {/* Comments List */}
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-sm text-left mb-10 text-gray-500">
+                                <thead className="text-xs uppercase bg-yellow-800 text-white">
+                                    <tr>
+                                        <th scope="col" className="px-4 py-4">Username</th>
+                                        <th scope="col" className="px-4 py-4">Comment</th>
+                                        <th scope="col" className="px-4 py-4">Film</th>
+                                        <th scope="col" className="px-4 py-4">Status / Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {currentComments.map((comment) => (
+                                        <tr key={comment.id} className="border-b text-black">
+                                            <td className="px-4 py-3">{comment.user?.username}</td>
+                                            <td className="px-4 py-3">{comment.comment}</td>
+                                            <td className="px-4 py-3">{comment.film.title}</td>
+                                            <td>
+                                                {comment.status === 'pending' ? (
+                                                    <div className="flex space-x-2">
+                                                        <button
+                                                            onClick={() => updateCommentStatus(comment.id, 'approved')}
+                                                            className="px-3 py-1 bg-green-500 text-white rounded"
+                                                        >
+                                                            Approve
+                                                        </button>
+                                                        <button
+                                                            onClick={() => updateCommentStatus(comment.id, 'unapproved')}
+                                                            className="px-3 py-1 bg-red-500 text-white rounded"
+                                                        >
+                                                            Unapprove
+                                                        </button>
+                                                    </div>
+                                                ) : (
+                                                    <span
+                                                        className={`px-3 py-1 rounded ${
+                                                            comment.status === 'approved'
+                                                                ? 'bg-green-200 text-green-800'
+                                                                : 'bg-red-200 text-red-800'
+                                                        }`}
+                                                    >
+                                                        {comment.status}
+                                                    </span>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Pagination Section */}
+                        <div className="mt-4 flex justify-center space-x-4">
+                            <button
+                                disabled={currentPage === 1}
+                                onClick={() => handlePageChange(currentPage - 1)}
+                                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+                            >
+                                Previous
+                            </button>
+                            {[...Array(totalPages).keys()].map((page) => (
+                                <button
+                                    key={page + 1}
+                                    onClick={() => handlePageChange(page + 1)}
+                                    className={`px-4 py-2 rounded ${
+                                        currentPage === page + 1 ? 'bg-blue-600 text-white' : 'bg-gray-200'
+                                    }`}
+                                >
+                                    {page + 1}
+                                </button>
+                            ))}
+                            <button
+                                disabled={currentPage === totalPages}
+                                onClick={() => handlePageChange(currentPage + 1)}
+                                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+                            >
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </main>
+                <Sidenav />
             </div>
             <Footer />
-        </>
+        </div>
     );
 };
 
-export default CMDComments;
+export default CMSComments;
