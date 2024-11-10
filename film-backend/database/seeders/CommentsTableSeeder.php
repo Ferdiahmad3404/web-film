@@ -40,6 +40,7 @@ class CommentsTableSeeder extends Seeder
                 'drama_id' => $filmIds[array_rand($filmIds)],
                 'parent_id' => null, // Komentar utama
                 'comment' => $mainComments[array_rand($mainComments)], // Konten acak dari array
+                'status' => 'pending',
                 'rating' => rand(1, 5),
             ]);
         
@@ -49,6 +50,7 @@ class CommentsTableSeeder extends Seeder
                     'user_id' => $userIds[array_rand($userIds)],
                     'drama_id' => $filmIds[array_rand($filmIds)],
                     'parent_id' => $mainComment->id, // Reply pada komentar utama
+                    'status' => 'pending',
                     'comment' => $replies[array_rand($replies)], // Konten acak dari array reply
                     'rating' => rand(1, 5), // Opsional, bisa tambahkan rating pada balasan
                 ]);

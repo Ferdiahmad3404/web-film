@@ -39,7 +39,7 @@ class CommentController extends Controller
             'drama_id' => $id,
             'comment' => $request->comment,
             'status' => 'pending', // Status default
-            'rating' => $request->rating, // Pastikan rating juga dikirim jika diperlukan
+            'rating' => null, // Pastikan rating juga dikirim jika diperlukan
             'parent_id' => null // null jika komentar utama
         ]);
 

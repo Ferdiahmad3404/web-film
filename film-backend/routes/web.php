@@ -17,6 +17,9 @@ Route::prefix('films')->group(function () {
     Route::post('/{id}', [FilmController::class, 'update']);
     Route::get('/{id}', [FilmController::class, 'show']); 
     Route::delete('/{id}', [FilmController::class, 'destroy']);
+    Route::post('/{id}/comments', [CommentController::class, 'addComment']);
+    Route::post('/${id}/comments/${commentId}/reply', [CommentController::class, 'addReply']);
+    Route::get('/{id}/comments', [CommentController::class, 'getComments']); 
 });
 
 // Rute untuk Countries
@@ -39,7 +42,7 @@ Route::prefix('genres')->group(function () {
 Route::prefix('actors')->group(function () {
     Route::post('/', [ActorController::class, 'store']);
     Route::get('/', [ActorController::class, 'index']);
-    Route::put('/{id}', [ActorController::class, 'update']);
+    Route::post('/{id}', [ActorController::class, 'update']);
     Route::delete('/{id}', [ActorController::class, 'destroy']);
 });
 

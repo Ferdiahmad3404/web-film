@@ -13,11 +13,12 @@ class Actor extends Model
 
     // Tentukan nama tabel jika tidak menggunakan nama model yang di-plural
     protected $table = 'actors';
+    protected $primaryKey = 'id';
 
     // Kolom-kolom yang dapat diisi secara massal
     protected $fillable = [
         'name',
-        'url_photo',
+        'url_photos',
         'birth_date',
         'country_id',
     ];

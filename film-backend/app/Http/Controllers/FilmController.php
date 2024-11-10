@@ -103,13 +103,6 @@ class FilmController extends Controller
      */
     public function update(Request $request, $id)
     {
-        \Log::info('Data yang akan diupdate:', [
-            'title' => $request->get('title'),
-            'alt_title' => $request->get('alt_title'),
-            'description' => $request->get('description'),
-            // Tambahkan field lainnya jika perlu
-        ]);
-
         $film = Film::find($id);
 
         if (!$film) {
@@ -188,7 +181,7 @@ class FilmController extends Controller
         // Terakhir, hapus data film
         $film->delete();
 
-        return response()->json(['message' => 'Film and all related data deleted successfully'], 200);
+        return response()->json(['message' => 'Actor and all related data deleted successfully'], 200);
     }
 
 }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Actor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class ActorController extends Controller
 {
@@ -26,16 +28,31 @@ class ActorController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'url_photos' => 'nullable|string|max:255',
-            'country_id' => 'required|integer|exists:countries.id', 
-            'birth_date' => 'nullable|date', 
-        ]);
+        try{
+            // Validasi input
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'country_id' => 'required|integer|exists:countries,id', 
+                'birth_date' => 'nullable|date',
+                'poster' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048', 
+            ]);
 
-        $actor = Actor::create($request->only('name', 'url_photos', 'country_id', 'birth_date'));
+            // Menangani upload foto jika ada
+            $photoPath = $request->file('poster')->store('actors', 'public');
 
-        return response()->json(['message' => 'Actor added successfully', 'data' => $actor], 201);
+            // Membuat aktor baru dan menyimpan data
+            $actor = Actor::create(array_merge($request->all(), [
+                'url_photos' => $photoPath, 
+            ]));
+
+            return response()->json([
+                'message' => 'Actor added successfully',
+                'data' => $actor
+            ], 201);
+        } catch (\Exception $e) {
+            // Menangkap kesalahan dan mengembalikan respons JSON
+            return response()->json(['error' => 'Internal Server Error', 'message' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -63,24 +80,29 @@ class ActorController extends Controller
             return response()->json(['message' => 'Actor not found'], 404);
         }
 
-        $validatedData = $request->validate([
-            'name' => 'nullable|string|max:255',
-            'url_photos' => 'nullable|string|max:255',
-            'country_id' => 'nullable|integer|exists:countries,id',
-            'birth_date' => 'nullable|date',
-        ]);
+        // Update poster jika ada file
+        if ($request->hasFile('poster')) {
+            if ($actor->url_photos) {
+                Storage::disk('public')->delete($actor->url_photos);
+            }
+            $path = $request->file('poster')->store('actors', 'public');
+            $actor->url_photos = $path;
+        }
+
+        $actor->name = $request->get('name') ?? $actor->name;
+        $actor->birth_date = $request->get('birth_date') ?? $actor->birth_date;
+        $actor->country_id = $request->get('country_id') ?? $actor->country_id;
+        // $actor->url_photos = $request->get('url_photos') ?? $actor->url_photos;
 
         try {
-            $actor->update($validatedData);
-            return response()->json([
-                'message' => 'Actor updated successfully',
-                'data' => $actor
-            ], 200);
+            if ($actor->save()) {
+                return response()->json(['message' => 'Actor updated successfully', 'data' => $actor], 200);
+            } else {
+                return response()->json(['message' => 'Error updating actor'], 500);
+            }
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error updating actor',
-                'error' => $e->getMessage()
-            ], 500);
+            Log::error('Error updating actor: ' . $e->getMessage());
+            return response()->json(['message' => 'Error updating actor', 'error' => $e->getMessage()], 500);
         }
     }
 
@@ -89,10 +111,24 @@ class ActorController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Actor $actor)
+    public function destroy($id)
     {
+        $actor = Actor::find($id);
+
+        if (!$actor) {
+            return response()->json(['message' => 'Actor not found'], 404);
+        }
+
+        // Hapus file poster jika ada
+        if (Storage::disk('public')->exists($actor->url_photos)) {
+            Storage::disk('public')->delete($actor->url_photos);
+        } else {
+            return response()->json(['message' => 'Poster file not found'], 404);
+        }
+
+        // Hapus data aktor dari database
         $actor->delete();
 
-        return response()->json(['message' => 'Actor deleted successfully'], 200);
+        return response()->json(['message' => 'Actor and poster deleted successfully'], 200);
     }
 }

@@ -9,7 +9,7 @@ const ErrorMessage = ({ message }) => {
             setVisible(true);
             const timer = setTimeout(() => {
                 setVisible(false);
-            }, 5000); // Hide after 5 seconds (5000 ms)
+            }, 5000); 
             return () => clearTimeout(timer); // Clean up the timer when the component is unmounted
         }
     }, [message]);
