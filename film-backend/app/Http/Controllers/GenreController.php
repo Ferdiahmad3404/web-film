@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Genre;
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
 
 class GenreController extends Controller
 {
@@ -12,10 +13,8 @@ class GenreController extends Controller
      */
     public function index()
     {
-        return response()->json([
-            'success' => true,
-            'data' => Genre::all(),
-        ], 200);
+        $genres = Genre::all();
+        return response()->json($genres, 200);
     }
 
     /**
@@ -23,54 +22,113 @@ class GenreController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'genre' => 'required|string|max:255',
-        ]);
+        try {
+            $validatedData = $request->validate([
+                'genre' => 'required|string|max:255|unique:genres,genre', // Ensure genre name is unique
+            ]);
 
-        $genre = Genre::create($validatedData);
+            $genre = Genre::create($validatedData);
+            return response()->json(['message' => 'Genre added successfully', 'data' => $genre], 201);
 
-        return response()->json(['message' => 'Genre added successfully', 'data' => $genre], 201);
+        } catch (QueryException $e) {
+            $errorCode = $e->errorInfo[0]; // Mendapatkan kode error dari PostgreSQL
+            
+            // Tangani error duplikasi unik
+            if ($errorCode == '23505') {
+                return response()->json(['message' => 'Genre name must be unique'], 400);
+            }
+
+            return response()->json([
+                'message' => 'Database error',
+                'error' => $e->errorInfo[2]
+            ], 500);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Genre $genre)
+    public function show($id)
     {
-        return response()->json([
-            'success' => true,
-            'data' => $genre,
-        ], 200);
+        $genre = Genre::find($id);
+
+        if (!$genre) {
+            return response()->json(['message' => 'Genre not found'], 404);
+        }
+
+        return response()->json($genre, 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Genre $genre)
+    public function update(Request $request, $id)
     {
-        $validatedData = $request->validate([
-            'genre' => 'required|string|max:255',
-        ]);
+        $genre = Genre::find($id);
 
-        // Cek jika genre yang baru sudah ada (case insensitive) dan bukan genre yang sama
-        $existingGenre = Genre::whereRaw('LOWER(genre) = ? AND id != ?', [strtolower($validatedData['genre']), $genre->id])->first();
-
-        if ($existingGenre) {
-            return response()->json(['message' => 'Genre already exists'], 409); // Conflict
+        if (!$genre) {
+            return response()->json(['message' => 'Genre not found'], 404);
         }
+    
+        try {
+            $validatedData = $request->validate([
+                'genre' => 'required|string|max:255',
+            ]);
 
-        $genre->update($validatedData);
+            // Check if the new genre already exists (case insensitive) and is not the same as the current genre
+            $existingGenre = Genre::where('genre', 'ILIKE', $validatedData['genre'])
+                                    ->where('id', '!=', $id)
+                                    ->first();
 
-        return response()->json(['message' => 'Genre updated successfully', 'data' => $genre], 200);
+            if ($existingGenre) {
+                return response()->json(['message' => 'Genre already exists'], 409); // Conflict
+            }
+
+            $genre->update($validatedData);
+            return response()->json(['message' => 'Genre updated successfully', 'data' => $genre], 200);
+        
+        } catch (QueryException $e) {
+            $errorCode = $e->errorInfo[0];
+
+            if ($errorCode == '23505') {
+                return response()->json(['message' => 'Genre name must be unique'], 400);
+            }
+
+            return response()->json([
+                'message' => 'Database error',
+                'error' => $e->errorInfo[2]
+            ], 500);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Genre $genre)
+    public function destroy($id)
     {
-        $genre->delete();
+        $genre = Genre::find($id);
 
-        return response()->json(['message' => 'Genre deleted successfully'], 200);
+        if (!$genre) {
+            return response()->json(['message' => 'Genre not found'], 404);
+        }
+
+        try {
+            $genre->delete();
+            return response()->json(['message' => 'Genre deleted successfully'], 200);
+        } catch (QueryException $e) {
+            $errorCode = $e->errorInfo[0];
+
+            // Tangani error referensi asing
+            if ($errorCode == '23503') { // kode error referensi asing di PostgreSQL
+                return response()->json([
+                    'message' => 'Cannot delete genre, it is still referenced by Films.'
+                ], 409);
+            }
+
+            return response()->json([
+                'message' => 'Database error',
+                'error' => $e->errorInfo[2]
+            ], 500);
+        }
     }
 }

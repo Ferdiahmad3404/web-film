@@ -16,7 +16,6 @@ class Award extends Model
 
     // Define the primary key field
     protected $primaryKey = 'id';
-
     
     protected $fillable = [
         'award',

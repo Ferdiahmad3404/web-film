@@ -59,11 +59,25 @@ class AuthController extends Controller
         $password = $request->input('password');
         $field = filter_var($identifier, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
-        if (! $token = auth()->attempt([$field => $identifier, 'password' => $password])) {
+        // Cek apakah user ada dan mencoba login
+        $user = User::where($field, $identifier)->first();
+
+        if (!$user || !Hash::check($password, $user->password)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $user = auth()->user();
+        // Cek apakah akun sedang disuspend
+        if ($user->suspended_until && now()->lt($user->suspended_until)) {
+            return response()->json([
+                'error' => 'Your account is suspended until ' . $user->suspended_until->format('Y-m-d H:i:s'),
+                'suspended_until' => $user->suspended_until
+            ], 403); // Status 403 Forbidden karena akun disuspend
+        }
+
+        // Jika akun tidak disuspend, lanjutkan login
+        if (! $token = auth()->login($user)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
 
         return response()->json([
             'access_token' => $token,
@@ -158,13 +172,20 @@ class AuthController extends Controller
         );
 
         $payload = [
-            'iss' => "your-app-name",
+            'iss' => "DramaKu",
             'sub' => $user->id,
             'iat' => time(),
             'exp' => time() + 60*60
         ];
 
         $jwt = JWT::encode($payload, env('JWT_SECRET'), 'HS256');
+
+        \Log::info('Redirecting to frontend with', [
+            'access_token' => $jwt,
+            'role_id' => $user->role_id,
+            'username' => $user->username
+        ]);
+        
 
         return redirect()->away(env('FRONTEND_URL') . '/auth/google/callback?access_token=' . $jwt . '&role_id=' . $user->role_id . '&username=' . $user->username);
     }
