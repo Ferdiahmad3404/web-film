@@ -320,61 +320,66 @@ const CMSDramaInput = () => {
         }
     };
 
-    const handleEdit = async (event) => { 
+    const handleEdit = async (event) => {
         event.preventDefault();
         const data = new FormData();
+
+        console.log("formData:", formData);
     
-        // Cek apakah file adalah URL
-        if (file && typeof file === 'string' && file.startsWith('http')) {
-            data.append('url_cover', file); 
-        } else {
-            data.append('poster', file);
+        // Memastikan hanya menambahkan 'poster' jika itu adalah file
+        if (file && typeof file !== 'string') {
+            data.append('poster', file); // Menambahkan file poster yang baru
+        } else if (file && typeof file === 'string') {
+            // Jika poster adalah URL (bukan file), menambahkannya ke FormData
+            data.append('url_cover', file);
         }
     
-        // Menambahkan semua field ke FormData
+        // Menambahkan semua field lain ke FormData
         data.append('title', formData.title);
         data.append('alt_title', formData.alt_title);
         data.append('description', formData.description);
-        data.append('trailer', formData.trailer); // pastikan ini adalah URL yang valid
+        data.append('trailer', formData.trailer);
         data.append('stream_site', formData.stream_site);
         data.append('year', formData.year);
         data.append('status', formData.status);
-        data.append('created_date', new Date().toISOString()); // mengisi tanggal saat ini
         data.append('country_id', formData.country_id);
-        data.append('created_by', formData.created_by);
-        data.append('award', formData.award);
     
+        // Menambahkan genres dan actors sebagai array
         selectedGenres.forEach(genre => {
-            data.append('genres[]', genre); // gunakan 'genres[]' untuk mengindikasikan array
+            data.append('genres[]', genre);
         });
         selectedActor.forEach(actor => {
-            data.append('actors[]', actor.id); // gunakan 'actors[]' untuk mengindikasikan array
+            data.append('actors[]', actor.id);
+        });
+    
+        data.forEach((value, key) => {
+            console.log(`${key}: ${value}`);
         });
     
         try {
             const response = await fetch(`http://localhost:8000/films/${dramaId}`, {
-                method: 'PUT',
-                body: data,
+                method: 'POST',
+                body: data, // Menggunakan FormData yang sudah disiapkan
             });
-            data.forEach((value, key) => {
-                console.log('ini yang final:', key, value);
-            });
+    
             const result = await response.json();
             if (!response.ok) {
                 throw new Error(result.message);
             }
+    
             console.log('Film updated successfully:', result);
             showMessage('Film updated successfully...', 'success');
     
             // Navigasi ke halaman lain setelah 5 detik
-            // setTimeout(() => {
-            //     navigate('/admin-dashboard');
-            // }, 5000);
+            setTimeout(() => {
+                navigate('/admin-dashboard');
+            }, 5000);
         } catch (error) {
             console.error('Error submitting form:', error);
-            showMessage('Error update film: ' + error.message, 'error');
+            showMessage('Error updating film: ' + error.message, 'error');
         }
     };
+    
 
     const handleSubmitOrEdit = (e) => {
         if (location.state?.drama) {
@@ -500,7 +505,7 @@ const CMSDramaInput = () => {
                                             className="block w-full p-2.5 border border-gray-300 rounded-lg"
                                         >
                                             <option value="">Select Country</option>
-                                            {countries.map((country) => (
+                                            {countries.sort((a, b) => a.country.localeCompare(b.country)).map((country) => (
                                                 <option key={country.id} value={country.id} className="text-black">
                                                     {country.country}
                                                 </option>
