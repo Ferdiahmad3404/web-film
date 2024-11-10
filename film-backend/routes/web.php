@@ -14,6 +14,7 @@ use App\Http\Controllers\CMSCommentController;
 Route::prefix('films')->group(function () {
     Route::post('/', [FilmController::class, 'store']);
     Route::get('/', [FilmController::class, 'index']); 
+    Route::put('/{id}', [FilmController::class, 'update']);
     Route::get('/{id}', [FilmController::class, 'show']); 
 });
 

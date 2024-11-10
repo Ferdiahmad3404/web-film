@@ -41,26 +41,26 @@ class CountryController extends Controller
     // Mengupdate data negara
     public function update(Request $request, $id)
     {
-    $country = Countries::find($id);
+        $country = Countries::find($id);
 
-    if (!$country) {
-        return response()->json(['message' => 'Country not found'], 404);
-    }
+        if (!$country) {
+            return response()->json(['message' => 'Country not found'], 404);
+        }
 
-    // Validasi yang akan memeriksa apakah nama negara sudah ada (case insensitive)
-    $validatedData = $request->validate([
-        'country' => 'required|string|max:255',
-    ]);
+        // Validasi yang akan memeriksa apakah nama negara sudah ada (case insensitive)
+        $validatedData = $request->validate([
+            'country' => 'required|string|max:255',
+        ]);
 
-    // Cek jika nama negara sudah ada (case insensitive)
-    $existingCountry = Countries::where('country', 'ILIKE', $validatedData['country'])->where('id', '!=', $id)->first();
+        // Cek jika nama negara sudah ada (case insensitive)
+        $existingCountry = Countries::where('country', 'ILIKE', $validatedData['country'])->where('id', '!=', $id)->first();
 
-    if ($existingCountry) {
-        return response()->json(['message' => 'Country name must be unique (case insensitive)'], 400);
-    }
+        if ($existingCountry) {
+            return response()->json(['message' => 'Country name must be unique (case insensitive)'], 400);
+        }
 
-    $country->update($validatedData);
-    return response()->json(['message' => 'Country updated successfully', 'data' => $country], 200);
+        $country->update($validatedData);
+        return response()->json(['message' => 'Country updated successfully', 'data' => $country], 200);
     }
 
 

@@ -254,7 +254,7 @@ const CMSActors = () => {
                         </div>
 
                         {message && (
-                            <div className={`text-center ${messageType === 'success' ? 'text-green-500' : 'text-red-500'}`}>
+                            <div className={`mb-4 p-2 text-white rounded ${messageType === 'success' ? 'bg-green-500' : 'bg-red-500'}`}>
                                 {message}
                             </div>
                         )}
@@ -273,7 +273,7 @@ const CMSActors = () => {
                                 </div>
                             </div>
 
-                            <ActorList actors={currentActors} onEdit={editActors} onDelete={deleteActors} />
+                            <ActorList actors={currentActors} editActors={editActors} deleteActors={deleteActors} />
 
                             <div className="flex justify-between mt-4">
                                 <div>
