@@ -103,22 +103,11 @@ class FilmController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Log::info('input', $request->all());
-
-        // Validasi input
-        $request->validate([
-            'poster' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
-            'url_cover' => 'nullable|string', // Validasi untuk URL
-            'title' => 'nullable|string|max:255',
-            'alt_title' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-            'trailer' => 'nullable|string',
-            'stream_site' => 'nullable|string',
-            'year' => 'nullable|integer',
-            'status' => 'nullable|string|max:50',
-            'country_id' => 'nullable|integer|exists:countries,id',
-            'genres' => 'nullable|array',
-            'actors' => 'nullable|array',
+        \Log::info('Data yang akan diupdate:', [
+            'title' => $request->get('title'),
+            'alt_title' => $request->get('alt_title'),
+            'description' => $request->get('description'),
+            // Tambahkan field lainnya jika perlu
         ]);
 
         $film = Film::find($id);
@@ -127,53 +116,79 @@ class FilmController extends Controller
             return response()->json(['message' => 'Film not found'], 404);
         }
 
-        // Update poster jika file yang diupload
+        // Update poster jika ada file
         if ($request->hasFile('poster')) {
             if ($film->url_cover) {
-                Storage::disk('public')->delete($film->url_cover); // Hapus poster yang lama
+                Storage::disk('public')->delete($film->url_cover);
             }
-            $path = $request->file('poster')->store('posters', 'public'); // Simpan poster baru
-            $film->url_cover = $path; // Update url_cover dengan path baru
-        } elseif ($request->hasFile('url_cover')) {
-            // Jika poster_url diisi dan bukan file, set url_cover dengan poster_url
-            $film->url_cover = $request->input('url_cover');
+            $path = $request->file('poster')->store('posters', 'public');
+            $film->url_cover = $path;
         }
 
-        // Update field lain yang ada dalam request
-        $film->title = $request->input('title', $film->title);
-        $film->alt_title = $request->input('alt_title', $film->alt_title);
-        $film->description = $request->input('description', $film->description);
-        $film->trailer = $request->input('trailer', $film->trailer);
-        $film->stream_site = $request->input('stream_site', $film->stream_site);
-        $film->year = $request->input('year', $film->year);
-        $film->status = $request->input('status', $film->status);
-        $film->country_id = $request->input('country_id', $film->country_id);
+        // Update data lainnya
+        $film->title = $request->get('title') ?? $film->title;
+        $film->alt_title = $request->get('alt_title') ?? $film->alt_title;
+        $film->description = $request->get('description') ?? $film->description;
+        $film->trailer = $request->get('trailer') ?? $film->trailer;
+        $film->stream_site = $request->get('stream_site') ?? $film->stream_site;
+        $film->year = $request->get('year') ?? $film->year;
+        $film->status = $request->get('status') ?? $film->status;
+        $film->country_id = $request->get('country_id') ?? $film->country_id;
 
-        $film->save(); // Simpan perubahan
+        // Simpan perubahan
+        if ($film->save()) {
+            Log::info('Film saved successfully:', $film->toArray());
+        } else {
+            Log::error('Failed to save the film');
+        }
 
-        // Update relasi
+        // Update genres dan actors
         if ($request->filled('genres')) {
             $film->genres()->sync($request->input('genres'));
+            Log::info('Updated genres:', $request->input('genres'));
         }
         if ($request->filled('actors')) {
             $film->actors()->sync($request->input('actors'));
+            Log::info('Updated actors:', $request->input('actors'));
         }
 
         return response()->json(['message' => 'Film updated successfully', 'data' => $film], 200);
     }
 
+
+
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Film $film)
+    public function destroy($id)
     {
+        // Temukan film berdasarkan ID
+        $film = Film::find($id);
+
+        // Cek apakah film ditemukan
+        if (!$film) {
+            return response()->json(['message' => 'Film not found'], 404);
+        }
+
         // Hapus file poster dari storage jika ada
         if ($film->url_cover) {
             Storage::disk('public')->delete($film->url_cover);
         }
 
+        // Hapus relasi dengan actors dan genres di tabel pivot
+        $film->actors()->detach();
+        $film->genres()->detach();
+
+        // Hapus semua awards yang berelasi dengan film ini
+        $film->awards()->delete();
+
+        // Hapus semua komentar yang berelasi dengan film ini
+        $film->comments()->delete();
+
+        // Terakhir, hapus data film
         $film->delete();
 
-        return response()->json(['message' => 'Film deleted successfully'], 200);
+        return response()->json(['message' => 'Film and all related data deleted successfully'], 200);
     }
+
 }

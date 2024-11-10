@@ -332,7 +332,7 @@ const CMSActors = () => {
                             </div>
                         </div>
                     </div>
-                </div>
+                    </div>
                 </main>
             </div>
         </div>

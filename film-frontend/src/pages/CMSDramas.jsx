@@ -8,6 +8,8 @@ const CMSDramas = () => {
     const [dramas, setDramas] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortOption, setSortOption] = useState('a-z');
+    const [message, setMessage] = useState('');
+    const [messageType, setMessageType] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -57,9 +59,28 @@ const CMSDramas = () => {
     };
 
     // Handle delete
-    const deleteDrama = (id) => {
-        const updatedDramas = dramas.filter(drama => drama.id !== id);
-        setDramas(updatedDramas);
+    const deleteDrama = async (id) => {
+        if (window.confirm('Are you sure you want to delete this country?')) {
+            try {
+                const response = await fetch(`http://localhost:8000/films/${id}`, {
+                    method: 'DELETE',
+                });
+                if (response.ok) {
+                    setDramas(dramas.filter(drama => drama.id !== id));
+                    showMessage('Drama deleted successfully', 'success');
+                } else {
+                    showMessage('Failed to delete drama', 'error');
+                }
+            } catch (error) {
+                showMessage('Error deleting drama', 'error');
+            }
+        }
+    };
+
+    const showMessage = (msg, type) => {
+        setMessage(msg);
+        setMessageType(type);
+        setTimeout(() => setMessage(''), 3000);
     };
 
     return (
@@ -74,6 +95,12 @@ const CMSDramas = () => {
                             <div className="mb-5 flex flex-col justify-between">
                                 <h1 className="text-2xl mb-5 font-medium">Drama</h1>
                             </div>
+
+                            {message && (
+                                <div className={`mb-4 p-2 text-white rounded ${messageType === 'success' ? 'bg-green-500' : 'bg-red-500'}`}>
+                                    {message}
+                                </div>
+                            )}
 
                             {/* Search and Sort Options */}
                             <div className="flex justify-between mb-4">
