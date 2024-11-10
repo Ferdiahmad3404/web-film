@@ -62,6 +62,9 @@ class CountryController extends Controller
         if (!$country) {
             return response()->json(['message' => 'Country not found'], 404);
         }
+        if (!$country) {
+            return response()->json(['message' => 'Country not found'], 404);
+        }
 
         try {
             $validatedData = $request->validate([

@@ -9,6 +9,8 @@ class Film extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+    
     // Tentukan nama tabel jika tidak menggunakan nama model yang di-plural
     protected $table = 'dramas';
     protected $primaryKey = 'id';

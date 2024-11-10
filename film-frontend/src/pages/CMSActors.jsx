@@ -264,6 +264,34 @@ const CMSActors = () => {
                                 </div>
                             )}
                         </div>
+
+                        {message && (
+                            <div className={`mb-4 p-2 text-white rounded ${messageType === 'success' ? 'bg-green-500' : 'bg-red-500'}`}>
+                                {message}
+                            </div>
+                        )}
+
+                        <div className="relative flex flex-col mt-4">
+                            <div className="flex justify-between mb-2">
+                                <h2 className="text-lg font-bold">Actors List</h2>
+                                <div className="flex items-center">
+                                    <input
+                                        type="text"
+                                        placeholder="Search..."
+                                        value={searchQuery}
+                                        onChange={e => setSearchQuery(e.target.value)}
+                                        className="border p-1"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* <ActorList actors={currentActors} editActors={editActors} deleteActors={deleteActors} />
+
+                            <div className="flex justify-between mt-4">
+                                <div>
+                                    <span>Page {currentPage} of {totalPages}</span>
+                                </div>
+                                <div className="flex items-center"> */}
                         <input 
                             type="text" 
                             placeholder="Search..." 

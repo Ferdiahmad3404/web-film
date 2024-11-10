@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import CommentsSection from '../components/CommentsSection';
 
-
-
 const DetailFilm = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -21,10 +19,7 @@ const DetailFilm = () => {
             const response = await fetch(`http://localhost:8000/films/${id}`);
             const data = await response.json();
             setFilmData(data.data);
-            setActorData(data.data.actors); // Mengasumsikan aktor ada di data.data.actors
-
-            console.log('Film data:', data.data);
-            console.log('Actor data:', data.data.actors);
+            setActorData(data.data.actors); 
         } catch (error) {
             console.error('Error fetching film data:', error);
         }
@@ -58,6 +53,14 @@ const DetailFilm = () => {
                     </div>
                 </div>
     }
+
+    const BASE_URL = 'http://localhost:8000/storage/'; // Ganti dengan URL dasar Anda
+
+    // Fungsi untuk mendapatkan URL gambar yang benar
+    const getImageUrl = (url) => {
+        return url.startsWith('http') ? url : BASE_URL + url; // Menggunakan BASE_URL jika bukan URL lengkap
+    };
+
     return (
         <div className="bg-yellow-900">
             <div className="flex flex-row items-center justify-center">
@@ -88,7 +91,7 @@ const DetailFilm = () => {
                     <div className="bg-neutral-200 shadow-lg rounded-lg p-6 mb-6">
                         <div className="flex flex-col md:flex-row">
                             <img
-                                src={filmData.url_cover}
+                                src={getImageUrl(filmData.url_cover)}
                                 alt=""
                                 className="w-full md:w-64 h-auto rounded-md mb-4 md:mr-6"
                             />

@@ -103,7 +103,14 @@ const DramaList = ({ searchTerm = ''}) => {
   useEffect(() => {
     fetchData();
   }, []);
-  
+
+  const BASE_URL = 'http://localhost:8000/storage/'; // Ganti dengan URL dasar Anda
+
+  // Fungsi untuk mendapatkan URL gambar yang benar
+  const getImageUrl = (url) => {
+    return url.startsWith('http') ? url : BASE_URL + url; // Menggunakan BASE_URL jika bukan URL lengkap
+  };
+
   return (
     <div>
       <FiltersAndSorting 
@@ -114,6 +121,7 @@ const DramaList = ({ searchTerm = ''}) => {
         platforms={platforms} 
         initialSearchTerm={searchTerm}
       />
+      
       {searchTerm.length > 0 ? (
         <div className="flex w-full items-center justify-center">
         <h2 className="ml-6 text-xl mt-6 mb-3">Hasil Pencarian untuk: {searchTerm}</h2>
@@ -126,7 +134,7 @@ const DramaList = ({ searchTerm = ''}) => {
               <div className="relative group bg-opacity-0 rounded-lg overflow-hidden w-full h-5/6 z-10">
                 <Link to={`/detailfilm/${drama.id}`}>
                   <img
-                    src={drama.url_cover}
+                    src={getImageUrl(drama.url_cover)}
                     alt=""
                     className="cursor-pointer transition-transform duration-300 ease-in-out w-full h-full rounded-xl shadow-xl group-hover:blur-sm group-hover:scale-110"
                   />
@@ -151,7 +159,7 @@ const DramaList = ({ searchTerm = ''}) => {
               <div className="relative group bg-opacity-0 rounded-lg overflow-hidden w-full h-5/6 z-10">
                 <Link to={`/detailfilm/${drama.id}`}>
                   <img
-                    src={drama.url_cover}
+                    src={getImageUrl(drama.url_cover)}
                     alt=""
                     className="cursor-pointer transition-transform duration-300 ease-in-out w-full h-full rounded-xl shadow-xl group-hover:blur-sm group-hover:scale-110"
                   />

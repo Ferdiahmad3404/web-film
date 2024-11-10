@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Film;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+
 
 class FilmController extends Controller
 {
@@ -99,22 +101,63 @@ class FilmController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Film $film)
+    public function update(Request $request, $id)
     {
+        Log::info('input', $request->all());
+
+        // Validasi input
         $request->validate([
-            'url_cover' => 'nullable|url',
+            'poster' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
+            'url_cover' => 'nullable|string', // Validasi untuk URL
             'title' => 'nullable|string|max:255',
             'alt_title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'trailer' => 'nullable|url',
-            'stream_site' => 'nullable|url',
+            'trailer' => 'nullable|string',
+            'stream_site' => 'nullable|string',
             'year' => 'nullable|integer',
             'status' => 'nullable|string|max:50',
-            'created_date' => 'nullable|date',
-            'country_id' => 'nullable|integer',
+            'country_id' => 'nullable|integer|exists:countries,id',
+            'genres' => 'nullable|array',
+            'actors' => 'nullable|array',
         ]);
 
-        $film->update($request->all());
+        $film = Film::find($id);
+
+        if (!$film) {
+            return response()->json(['message' => 'Film not found'], 404);
+        }
+
+        // Update poster jika file yang diupload
+        if ($request->hasFile('poster')) {
+            if ($film->url_cover) {
+                Storage::disk('public')->delete($film->url_cover); // Hapus poster yang lama
+            }
+            $path = $request->file('poster')->store('posters', 'public'); // Simpan poster baru
+            $film->url_cover = $path; // Update url_cover dengan path baru
+        } elseif ($request->hasFile('url_cover')) {
+            // Jika poster_url diisi dan bukan file, set url_cover dengan poster_url
+            $film->url_cover = $request->input('url_cover');
+        }
+
+        // Update field lain yang ada dalam request
+        $film->title = $request->input('title', $film->title);
+        $film->alt_title = $request->input('alt_title', $film->alt_title);
+        $film->description = $request->input('description', $film->description);
+        $film->trailer = $request->input('trailer', $film->trailer);
+        $film->stream_site = $request->input('stream_site', $film->stream_site);
+        $film->year = $request->input('year', $film->year);
+        $film->status = $request->input('status', $film->status);
+        $film->country_id = $request->input('country_id', $film->country_id);
+
+        $film->save(); // Simpan perubahan
+
+        // Update relasi
+        if ($request->filled('genres')) {
+            $film->genres()->sync($request->input('genres'));
+        }
+        if ($request->filled('actors')) {
+            $film->actors()->sync($request->input('actors'));
+        }
 
         return response()->json(['message' => 'Film updated successfully', 'data' => $film], 200);
     }

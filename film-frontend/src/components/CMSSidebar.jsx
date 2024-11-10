@@ -43,10 +43,14 @@ const CMSSidebar = () => {
             selectedMenu === menu ? "bg-yellow-900 text-white" : "hover:bg-yellow-900 hover:text-white"
         }`;
 
+    const handleHome = () => {
+        sessionStorage.setItem("selectedMenu", "drama");
+    };
+
     return (
         <aside className="w-64 h-screen bg-black bg-opacity-5 rounded-r-xl rounded-b-xl flex flex-col">
             <div className="p-6">
-                <a className="text-3xl font-bold mb-6" href="/" >DramaKu</a>
+                <a className="text-3xl font-bold mb-6" href="/" onClick={handleHome}>DramaKu</a>
             </div>
             <nav className="flex-1">
                 <ul>

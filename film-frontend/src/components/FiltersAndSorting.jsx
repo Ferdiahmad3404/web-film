@@ -66,7 +66,7 @@ const FiltersAndSorting = ({ onFilterChange, onNameChange, genres, years, platfo
             className="cursor-pointer border text-sm rounded-full block w-full p-2.5 bg-yellow-900 hover:bg-yellow-700 text-white focus:ring-white focus:border-white"
           >
             <option value="">Choose a year</option>
-            {years.map(year => (
+            {years.slice().sort((b, a) => a.year - b.year).map(year => (
               <option key={year.id} value={year.year}>{year.year}</option>
             ))}
           </select>
@@ -79,7 +79,7 @@ const FiltersAndSorting = ({ onFilterChange, onNameChange, genres, years, platfo
             className="cursor-pointer border text-sm rounded-full block w-full p-2.5 bg-yellow-900 hover:bg-yellow-700 placeholder-yellow-900 text-white focus:ring-white focus:border-white"
           >
             <option value="">Choose a genre</option>
-            {genres.map((genre) => (
+            {genres.slice().sort((a, b) => a.genre.localeCompare(b.genre)).map((genre) => (
               <option key={genre.id} value={genre.genre}>{genre.genre}</option>
             ))}
           </select>
@@ -92,7 +92,7 @@ const FiltersAndSorting = ({ onFilterChange, onNameChange, genres, years, platfo
             className="cursor-pointer border text-sm rounded-full block w-full p-2.5 bg-yellow-900 hover:bg-yellow-700 placeholder-yellow-900 text-white focus:ring-white focus:border-white"
           >
             <option value="">Choose a platform</option>
-            {platforms.map(platform => (
+            {platforms.slice().sort((a, b) => a.platform.localeCompare(b.platform)).map(platform => (
               <option key={platform.id} value={platform.platform}>{platform.platform}</option>
             ))}
           </select>

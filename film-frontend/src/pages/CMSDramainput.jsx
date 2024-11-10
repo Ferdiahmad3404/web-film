@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import CMSSidebar from '../components/CMSSidebar';
 import Sidenav from '../components/Sidenav';
 import Footer from '../components/Footer';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const CMSDramaInput = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const [dramaId, setDramaId] = useState(null) ;
     // State untuk menyimpan data file dan preview poster
     const [posterPreview, setPosterPreview] = useState(null);
     const [file, setFile] = useState(null);
@@ -200,12 +202,62 @@ const CMSDramaInput = () => {
         }
     };
 
+    const BASE_URL = 'http://localhost:8000/storage/'; // Ganti dengan URL dasar Anda
+
+    // Fungsi untuk mendapatkan URL gambar yang benar
+    const getImageUrl = (url) => {
+        return url.startsWith('http') ? url : BASE_URL + url; 
+    };
+
+    useEffect(() => {
+        // Jika ada film yang diterima dari halaman edit
+        if (location.state?.drama) {
+            const drama = location.state.drama;
+            setDramaId(drama.id);
+    
+            const posterUrl = getImageUrl(drama.url_cover);
+            console.log(posterUrl);
+    
+            setFormData({
+                title: drama.title,
+                alt_title: drama.alt_title,
+                year: drama.year,
+                country_id: drama.country_id,
+                description: drama.description,
+                stream_site: drama.stream_site,
+                trailer: drama.trailer,
+                status: drama.status,
+                created_by: drama.created_by,
+                award: drama.awards.join(', '),
+                genres: drama.genres.map(genre => genre.id),
+                actors: drama.actors.map(actor => actor.id),
+            });
+    
+            // Set preview poster jika ada
+            setSelectedGenres(drama.genres.map(genre => genre.id));
+            setSelectedActor(drama.actors);
+    
+            // Cek apakah posterUrl diawali dengan http
+            if (posterUrl.startsWith('http')) {
+                setFile(posterUrl); 
+                setPosterPreview(posterUrl); 
+            } else {
+                setFile(null); 
+                setPosterPreview(posterUrl);
+            }
+        }
+    }, [location.state]);
+
+    useEffect(() => {
+        console.log('Form Data:', formData);
+    });
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData();
 
         // Menambahkan semua field ke FormData
-        data.append('poster', file); // pastikan file terpilih
+        data.append('poster', file);
         data.append('title', formData.title);
         data.append('alt_title', formData.alt_title);
         data.append('description', formData.description);
@@ -268,6 +320,70 @@ const CMSDramaInput = () => {
         }
     };
 
+    const handleEdit = async (event) => { 
+        event.preventDefault();
+        const data = new FormData();
+    
+        // Cek apakah file adalah URL
+        if (file && typeof file === 'string' && file.startsWith('http')) {
+            data.append('url_cover', file); 
+        } else {
+            data.append('poster', file);
+        }
+    
+        // Menambahkan semua field ke FormData
+        data.append('title', formData.title);
+        data.append('alt_title', formData.alt_title);
+        data.append('description', formData.description);
+        data.append('trailer', formData.trailer); // pastikan ini adalah URL yang valid
+        data.append('stream_site', formData.stream_site);
+        data.append('year', formData.year);
+        data.append('status', formData.status);
+        data.append('created_date', new Date().toISOString()); // mengisi tanggal saat ini
+        data.append('country_id', formData.country_id);
+        data.append('created_by', formData.created_by);
+        data.append('award', formData.award);
+    
+        selectedGenres.forEach(genre => {
+            data.append('genres[]', genre); // gunakan 'genres[]' untuk mengindikasikan array
+        });
+        selectedActor.forEach(actor => {
+            data.append('actors[]', actor.id); // gunakan 'actors[]' untuk mengindikasikan array
+        });
+    
+        try {
+            const response = await fetch(`http://localhost:8000/films/${dramaId}`, {
+                method: 'PUT',
+                body: data,
+            });
+            data.forEach((value, key) => {
+                console.log('ini yang final:', key, value);
+            });
+            const result = await response.json();
+            if (!response.ok) {
+                throw new Error(result.message);
+            }
+            console.log('Film updated successfully:', result);
+            showMessage('Film updated successfully...', 'success');
+    
+            // Navigasi ke halaman lain setelah 5 detik
+            // setTimeout(() => {
+            //     navigate('/admin-dashboard');
+            // }, 5000);
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            showMessage('Error update film: ' + error.message, 'error');
+        }
+    };
+
+    const handleSubmitOrEdit = (e) => {
+        if (location.state?.drama) {
+            handleEdit(e);
+        } else {
+            handleSubmit(e);
+        }
+    };
+
     const showMessage = (msg, type) => {
         setMessage(msg);
         setMessageType(type);
@@ -282,7 +398,7 @@ const CMSDramaInput = () => {
 
                     {/* Main Content */}
                     <main className="flex-1 bg-gray-100 p-6">
-                        <h1 className="text-2xl mb-5 font-medium">Add New Drama</h1>
+                        <h1 className="text-2xl mb-5 font-medium">{location.state?.drama ? 'Update Drama' : 'Add New Drama'}</h1>
 
                         {message && (
                             <div className={`mb-4 p-2 text-white rounded ${messageType === 'success' ? 'bg-green-500' : 'bg-red-500'}`}>
@@ -290,7 +406,7 @@ const CMSDramaInput = () => {
                             </div>
                         )}
 
-                        <form onSubmit={handleSubmit} className="flex w-full justify-between px-6 py-8 space-y-6 md:flex-row md:space-y-0">
+                        <form onSubmit={handleSubmitOrEdit} className="flex w-full justify-between px-6 py-8 space-y-6 md:flex-row md:space-y-0">
                             <div className="w-2/6 max-w-sm p-5 flex flex-col">
                                 {posterPreview && (
                                     <button
@@ -324,7 +440,7 @@ const CMSDramaInput = () => {
                                     />
                                 </div>
                                 <button type="submit" className="w-full px-6 py-3 mt-4 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600">
-                                    Submit
+                                    {location.state?.drama ? 'Update Drama' : 'Submit'}
                                 </button>
                             </div>
 
