@@ -50,7 +50,7 @@ class CreateDramasTables extends Migration
             $table->text('description')->nullable();
             $table->string('trailer')->nullable();
             $table->string('stream_site')->nullable();
-            $table->string('status')->default('unapproved');
+            $table->enum('status', ['approved', 'pending', 'unapproved'])->default('pending'); // Menggunakan enum status
             $table->timestamp('created_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->foreignId('country_id')->constrained('countries')->onDelete('restrict');
             $table->string('created_by')->nullable();
@@ -62,7 +62,7 @@ class CreateDramasTables extends Migration
             $table->id();
             $table->longText('comment');
             $table->integer('rating')->nullable();
-            $table->string('status')->default('unapproved');
+            $table->enum('status', ['approved', 'pending', 'unapproved'])->default('pending');
             $table->foreignId('drama_id')->constrained('dramas')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('parent_id')->nullable()->constrained('comments')->onDElete('cascade');
