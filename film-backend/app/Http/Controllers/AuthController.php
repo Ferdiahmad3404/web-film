@@ -171,6 +171,14 @@ class AuthController extends Controller
             ]
         );
 
+        // Cek apakah akun sedang disuspend
+        if ($user->suspended_until && now()->lt($user->suspended_until)) {
+            return response()->json([
+                'error' => 'Your account is suspended until ' . $user->suspended_until->format('Y-m-d H:i:s'),
+                'suspended_until' => $user->suspended_until
+            ], 403); // Status 403 Forbidden karena akun disuspend
+        }
+
         $payload = [
             'iss' => "DramaKu",
             'sub' => $user->id,
@@ -178,14 +186,7 @@ class AuthController extends Controller
             'exp' => time() + 60*60
         ];
 
-        $jwt = JWT::encode($payload, env('JWT_SECRET'), 'HS256');
-
-        \Log::info('Redirecting to frontend with', [
-            'access_token' => $jwt,
-            'role_id' => $user->role_id,
-            'username' => $user->username
-        ]);
-        
+        $jwt = JWT::encode($payload, env('JWT_SECRET'), 'HS256');        
 
         return redirect()->away(env('FRONTEND_URL') . '/auth/google/callback?access_token=' . $jwt . '&role_id=' . $user->role_id . '&username=' . $user->username);
     }

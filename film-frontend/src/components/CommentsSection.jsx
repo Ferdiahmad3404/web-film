@@ -54,8 +54,7 @@ const CommentsSection = ({ id }) => {
                     },
                     body: JSON.stringify({
                         userId: userId,
-                        comment: newComment,
-                        rating: null,
+                        comment: newComment
                     }),
                 });
 
@@ -85,7 +84,7 @@ const CommentsSection = ({ id }) => {
                     },
                     body: JSON.stringify({ 
                         userId: userId,
-                        comment: replyComment 
+                        comment: replyComment
                     }),
                 });
                 

@@ -40,7 +40,6 @@ const CMSComments = () => {
                 )
             );
             setMessage(`Comment ${status} successfully!`);
-            console.loh('comment :', status);
         } catch (error) {
             setError('Failed to update comment status.');
         }
