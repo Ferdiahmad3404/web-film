@@ -4,42 +4,30 @@ import api from "../services/api.js";
 
 const Login = () => {
     const [credentials, setCredentials] = useState({ identifier: "", password: "" });
-    const navigate = useNavigate(); // Untuk navigasi setelah login berhasil
+    const [suspendInfo, setSuspendInfo] = useState(null);
+    const navigate = useNavigate();
 
-    // Cek apakah ada access_token pada URL (Google login callback)
+    // Google login callback handling
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const accessToken = urlParams.get('access_token');
         const roleId = urlParams.get('role_id');
         const username = urlParams.get('username');
-    
-        console.log("Response Google :", urlParams);
-        console.log("Access Token from URL:", accessToken);
-    
+        const isSuspended = urlParams.get('is_suspended');
+        const suspensionEnds = urlParams.get('suspension_ends');
+
         if (accessToken) {
-            // Simpan token dan data pengguna di sessionStorage
             sessionStorage.setItem('token', accessToken);
             sessionStorage.setItem('role_id', roleId);
             sessionStorage.setItem('username', username);
-    
-            // Tambahkan sedikit penundaan sebelum memeriksa isi sessionStorage
-            setTimeout(() => {
-                console.log("Stored in sessionStorage:", {
-                    token: sessionStorage.getItem('token'),
-                    role_id: sessionStorage.getItem('role_id'),
-                    username: sessionStorage.getItem('username'),
-                });
-    
-                // Redirect pengguna berdasarkan role setelah memastikan penyimpanan selesai
-                if (roleId === 'admin') {
-                    navigate('/admin-dashboard');
-                } else {
-                    navigate('/');
-                }
-            }, 100); // Penundaan 100ms
+
+            if (isSuspended === 'true') {
+                setSuspendInfo(`Your account is suspended until ${suspensionEnds}`);
+            } else {
+                roleId === 'admin' ? navigate('/admin-dashboard') : navigate('/');
+            }
         }
     }, [navigate]);
-    
 
     const handleChange = (e) => {
         setCredentials({
@@ -53,18 +41,17 @@ const Login = () => {
 
         try {
             const response = await api.post('login', credentials);
-            sessionStorage.setItem('token', response.data.access_token);
-            sessionStorage.setItem('role_id', response.data.role_id);
-            sessionStorage.setItem('username', credentials.identifier)
-            sessionStorage.setItem('id', response.data.id);
-        
-            // Cek peran pengguna
-            const roleId = response.data.role_id;
-        
-            if (roleId === 'admin') {
-                navigate('/admin-dashboard'); // Redirect ke halaman dashboard admin
-            } else if (roleId === 'user') {
-                navigate('/'); // Redirect ke halaman dashboard pengguna
+            const { access_token, role_id, is_suspended, suspension_ends } = response.data;
+
+            if (is_suspended) {
+                setSuspendInfo(`Your account is suspended until ${suspension_ends}`);
+            } else {
+                sessionStorage.setItem('token', access_token);
+                sessionStorage.setItem('role_id', role_id);
+                sessionStorage.setItem('username', credentials.identifier);
+                sessionStorage.setItem('id', response.data.id);
+
+                role_id === 'admin' ? navigate('/admin-dashboard') : navigate('/');
             }
         } catch (error) {
             console.error("Login failed", error);
@@ -82,6 +69,11 @@ const Login = () => {
     return (
         <div className="w-screen h-screen flex flex-col gap-10 justify-center bg-neutral-200 bg-center">
             <div className="flex justify-center text-4xl font-bold text-gray-900 dark:text-yellow-900">LOGIN</div>
+            {suspendInfo && (
+                <div className="text-red-500 text-center mb-5">
+                    {suspendInfo}
+                </div>
+            )}
             <form className="max-w-sm mx-auto w-full flex flex-col gap-3 items-center" onSubmit={handleSubmit}>
                 <div className="w-full">
                     <label htmlFor="identifier" className="block text-sm font-medium text-gray-900 dark:text-yellow-900">Your Email or Username</label>

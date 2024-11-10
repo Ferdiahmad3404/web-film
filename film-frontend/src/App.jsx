@@ -18,7 +18,7 @@ import CMSActors from './pages/CMSActors';
 import CMSComments from './pages/CMSComments';
 import CMSDramas from './pages/CMSDramas';
 import CMSDramainput from './pages/CMSDramainput';
-
+import CMSUsers from './pages/CMSUsers.jsx';
 
 const PrivateRoute = ({ element, requiredRoles }) => {
   const token = sessionStorage.getItem('token');
@@ -64,6 +64,7 @@ function App() {
           <Route path='/cmscomments' element={<PrivateRoute element={<CMSComments />} requiredRoles={['admin']} />} />
           <Route path='/cmsdramas' element={<PrivateRoute element={<CMSDramas />} requiredRoles={['admin']} />} />
           <Route path='/cmsdramainput' element={<PrivateRoute element={<CMSDramainput />} requiredRoles={['admin']} />} />
+          <Route path='/cmsusers'element={<PrivateRoute element={<CMSUsers />} requiredRoles={['admin']} />} />
         </Routes>
       </div>
     </Router>
