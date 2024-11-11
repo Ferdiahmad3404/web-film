@@ -62,8 +62,8 @@ const CMSDramaInput = () => {
             const response = await fetch('http://localhost:8000/genres');
             const result = await response.json();
     
-            if (result.success && Array.isArray(result.data)) { // Check if success is true and data is an array
-                setGenres(result.data); // Set actors from result.data
+            if (Array.isArray(result)) { // Check if success is true and data is an array
+                setGenres(result); // Set actors from result.data
             } else {
                 console.error('Data is not an array:', result);
                 setGenres([]); // Set to empty array if data is not as expected
@@ -96,9 +96,9 @@ const CMSDramaInput = () => {
             const response = await fetch('http://localhost:8000/awards');
             const result = await response.json();
 
-            if (result.success && Array.isArray(result.data)) {
+            if (Array.isArray(result.data)) {
                 // Filter awards yang drama_id-nya null
-                const filteredAwards = result.data.filter(award => award.drama_id === null);
+                const filteredAwards = result.filter(award => award.drama_id === null);
                 setAwards(filteredAwards); // Set awards ke state
             } else {
                 console.error('Data is not an array:', result);

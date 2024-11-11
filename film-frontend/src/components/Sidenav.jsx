@@ -73,16 +73,10 @@ const Sidenav = () => {
                             {role === 'user' && (
                                 <>
                                     <li className="mb-4">
-                                        <a href="/" className="sidebar-link text-lg text-white">Profile</a>
-                                    </li>
-                                    <li className="mb-4">
                                         <a href="/" className="sidebar-link text-lg text-white">Home</a>
                                     </li>
                                     <li className="mb-4">
-                                        <a href="/my-drama-list" className="sidebar-link text-lg text-white">My Drama List</a>
-                                    </li>
-                                    <li className="mb-4">
-                                        <a href="/user-profile" className="sidebar-link text-lg text-white">Profile</a>
+                                        <a href="/cmsdramainput" className="sidebar-link text-lg text-white">DramaInput</a>
                                     </li>
                                     <li className="mb-4">
                                         <a href="/" className="sidebar-link text-lg text-white" onClick={handleLogout}>Log Out</a>

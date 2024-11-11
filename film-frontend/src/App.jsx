@@ -19,6 +19,7 @@ import CMSComments from './pages/CMSComments';
 import CMSDramas from './pages/CMSDramas';
 import CMSDramainput from './pages/CMSDramainput';
 import CMSUsers from './pages/CMSUsers.jsx';
+import NotFound from './components/NotFound';
 
 const PrivateRoute = ({ element, requiredRoles }) => {
   const token = sessionStorage.getItem('token');
@@ -63,8 +64,11 @@ function App() {
           <Route path='/cmsactors' element={<PrivateRoute element={<CMSActors />} requiredRoles={['admin']} />} />
           <Route path='/cmscomments' element={<PrivateRoute element={<CMSComments />} requiredRoles={['admin']} />} />
           <Route path='/cmsdramas' element={<PrivateRoute element={<CMSDramas />} requiredRoles={['admin']} />} />
-          <Route path='/cmsdramainput' element={<PrivateRoute element={<CMSDramainput />} requiredRoles={['admin']} />} />
+          <Route path='/cmsdramainput' element={<PrivateRoute element={<CMSDramainput />} requiredRoles={['admin', 'user']} />} />
           <Route path='/cmsusers'element={<PrivateRoute element={<CMSUsers />} requiredRoles={['admin']} />} />
+
+          {/* 404 Route - Catch-all for undefined routes */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </Router>
