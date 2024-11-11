@@ -19,7 +19,7 @@ const CMSDramaInput = () => {
         trailer: '',
         stream_site: '',
         year: '',
-        status: 'unapproved',
+        status: 'pending',
         created_date: '',
         country_id: '',
         created_by: sessionStorage.getItem('username'),
@@ -94,16 +94,9 @@ const CMSDramaInput = () => {
     const fetchAwards = async () => {
         try {
             const response = await fetch('http://localhost:8000/awards');
-            const result = await response.json();
-
-            if (Array.isArray(result.data)) {
-                // Filter awards yang drama_id-nya null
-                const filteredAwards = result.filter(award => award.drama_id === null);
-                setAwards(filteredAwards); // Set awards ke state
-            } else {
-                console.error('Data is not an array:', result);
-                setAwards([]); // Set to empty array if data is not as expected
-            }
+            const result = await response.json()
+            const filteredAwards = result.filter(award => award.drama_id === null)
+            setAwards(filteredAwards)
         } catch (error) {
             console.error('Error fetching awards:', error);
             setAwards([]); // Set to empty array on error
