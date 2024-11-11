@@ -8,6 +8,9 @@ const DramaList = ({ searchTerm = ''}) => {
   const [genres, setGenres] = useState([]); // State untuk genre
   const [years, setYears] = useState([]); // State untuk tahun
   const [platforms, setPlatforms] = useState([]); // State untuk platform
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPageFiltered, setCurrentPageFiltered] = useState(1);
+  const [dramasPerPage] = useState(20); 
 
   const fetchData = async () => {
     try {
@@ -111,7 +114,48 @@ const DramaList = ({ searchTerm = ''}) => {
     return url.startsWith('http') ? url : BASE_URL + url; // Menggunakan BASE_URL jika bukan URL lengkap
   };
 
+  const totalPages = Math.ceil(dramaData.length / dramasPerPage);
+  const currentDrama = dramaData.slice((currentPage - 1) * dramasPerPage, currentPage * dramasPerPage);
+  
+  const totalPagesFiltered = Math.ceil(filteredData.length / dramasPerPage);
+  const currentDramaFiltered = filteredData.slice((currentPage - 1) * dramasPerPage, currentPage * dramasPerPage);
+  
+  const getPageNumbers = () => {
+      const pageNumbers = [];
+      let startPage = Math.max(1, currentPage - 2);
+      let endPage = Math.min(totalPages, startPage + 5);
+      if (endPage - startPage < 5) {
+          startPage = Math.max(1, endPage - 5);
+      }
+      for (let i = startPage; i <= endPage; i++) {
+          pageNumbers.push(i);
+      }
+      return pageNumbers;
+  };
+
+  const getPageNumbersFiltered = () => {
+    const pageNumbers = [];
+    let startPage = Math.max(1, currentPage - 2);
+    let endPage = Math.min(totalPages, startPage + 5);
+    if (endPage - startPage < 5) {
+        startPage = Math.max(1, endPage - 5);
+    }
+    for (let i = startPage; i <= endPage; i++) {
+        pageNumbers.push(i);
+    }
+    return pageNumbers;
+  };
+
+  const handlePageChange = (pageNumber) => {
+      setCurrentPage(pageNumber);
+  };
+
+  const handlePageChangeFiltered = (pageNumber) => {
+    setCurrentPageFiltered(pageNumber);
+  };
+
   return (
+    <>
     <div>
       <FiltersAndSorting 
         onNameChange={handleNameFilter} 
@@ -124,12 +168,12 @@ const DramaList = ({ searchTerm = ''}) => {
       
       {searchTerm.length > 0 ? (
         <div className="flex w-full items-center justify-center">
-        <h2 className="ml-6 text-xl mt-6 mb-3">Hasil Pencarian untuk: {searchTerm}</h2>
+        <h2 className="ml-6 text-xl mt-6">Hasil Pencarian untuk: {searchTerm}</h2>
       </div>
       ) : ('')}
-      <div className="grid grid-cols-5 gap-4 p-4 mb-52 w-full h-full ">
-        {searchTerm.length > 0 ? (
-          filteredData.map((drama) => (
+      <div className="grid grid-cols-5 gap-4 p-4 mb-16 w-full h-full ">
+        {searchTerm.length > 0 && filteredData == null ? (
+          currentDramaFiltered.map((drama) => (
             <div key={drama.id}>
               <div className="relative group bg-opacity-0 rounded-lg overflow-hidden w-full h-5/6 z-10">
                 <Link to={`/detailfilm/${drama.id}`}>
@@ -154,7 +198,7 @@ const DramaList = ({ searchTerm = ''}) => {
             </div>
           ))
         ) : (
-          dramaData.map((drama) => (
+          currentDrama.map((drama) => (
             <div key={drama.id}>
               <div className="relative group bg-opacity-0 rounded-lg overflow-hidden w-full h-5/6 z-10">
                 <Link to={`/detailfilm/${drama.id}`}>
@@ -181,6 +225,70 @@ const DramaList = ({ searchTerm = ''}) => {
         ) }
       </div>
     </div>
+    {/* Pagination Section */}
+    <div className="flex justify-center mt-4">
+    <div className="flex items-center">
+      {/* Pagination ketika ada searchTerm */}
+      {searchTerm.length > 0 ? (
+        <>
+          {currentPageFiltered > 1 && (
+            <button
+              onClick={() => handlePageChangeFiltered(currentPageFiltered - 1)}
+              className="mx-1 px-3 py-1 rounded bg-white text-blue-500 border"
+            >
+              Prev
+            </button>
+          )}
+          {getPageNumbersFiltered().map(page => (
+            <button
+              key={page}
+              onClick={() => handlePageChangeFiltered(page)}
+              className={`mx-1 px-3 py-1 rounded ${currentPageFiltered === page ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 border'}`}
+            >
+              {page}
+            </button>
+          ))}
+          {currentPageFiltered < totalPagesFiltered && (
+            <button
+              onClick={() => handlePageChangeFiltered(currentPageFiltered + 1)}
+              className="mx-1 px-3 py-1 rounded bg-white text-blue-500 border"
+            >
+              Next
+            </button>
+          )}
+        </>
+      ) : (
+        <>
+          {currentPage > 1 && (
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              className="mx-1 px-3 py-1 rounded bg-white text-blue-500 border"
+            >
+              Prev
+            </button>
+          )}
+          {getPageNumbers().map(page => (
+            <button
+              key={page}
+              onClick={() => handlePageChange(page)}
+              className={`mx-1 px-3 py-1 rounded ${currentPage === page ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 border'}`}
+            >
+              {page}
+            </button>
+          ))}
+          {currentPage < totalPages && (
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              className="mx-1 px-3 py-1 rounded bg-white text-blue-500 border"
+            >
+              Next
+            </button>
+          )}
+        </>
+      )}
+    </div>
+  </div>
+  </>
   );
 };
 

@@ -182,7 +182,7 @@ const CMSDramas = () => {
                                                 >
                                                     {drama.description.length > 50 ? `${drama.description.slice(0, 150)}...` : drama.description}
                                                 </td>
-                                                <td className={`px-4 py-3 ${drama.status === "approved" ? "text-green-500" : "text-red-500"}`}
+                                                <td className={`px-4 py-3 ${drama.status === "approved" ? "text-green-500" : drama.status === "pending" ? "text-blue-500" : "text-red-500"}`}
                                                 >
                                                     {drama.status}
                                                 </td>
