@@ -10,12 +10,15 @@ const CMSAwards = () => {
     const [newCountry, setNewCountry] = useState('');
     const [newYear, setNewYear] = useState('');
     const [newAwards, setNewAwards] = useState('');
-    const [sortOption, setSortOption] = useState('a-z');
-    const [searchInput, setSearchInput] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [sortOrder, setSortOrder] = useState('a-z');
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10; // Number of items per page
     const [statusMessage, setStatusMessage] = useState('');
     const [statusType, setStatusType] = useState('');
+    const [editingId, setEditingId] = useState(null);
+    const [tempName, setTempName] = useState('');
+    const [tempYear, setTempYear] = useState('');
 
     useEffect(() => {
         fetchAwards();
@@ -35,30 +38,19 @@ const CMSAwards = () => {
         try {
             const response = await fetch('http://localhost:8000/awards');
             const data = await response.json();
-            if (data && Array.isArray(data.data)) {
-                setAwards(data.data);
-            } else {
-                setAwards([]);
-                setStatusMessage('Unexpected awards data format.');
-                setStatusType('error');
-            }
+            setAwards(data);
         } catch (error) {
-            setStatusMessage('Failed to fetch awards.');
+            setStatusMessage(`Failed to fetch awards: ${error.message}`);
             setStatusType('error');
         }
     };
-
+    
     const fetchCountries = async () => {
         try {
             const response = await fetch('http://localhost:8000/countries');
             const data = await response.json();
-            if (Array.isArray(data)) {
-                setCountries(data);
-            } else {
-                setCountries([]);
-            }
+            setCountries(data);
         } catch (error) {
-            setCountries([]);
             setStatusMessage('Failed to fetch countries.');
             setStatusType('error');
         }
@@ -66,11 +58,11 @@ const CMSAwards = () => {
 
     const filteredAwards = () => {
         return awards.filter(item =>
-            item.country.country.toLowerCase().includes(searchInput.toLowerCase()) ||
-            item.year.toString().includes(searchInput) ||
-            item.award.toLowerCase().includes(searchInput.toLowerCase())
+            item.country.country.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            item.year.toString().includes(searchQuery) ||
+            item.award.toLowerCase().includes(searchQuery.toLowerCase())
         ).sort((a, b) => {
-            return sortOption === 'a-z' ?
+            return sortOrder === 'a-z' ?
                 a.country.country.localeCompare(b.country.country) :
                 b.country.country.localeCompare(a.country.country);
         });
@@ -84,13 +76,61 @@ const CMSAwards = () => {
 
     const renderAwards = () => {
         return paginatedAwards().map((item, index) => (
-            <tr key={item.id} className="border-b dark:border-gray-700">
-                <th scope="row" className="px-4 py-3 font-medium dark:text-black">{(currentPage - 1) * itemsPerPage + index + 1}</th>
-                <td className="px-4 py-3">{item.country.country}</td>
-                <td className="px-4 py-3">{item.year}</td>
-                <td className="px-4 py-3">{item.award}</td>
-                <td className="text-center flex items-center justify-end">
-                    <button onClick={() => deleteAwards(item.id)} className="flex items-center py-2 px-4 hover:text-red-600 text-black">Delete</button>
+            <tr key={item.id} className="border-b">
+                <th scope="row" className="px-4 py-3 font-medium text-black">{(currentPage - 1) * itemsPerPage + index + 1}</th>
+                <td className="px-4 py-3 font-medium text-black">{item.country.country}</td>
+                <td className="px-4 py-3 font-medium text-black">
+                    {editingId === item.id ? (
+                        <input
+                            type="text"
+                            value={tempYear}
+                            onChange={handleChange}
+                            onBlur={() => handleSave(item.id)}
+                            onKeyDown={(e) => handleKeyDown(e, item.id)}
+                            className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-600"
+                            autoFocus
+                        />
+                    ) : (
+                        item.year
+                    )}    
+                </td>
+                <td className="px-4 py-3 font-medium text-black">
+                    {editingId === item.id ? (
+                        <input
+                            type="text"
+                            value={tempName}
+                            onChange={handleChange}
+                            onBlur={() => handleSave(item.id)}
+                            onKeyDown={(e) => handleKeyDown(e, item.id)}
+                            className="border-b-2 border-gray-300 focus:outline-none focus:border-blue-600"
+                            autoFocus
+                        />
+                    ) : (
+                        item.award
+                    )}
+                </td>
+                <td className="text-center text-black">
+                    <div className="flex justify-center items-center">
+                        {editingId === item.id ? (
+                            <>
+                                <button onClick={() => handleDoubleClick()} className="flex py-2 px-4 text-black hover:text-blue-600">
+                                    Save
+                                </button>
+                                <span className="text-black">|</span>
+                                <button onClick={() => handleCancelClick()} className="flex py-2 px-4 text-black hover:text-red-600">
+                                    Cancel
+                                </button>
+                            </>
+                        ) : (
+                            <button onClick={() => handleDoubleClick(item)} className="flex py-2 px-4 text-black hover:text-blue-600">
+                                Edit
+                            </button>
+                        )}
+                        <span className="text-black">|</span>
+                        <button onClick={() => deleteActors(item.id)} className="flex py-2 px-4 text-black hover:text-red-600">
+                            Delete
+                        </button>
+                    </div>
                 </td>
             </tr>
         ));
@@ -132,6 +172,37 @@ const CMSAwards = () => {
         }
     };
 
+    const handleDoubleClick = (award) => {
+        setEditingId(award.id);
+        setTempName(award.award); // Isi input dengan nama saat ini
+        setTempYear(award.year);
+    };
+
+    const handleChange = (e) => {
+        setTempName(e.target.value); // Update nama saat mengetik
+        setTempYear(e.target.value);
+    };
+
+    const handleCancelClick = () => {
+        setEditingId(null); 
+        setTempName(null);
+        setTempYear(null);
+    };
+
+    const handleSave = (id) => {
+        if (tempName.trim() && tempYear.trim()) {
+            updateAward(id, tempName.trim(), tempYear.trim()); // Simpan perubahan
+        }
+        setEditingId(null); // Keluar dari mode edit
+    };
+
+    const handleKeyDown = (e, id) => {
+        if (e.key === 'Enter') {
+            handleSave(id); // Simpan perubahan jika tekan Enter
+        }
+    };
+
+
     const resetForm = () => {
         setNewCountry('');
         setNewYear('');
@@ -160,53 +231,93 @@ const CMSAwards = () => {
                                 </div>
                             )}
                             <form onSubmit={addAwards} className="mb-5 space-y-4">
-                                <div>
-                                    <label htmlFor="country" className="block mb-2">Country</label>
+                                <div className="relative z-0 w-full mb-5 group">
                                     <select
-                                        id="country"
+                                        id="country_id"
+                                        name="country_id"
                                         value={newCountry}
                                         onChange={(e) => setNewCountry(e.target.value)}
-                                        required
-                                        className="border-2 border-gray-300 rounded p-1 w-full"
+                                        className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                        required        
                                     >
-                                        <option value="">Select a country</option>
-                                        {Array.isArray(countries) && countries.map(country => (
-                                            <option key={country.id} value={country.id}>{country.country}</option>
+                                        <option value="" disabled hidden>Select a country</option>
+                                        {countries.sort((a, b) => a.country.localeCompare(b.country)).map((country) => (
+                                            <option key={country.id} value={country.id} className="text-black">
+                                                {country.country}
+                                            </option>
                                         ))}
                                     </select>
+                                    <label 
+                                        className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                                    >
+                                        Country
+                                    </label>
                                 </div>
-                                <div>
-                                    <label htmlFor="year" className="block mb-2">Year</label>
+                                <div className="relative z-0 w-full mb-5 group">
                                     <input
                                         type="text"
                                         id="year"
+                                        name="year"
                                         value={newYear}
                                         onChange={(e) => setNewYear(e.target.value)}
                                         required
-                                        className="border-2 border-gray-300 rounded p-1 w-full"
+                                        className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                        placeholder=" "
                                     />
+                                    <label 
+                                        className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                                    >
+                                        Year
+                                    </label>
                                 </div>
-                                <div>
-                                    <label htmlFor="awards" className="block mb-2">Award</label>
+                                <div className="relative z-0 w-full mb-5 group">
                                     <input
                                         type="text"
-                                        id="awards"
-                                        value={newAwards}
-                                        onChange={(e) => setNewAwards(e.target.value)}
+                                        id="award"
+                                        name="award"
+                                        value={newYear}
+                                        onChange={(e) => setNewYear(e.target.value)}
                                         required
-                                        className="border-2 border-gray-300 rounded p-1 w-full"
+                                        className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                        placeholder=" "
                                     />
+                                    <label 
+                                        className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                                    >
+                                        Award
+                                    </label>
                                 </div>
-                                <button type="submit" className="mt-4 bg-blue-600 text-white px-4 py-2 rounded">Add Award</button>
+                                <div className="w-full flex items-center mb-5">
+                                    <button type="submit" className="w-full h-10 bg-blue-500 text-white rounded-full hover:bg-blue-600">Add New Award</button>
+                                </div>
                             </form>
-                            <table className="min-w-full">
-                                <thead>
+                            <div className="relative flex flex-col mt-4">
+                                <div className="flex justify-between mb-4">
+                                    <input 
+                                        type="text" 
+                                        placeholder="Search..." 
+                                        value={searchQuery} 
+                                        onChange={e => setSearchQuery(e.target.value)} 
+                                        className="border border-gray-400 px-4 py-2 rounded-full"
+                                    />
+                                    <select
+                                        value={sortOrder}
+                                        onChange={(e) => setSortOrder(e.target.value)}
+                                        className="border border-gray-400 px-4 py-2 rounded-full"
+                                    >
+                                        <option value="a-z">A-Z</option>
+                                        <option value="z-a">Z-A</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <table className="w-full text-sm text-left text-gray-500">
+                                <thead className="text-xs text-white uppercase bg-yellow-900">
                                     <tr>
-                                        <th className="px-4 py-2">#</th>
-                                        <th className="px-4 py-2">Country</th>
-                                        <th className="px-4 py-2">Year</th>
-                                        <th className="px-4 py-2">Award</th>
-                                        <th className="px-4 py-2">Actions</th>
+                                        <th className="px-4 py-4">#</th>
+                                        <th className="px-4 py-4">Country</th>
+                                        <th className="px-4 py-4">Year</th>
+                                        <th className="px-4 py-4">Award</th>
+                                        <th className="px-4 py-4">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>

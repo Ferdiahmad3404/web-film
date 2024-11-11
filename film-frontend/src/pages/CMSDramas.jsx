@@ -10,6 +10,8 @@ const CMSDramas = () => {
     const [sortOption, setSortOption] = useState('a-z');
     const [message, setMessage] = useState('');
     const [messageType, setMessageType] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [dramasPerPage] = useState(10); 
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -51,6 +53,28 @@ const CMSDramas = () => {
         }
 
         return filtered;
+    };
+
+    const totalPages = Math.ceil(filteredAndSortedDramas().length / dramasPerPage);
+    const currentDrama = filteredAndSortedDramas().slice((currentPage - 1) * dramasPerPage, currentPage * dramasPerPage);
+
+    const getPageNumbers = () => {
+        const pageNumbers = [];
+        let startPage = Math.max(1, currentPage - 2);
+        let endPage = Math.min(totalPages, startPage + 5);
+
+        if (endPage - startPage < 5) {
+            startPage = Math.max(1, endPage - 5);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            pageNumbers.push(i);
+        }
+        return pageNumbers;
+    };
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
     };
 
     // Handle edit
@@ -142,9 +166,9 @@ const CMSDramas = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {filteredAndSortedDramas().map((drama, index) => (
+                                        {currentDrama.map((drama, index) => (
                                             <tr className="border-b dark:border-gray-700" key={drama.id}>
-                                                <td className="px-4 py-3 text-black">{index + 1}</td>
+                                                <td className="px-4 py-3 text-black">{(currentPage - 1) * dramasPerPage + index + 1}</td>
                                                 <td className="px-4 py-3 text-black">{drama.title}</td>
                                                 <td className="px-4 py-3 text-black"
                                                 >
@@ -183,6 +207,37 @@ const CMSDramas = () => {
                                         ))}
                                     </tbody>
                                 </table>
+
+                                {/* Pagination Section */}
+                                <div className="flex justify-center mt-4">
+                                    <div className="flex items-center">
+                                        {currentPage > 1 && (
+                                            <button
+                                                onClick={() => handlePageChange(currentPage - 1)}
+                                                className="mx-1 px-3 py-1 rounded bg-white text-blue-500 border"
+                                            >
+                                                Prev
+                                            </button>
+                                        )}
+                                        {getPageNumbers().map(page => (
+                                            <button
+                                                key={page}
+                                                onClick={() => handlePageChange(page)}
+                                                className={`mx-1 px-3 py-1 rounded ${currentPage === page ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 border'}`}
+                                            >
+                                                {page}
+                                            </button>
+                                        ))}
+                                        {currentPage < totalPages && (
+                                            <button
+                                                onClick={() => handlePageChange(currentPage + 1)}
+                                                className="mx-1 px-3 py-1 rounded bg-white text-blue-500 border"
+                                            >
+                                                Next
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </main>

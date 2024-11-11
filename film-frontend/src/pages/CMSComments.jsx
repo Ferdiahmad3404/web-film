@@ -39,9 +39,12 @@ const CMSComments = () => {
                     comment.id === id ? { ...comment, status } : comment
                 )
             );
-            setMessage(`Comment ${status} successfully!`);
+            showMessage(`Comment ${status} successfully!`, 'success');
+            console.log('comment :', status);
         } catch (error) {
             setError('Failed to update comment status.');
+            console.log('Failed to update comment status.', error);
+            showMessage(`Comment ${status} failed!`, 'error');
         }
     };
 
@@ -61,12 +64,25 @@ const CMSComments = () => {
         );
     };
 
+    const showMessage = (msg, type) => {
+        setMessage(msg);
+        setMessageType(type);
+        setTimeout(() => setMessage(''), 3000);
+    };
+
     const indexOfLastComment = currentPage * itemsPerPage;
     const indexOfFirstComment = indexOfLastComment - itemsPerPage;
     const currentComments = getFilteredAndSearchedComments().slice(indexOfFirstComment, indexOfLastComment);
     const totalPages = Math.ceil(getFilteredAndSearchedComments().length / itemsPerPage);
 
     const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+
+    const [editingCommentId, setEditingCommentId] = useState(null);
+
+    const handleEditClick = (id) => {
+        // Toggle the comment's edit state
+        setEditingCommentId(editingCommentId === id ? null : id);
+    };
 
     return (
         <div className="bg-gray-100">
@@ -77,11 +93,7 @@ const CMSComments = () => {
                         <h1 className="text-2xl mb-5 font-medium">Manage Comments</h1>
 
                         {message && (
-                            <div
-                                className={`mb-4 p-2 text-white rounded ${
-                                    messageType === 'success' ? 'bg-green-500' : 'bg-red-500'
-                                }`}
-                            >
+                            <div className={`mb-4 p-2 text-white rounded ${messageType === 'success' ? 'bg-green-500' : 'bg-red-500'}`}>
                                 {message}
                             </div>
                         )}
@@ -114,7 +126,8 @@ const CMSComments = () => {
                                         <th scope="col" className="px-4 py-4">Username</th>
                                         <th scope="col" className="px-4 py-4">Comment</th>
                                         <th scope="col" className="px-4 py-4">Film</th>
-                                        <th scope="col" className="px-4 py-4">Status / Action</th>
+                                        <th scope="col" className="px-4 py-4">Status</th>
+                                        <th scope="col" className="px-4 py-4">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -124,31 +137,88 @@ const CMSComments = () => {
                                             <td className="px-4 py-3">{comment.comment}</td>
                                             <td className="px-4 py-3">{comment.film.title}</td>
                                             <td>
-                                                {comment.status === 'pending' ? (
-                                                    <div className="flex space-x-2">
+                                                <span
+                                                    className={`px-3 py-1 rounded ${
+                                                        comment.status === 'approved'
+                                                            ? 'bg-green-200 text-green-800'
+                                                            : comment.status === 'pending' 
+                                                            ? 'bg-blue-400 text-white'
+                                                            : 'bg-red-200 text-red-800'
+                                                    }`}
+                                                >
+                                                    {comment.status}
+                                                </span>
+                                            </td>
+                                            <td className="flex items-center justify-center">
+                                                <div className="comment-content">
+                                                    
+                                                </div>
+                                                {editingCommentId !== comment.id ? (
+                                                    <>
                                                         <button
-                                                            onClick={() => updateCommentStatus(comment.id, 'approved')}
-                                                            className="px-3 py-1 bg-green-500 text-white rounded"
+                                                            onClick={() => handleEditClick(comment.id)}
+                                                            className="px-3 py-1 text-black hover:text-blue-500 rounded"
                                                         >
-                                                            Approve
+                                                            Change
                                                         </button>
+                                                    </>
+                                                ) : ( 
+                                                    <div className="flex flex-col items-center justify-center">
                                                         <button
-                                                            onClick={() => updateCommentStatus(comment.id, 'unapproved')}
-                                                            className="px-3 py-1 bg-red-500 text-white rounded"
+                                                            onClick={() => handleEditClick(comment.id)}
+                                                            className="px-3 py-1 text-red-500 rounded"
                                                         >
-                                                            Unapprove
+                                                            Cancel
                                                         </button>
+                                                        <div className="flex space-x-2 mt-2">
+                                                            {comment.status === 'pending' ? (
+                                                                <>
+                                                                    <button
+                                                                        onClick={() => updateCommentStatus(comment.id, 'approved')}
+                                                                        className="px-3 py-1 bg-green-500 text-white rounded"
+                                                                    >
+                                                                        Approve
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => updateCommentStatus(comment.id, 'unapproved')}
+                                                                        className="px-3 py-1 bg-red-500 text-white rounded"
+                                                                    >
+                                                                        Unapprove
+                                                                    </button>
+                                                                </>
+                                                            ) : comment.status === 'approved' ? (
+                                                                <>
+                                                                    <button
+                                                                        onClick={() => updateCommentStatus(comment.id, 'pending')}
+                                                                        className="px-3 py-1 bg-blue-500 text-white rounded"
+                                                                    >
+                                                                        Pending
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => updateCommentStatus(comment.id, 'unapproved')}
+                                                                        className="px-3 py-1 bg-red-500 text-white rounded"
+                                                                    >
+                                                                        Unapprove
+                                                                    </button>
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <button
+                                                                        onClick={() => updateCommentStatus(comment.id, 'approved')}
+                                                                        className="px-3 py-1 bg-green-500 text-white rounded"
+                                                                    >
+                                                                        Approve
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => updateCommentStatus(comment.id, 'pending')}
+                                                                        className="px-3 py-1 bg-blue-500 text-white rounded"
+                                                                    >
+                                                                        Pending
+                                                                    </button>
+                                                                </>
+                                                            )}
+                                                        </div>
                                                     </div>
-                                                ) : (
-                                                    <span
-                                                        className={`px-3 py-1 rounded ${
-                                                            comment.status === 'approved'
-                                                                ? 'bg-green-200 text-green-800'
-                                                                : 'bg-red-200 text-red-800'
-                                                        }`}
-                                                    >
-                                                        {comment.status}
-                                                    </span>
                                                 )}
                                             </td>
                                         </tr>

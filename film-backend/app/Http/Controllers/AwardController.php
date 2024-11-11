@@ -12,7 +12,7 @@ class AwardController extends Controller
     // Function to display all awards
     public function index()
     {
-        $awards = Award::all();
+        $awards = Award::with(['country', 'film'])->get();
         return response()->json($awards, 200);
     }
 

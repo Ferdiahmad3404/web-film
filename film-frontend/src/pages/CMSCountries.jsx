@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CMSSidebar from '../components/CMSSidebar';
 import Sidenav from '../components/Sidenav';
 import Footer from '../components/Footer';
@@ -6,6 +7,7 @@ import CountryList from '../components/CountryList';
 import ErrorMessage from '../components/ErrorMessage';
 
 const CMSCountries = () => {
+    const navigate = useNavigate();
     const [countries, setCountries] = useState([]);
     const [newCountry, setNewCountry] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
@@ -76,7 +78,6 @@ const CMSCountries = () => {
                 throw new Error(data.message || 'Error updating country!');
             }
 
-            setCountries(countries.map((c) => (c.id === id ? { ...c, country: newName } : c)));
             showMessage('Country updated successfully!', 'success');
             setError(null);
         } catch (error) {
@@ -101,6 +102,7 @@ const CMSCountries = () => {
                 setCountries(countries.filter((country) => country.id !== id));
                 showMessage('Country deleted successfully!', 'success');
                 setError(null);
+                navigate('/cmscountries');
             } catch (error) {
                 setError(error.message);
                 console.error('Error deleting country:', error);
@@ -115,6 +117,7 @@ const CMSCountries = () => {
     };
 
     const getFilteredAndSortedCountries = () => {
+        fetchCountries();
         const filteredCountries = countries.filter((country) =>
             country.country && country.country.toLowerCase().includes(searchTerm.toLowerCase())
         );
@@ -133,7 +136,6 @@ const CMSCountries = () => {
     const indexOfLastCountry = currentPage * itemsPerPage;
     const indexOfFirstCountry = indexOfLastCountry - itemsPerPage;
     const currentCountries = getFilteredAndSortedCountries().slice(indexOfFirstCountry, indexOfLastCountry);
-
     const totalPages = Math.ceil(getFilteredAndSortedCountries().length / itemsPerPage);
 
     const handlePageChange = (pageNumber) => {
