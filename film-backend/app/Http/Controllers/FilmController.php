@@ -34,13 +34,13 @@ class FilmController extends Controller
             // Validasi data yang diterima
             $request->validate([
                 'poster' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'title' => 'required|string|max:255',
-                'alt_title' => 'nullable|string|max:255',
+                'title' => 'required|string|max:64',
+                'alt_title' => 'nullable|string|max:64',
                 'description' => 'nullable|string',
                 'trailer' => 'nullable|string',
                 'stream_site' => 'nullable|string',
                 'year' => 'required|integer',
-                'status' => 'required|string|max:50',
+                'status' => 'required|string|max:16',
                 'created_date' => 'required|date',
                 'created_by' => 'nullable|string|max:255',
                 'country_id' => 'required|integer',

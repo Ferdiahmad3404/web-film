@@ -21,7 +21,7 @@ class AwardController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'award' => 'required|string|max:255|unique:awards,award',
+                'award' => 'required|string|max:64|unique:awards,award',
                 'country_id' => 'required|exists:countries,id',
                 'year' => 'required|integer|min:1900|max:' . date('Y'),
             ]);
