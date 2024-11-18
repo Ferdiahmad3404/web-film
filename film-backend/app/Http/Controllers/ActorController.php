@@ -31,7 +31,7 @@ class ActorController extends Controller
         try{
             // Validasi input
             $request->validate([
-                'name' => 'required|string|max:255',
+                'name' => 'required|string|max:64',
                 'country_id' => 'required|integer|exists:countries,id', 
                 'birth_date' => 'nullable|date',
                 'poster' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048', 

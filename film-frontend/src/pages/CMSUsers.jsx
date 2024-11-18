@@ -41,7 +41,6 @@ const CMSUsers = () => {
                 body: JSON.stringify({ duration }),
             });
             const data = await response.json();
-            console.log("Response", duration);
             if (!response.ok) {
                 throw new Error(data.message || 'Failed to suspend user.');
             }

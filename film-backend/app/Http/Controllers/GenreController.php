@@ -24,7 +24,7 @@ class GenreController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'genre' => 'required|string|max:255|unique:genres,genre', // Ensure genre name is unique
+                'genre' => 'required|string|max:32|unique:genres,genre', // Ensure genre name is unique
             ]);
 
             $genre = Genre::create($validatedData);

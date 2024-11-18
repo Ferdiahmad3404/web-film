@@ -20,7 +20,7 @@ class CountryController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'country' => 'required|string|max:255|unique:countries,country',
+                'country' => 'required|string|max:32|unique:countries,country',
             ]);
 
             // ID akan dihasilkan secara otomatis oleh Laravel
