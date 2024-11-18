@@ -36,8 +36,11 @@ class UserController extends Controller
             $suspendedUntil = now()->addDay();
         } elseif ($duration === '7d') {
             $suspendedUntil = now()->addWeek();
+        } elseif ($duration === '1m') {
+            $suspendedUntil = now()->addMinute();
+        } elseif ($duration === 'null') {
+            return response()->json(['message' => 'Invalid duration.'], 400);
         }
-
         $user->update(['suspended_until' => $suspendedUntil]);
 
         return response()->json(['message' => 'User suspended successfully!']);

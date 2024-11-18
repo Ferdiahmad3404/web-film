@@ -81,7 +81,7 @@ const Login = () => {
                         type="text"
                         name="identifier"
                         id="identifier"
-                        className="shadow-sm rounded-full bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-transparent dark:border-yellow-900 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                        className="shadow-sm rounded-full bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         placeholder="name@flowbite.com or username"
                         required
                         onChange={handleChange}
@@ -93,7 +93,7 @@ const Login = () => {
                         type="password"
                         name="password"
                         id="password"
-                        className="shadow-sm rounded-full bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-transparent dark:border-yellow-900 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+                        className="shadow-sm rounded-full bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         placeholder="********"
                         required
                         onChange={handleChange}

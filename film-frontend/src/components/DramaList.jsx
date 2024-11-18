@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import FiltersAndSorting from './FiltersAndSorting'; // Pastikan import komponen ini
 
-const DramaList = ({ searchTerm = ''}) => {
+const DramaList = ({ searchTerm = ""}) => {
   const [dramaData, setDramaData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [genres, setGenres] = useState([]); // State untuk genre
@@ -164,6 +164,7 @@ const DramaList = ({ searchTerm = ''}) => {
         years={years}
         platforms={platforms} 
         initialSearchTerm={searchTerm}
+        filteredData={filteredData}
       />
       
       {searchTerm.length > 0 ? (
@@ -172,7 +173,7 @@ const DramaList = ({ searchTerm = ''}) => {
       </div>
       ) : ('')}
       <div className="grid grid-cols-5 gap-4 p-4 mb-16 w-full h-full ">
-        {searchTerm.length > 0 && filteredData == null ? (
+        {searchTerm.length > 0 ? (
           currentDramaFiltered.map((drama) => (
             <div key={drama.id}>
               <div className="relative group bg-opacity-0 rounded-lg overflow-hidden w-full h-5/6 z-10">
@@ -231,26 +232,26 @@ const DramaList = ({ searchTerm = ''}) => {
       {/* Pagination ketika ada searchTerm */}
       {searchTerm.length > 0 ? (
         <>
-          {currentPageFiltered > 1 && (
+          {currentPage > 1 && (
             <button
-              onClick={() => handlePageChangeFiltered(currentPageFiltered - 1)}
+              onClick={() => handlePageChange(currentPage - 1)}
               className="mx-1 px-3 py-1 rounded bg-white text-blue-500 border"
             >
               Prev
             </button>
           )}
-          {getPageNumbersFiltered().map(page => (
+          {getPageNumbers().map(page => (
             <button
               key={page}
-              onClick={() => handlePageChangeFiltered(page)}
-              className={`mx-1 px-3 py-1 rounded ${currentPageFiltered === page ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 border'}`}
+              onClick={() => handlePageChange(page)}
+              className={`mx-1 px-3 py-1 rounded ${currentPage === page ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 border'}`}
             >
               {page}
             </button>
           ))}
-          {currentPageFiltered < totalPagesFiltered && (
+          {currentPage < totalPagesFiltered && (
             <button
-              onClick={() => handlePageChangeFiltered(currentPageFiltered + 1)}
+              onClick={() => handlePageChange(currentPage + 1)}
               className="mx-1 px-3 py-1 rounded bg-white text-blue-500 border"
             >
               Next

@@ -365,7 +365,7 @@ const CMSDramaInput = () => {
     
             // Navigasi ke halaman lain setelah 5 detik
             setTimeout(() => {
-                navigate('/admin-dashboard');
+                    navigate('/admin-dashboard');
             }, 5000);
         } catch (error) {
             console.error('Error submitting form:', error);
@@ -437,10 +437,36 @@ const CMSDramaInput = () => {
                                         onChange={handlePosterChange}
                                     />
                                 </div>
-                                <button type="submit" className="w-full px-6 py-3 mt-4 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600">
+                                {location.state?.drama && (
+                                    <div>
+                                        <label htmlFor="status" className="block mt-10 text-sm font-medium text-gray-900">
+                                            Status
+                                        </label>
+                                        <select
+                                            id="status"
+                                            name="status"
+                                            value={formData.status}
+                                            onChange={handleInputChange}
+                                            className="block w-full p-2.5 border border-gray-300 rounded-lg "
+                                            style={{
+                                                backgroundColor: formData.status === 'approved' ? 'green' :
+                                                                formData.status === 'pending' ? 'blue' :
+                                                                formData.status === 'unapproved' ? 'red' : 'gray',
+                                                color: 'white'
+                                            }}
+                                        >
+                                            <option value="">Select Status</option>
+                                            <option value='approved' className="text-white">Approved</option>
+                                            <option value='pending' className="text-white">Pending</option>
+                                            <option value='unapproved' className="text-white">Unapproved</option>
+                                        </select>
+                                    </div>
+                                )}
+                                <button type="submit" className="w-full px-6 py-3 mt-14 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600">
                                     {location.state?.drama ? 'Update Drama' : 'Submit'}
                                 </button>
                             </div>
+                            
 
                             <div className="w-full max-w-4xl space-y-6">
                                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">

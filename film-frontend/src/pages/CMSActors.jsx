@@ -27,7 +27,7 @@ const CMSActors = () => {
         fetchActors();
         fetchCountries();
         getFilteredAndSortedActors();
-    }, []);
+    });
 
     const fetchActors = async () => {
         try {
@@ -120,6 +120,7 @@ const CMSActors = () => {
             }
             console.log('Actor added successfully:', result);
             resetForm();
+            fetchActors();
             showMessage('Actor added successfully!', 'success');
         } catch (error) {
             console.error('Error adding actor:', error);

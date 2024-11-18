@@ -36,7 +36,7 @@ const CMSUsers = () => {
 
         try {
             const response = await fetch(`http://localhost:8000/users/suspend/${userId}`, {
-                method: 'PUT',
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ duration }),
             });
@@ -59,6 +59,20 @@ const CMSUsers = () => {
             ...prevDurations,
             [userId]: duration,
         }));
+    };
+
+    const calculateSuspensionStatus = (suspensionEnd) => {
+        if (!suspensionEnd) return 'Active';
+
+        const now = new Date();
+        const end = new Date(suspensionEnd);
+        const timeRemaining = end - now;
+
+        if (timeRemaining <= 0) return 'Active';
+
+        const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
+        const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+        return  `${hours}h ${minutes}m remaining`;
     };
 
     // Pagination logic
@@ -93,6 +107,7 @@ const CMSUsers = () => {
                                         <th scope="col" className="px-4 py-4">Name</th>
                                         <th scope="col" className="px-4 py-4">Email</th>
                                         <th scope="col" className="px-4 py-4">Role</th>
+                                        <th scope="col" className="px-4 py-4">Suspension Status</th>
                                         <th scope="col" className="px-4 py-4">Action</th>
                                         <th scope="col" className="px-4 py-4">Suspension Duration</th>
                                     </tr>
@@ -103,6 +118,9 @@ const CMSUsers = () => {
                                             <td className="px-4 py-3">{user.username}</td>
                                             <td className="px-4 py-3">{user.email}</td>
                                             <td className="px-4 py-3">{user.role_id}</td>
+                                            <td className="px-4 py-3">
+                                                {calculateSuspensionStatus(user.suspended_until)}
+                                            </td>
                                             <td className="px-4 py-3">
                                                 <button
                                                     onClick={() => suspendUser(user.id)}
@@ -116,6 +134,8 @@ const CMSUsers = () => {
                                                     className="border p-1 rounded"
                                                     onChange={(e) => handleSuspendDurationChange(user.id, e.target.value)}
                                                 >
+                                                    <option value="null">-</option>
+                                                    <option value="1m">1 Minutes</option>
                                                     <option value="1h">1 Hour</option>
                                                     <option value="1d">1 Day</option>
                                                     <option value="7d">1 Week</option>

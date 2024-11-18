@@ -63,7 +63,7 @@ function App() {
           <Route path='/cmsactors' element={<PrivateRoute element={<CMSActors />} requiredRoles={['admin']} />} />
           <Route path='/cmscomments' element={<PrivateRoute element={<CMSComments />} requiredRoles={['admin']} />} />
           <Route path='/cmsdramas' element={<PrivateRoute element={<CMSDramas />} requiredRoles={['admin']} />} />
-          <Route path='/cmsdramainput' element={<PrivateRoute element={<CMSDramainput />} requiredRoles={['admin']} />} />
+          <Route path='/cmsdramainput' element={<PrivateRoute element={<CMSDramainput />} requiredRoles={['admin', 'user']} />} />
           <Route path='/cmsusers'element={<PrivateRoute element={<CMSUsers />} requiredRoles={['admin']} />} />
         </Routes>
       </div>
