@@ -41,7 +41,6 @@ class FilmController extends Controller
                 'stream_site' => 'nullable|string',
                 'year' => 'required|integer',
                 'status' => 'required|string|max:16',
-                'created_date' => 'required|date',
                 'created_by' => 'nullable|string|max:255',
                 'country_id' => 'required|integer',
                 'genres' => 'nullable|array',
@@ -54,7 +53,6 @@ class FilmController extends Controller
             // Membuat film baru
             $film = Film::create(array_merge($request->all(), [
                 'url_cover' => $path,
-                'created_date' => now(), // Mengisi created_date dengan timestamp saat ini
             ]));
 
             // Menghubungkan film dengan genre
@@ -68,7 +66,7 @@ class FilmController extends Controller
             }
             
 
-            return response()->json(['message' => 'Film added successfully', 'data' => $film], 201);
+            return response()->json(['message' => 'Film added successfully', 'success' => true, 'data' => $film], 201);
         } catch (\Exception $e) {
             // Menangkap kesalahan dan mengembalikan respons JSON
             return response()->json(['error' => 'Internal Server Error', 'message' => $e->getMessage()], 500);
@@ -145,7 +143,7 @@ class FilmController extends Controller
             Log::info('Updated actors:', $request->input('actors'));
         }
 
-        return response()->json(['message' => 'Film updated successfully', 'data' => $film], 200);
+        return response()->json(['message' => 'Film updated successfully', 'success' => true, 'data' => $film], 200);
     }
 
 
@@ -181,7 +179,7 @@ class FilmController extends Controller
         // Terakhir, hapus data film
         $film->delete();
 
-        return response()->json(['message' => 'Actor and all related data deleted successfully'], 200);
+        return response()->json(['message' => 'Drama and all related data deleted successfully', 'success' => true], 200);
     }
 
 }

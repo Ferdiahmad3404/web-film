@@ -47,6 +47,7 @@ class ActorController extends Controller
 
             return response()->json([
                 'message' => 'Actor added successfully',
+                'success' => true,
                 'data' => $actor
             ], 201);
         } catch (\Exception $e) {
@@ -96,7 +97,7 @@ class ActorController extends Controller
 
         try {
             if ($actor->save()) {
-                return response()->json(['message' => 'Actor updated successfully', 'data' => $actor], 200);
+                return response()->json(['message' => 'Actor updated successfully', 'success' => true, 'data' => $actor], 200);
             } else {
                 return response()->json(['message' => 'Error updating actor'], 500);
             }
@@ -129,6 +130,6 @@ class ActorController extends Controller
         // Hapus data aktor dari database
         $actor->delete();
 
-        return response()->json(['message' => 'Actor and poster deleted successfully'], 200);
+        return response()->json(['message' => 'Actor and poster deleted successfully', 'success' => true], 200);
     }
 }

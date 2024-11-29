@@ -258,7 +258,7 @@ const CMSDramaInput = () => {
         data.append('stream_site', formData.stream_site);
         data.append('year', formData.year);
         data.append('status', formData.status);
-        data.append('created_date', new Date().toISOString()); // mengisi tanggal saat ini
+        // data.append('created_date', new Date().toISOString()); // mengisi tanggal saat ini
         data.append('country_id', formData.country_id);
         data.append('created_by', formData.created_by);
         data.append('award', formData.award);
