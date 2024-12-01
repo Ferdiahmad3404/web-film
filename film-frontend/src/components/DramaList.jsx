@@ -14,7 +14,7 @@ const DramaList = ({ searchTerm = ""}) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('http://localhost:8000/films');
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/films`);
       const data = await response.json();
       setDramaData(data.data); // Mengambil data dari respons JSON
 
@@ -107,7 +107,7 @@ const DramaList = ({ searchTerm = ""}) => {
     fetchData();
   }, []);
 
-  const BASE_URL = 'http://localhost:8000/storage/'; // Ganti dengan URL dasar Anda
+  const BASE_URL = `${import.meta.env.VITE_API_URL}//storage/`; // Ganti dengan URL dasar Anda
 
   // Fungsi untuk mendapatkan URL gambar yang benar
   const getImageUrl = (url) => {

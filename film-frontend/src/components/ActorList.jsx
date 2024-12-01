@@ -13,7 +13,7 @@ const ActorList = ({ actors, editActors, deleteActors, actorsPerPage, currentPag
         setTempActors(null);
     };
 
-    const BASE_URL = 'http://localhost:8000/storage/';
+    const BASE_URL = `${import.meta.env.VITE_API_URL}/storage/`;
 
     // Fungsi untuk mendapatkan URL gambar yang benar
     const getImageUrl = (url) => {

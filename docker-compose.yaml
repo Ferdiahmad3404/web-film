@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  frontend_dev:
+      container_name: dramaku_frontend_dev
+      build:
+        context: ./film-frontend
+        dockerfile: Dockerfile.frontenddev
+      ports:
+        - "3000:80"
+      environment:
+        - VITE_API_URL=http://localhost:3001
+        - VITE_API_ROUTE_URL=http://localhost:3001/api
+  backend:
+    container_name: dramaku_backend
+    image: dramaku_backend:latest
+    build: 
+      context: ./film-backend
+      dockerfile: Dockerfile.backend
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+    env_file:
+      - ./film-backend/.env
+  db:
+    container_name: dramaku_db
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: DramaKu
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "DramaKu"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+volumes:
+  pgdata: {}

@@ -27,7 +27,7 @@ const CMSCountries = () => {
 
     const fetchCountries = async () => {
         try {
-            const response = await fetch('http://localhost:8000/countries');
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/countries`);
             const data = await response.json();
             setCountries(data);
         } catch (error) {
@@ -41,7 +41,7 @@ const CMSCountries = () => {
             try {
                 const requestData = { country: newCountry.trim() };
 
-                const response = await fetch('http://localhost:8000/countries', {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/countries`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(requestData),
@@ -66,7 +66,7 @@ const CMSCountries = () => {
 
     const updateCountry = async (id, newName) => {
         try {
-            const response = await fetch(`http://localhost:8000/countries/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/countries/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ country: newName }),
@@ -89,7 +89,7 @@ const CMSCountries = () => {
     const deleteCountry = async (id) => {
         if (window.confirm('Are you sure you want to delete this country?')) {
             try {
-                const response = await fetch(`http://localhost:8000/countries/${id}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/countries/${id}`, {
                     method: 'DELETE',
                 });
 

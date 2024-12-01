@@ -16,7 +16,7 @@ const DetailFilm = () => {
     // Fungsi untuk mengambil data film berdasarkan ID
     const fetchFilmData = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/films/${id}`);
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/films/${id}`);
             const data = await response.json();
             setFilmData(data.data);
             setActorData(data.data.actors); 

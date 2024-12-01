@@ -36,7 +36,7 @@ const CMSAwards = () => {
 
     const fetchAwards = async () => {
         try {
-            const response = await fetch('http://localhost:8000/awards');
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/awards`);
             const data = await response.json();
             setAwards(data);
         } catch (error) {
@@ -47,7 +47,7 @@ const CMSAwards = () => {
     
     const fetchCountries = async () => {
         try {
-            const response = await fetch('http://localhost:8000/countries');
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/countries`);
             const data = await response.json();
             setCountries(data);
         } catch (error) {
