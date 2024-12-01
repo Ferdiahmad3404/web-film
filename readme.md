@@ -7,17 +7,75 @@
 
 Website ini dibuat untuk menyediakan informasi berbagai film yang ada. Informasi detail dari setiap film disertasi dengan rating dan komentar dari user.
 
+<br>
+
+## **Developer**
+
 ---
+
+<li>Ferdi Ahmad Ariesta - 221524041
+<li>Septyana Agustina - 221524060
+
+<br>
 
 ## **Tech Stack**
 
-**Client:** React, Vite, TailwindCSS
-
-**Server:** PHP, Laravel 
-
 ---
 
+<details>
+  <summary><strong>Frontend<strong></summary>
+  <ul>
+    <li>React</li>
+    <li>Vite</li>
+    <li>Tailwind CSS</li>
+    <li>React Router</li>
+    <li>Fetch API</li>
+  </ul>
+</details>
+
+<details>
+  <summary><strong>Backend</strong></summary>
+  <ul>
+    <li>PHP</li>
+    <li>Laravel</li>
+    <li>JWT Authentication</li>
+    <li>Google OAuth</li>
+  </ul>
+</details>
+
+<details>
+  <summary><strong>Database</strong></summary>
+  <ul>
+    <li>PostgreSQL</li>
+  </ul>
+</details>
+
+
+<details>
+  <summary><strong>Testing</strong></summary>
+  <ul>
+    <li>Jest</li>
+    <li>React Testing Library</li>
+  </ul>
+</details>
+
+<details>
+  <summary><strong>Deployment</strong></summary>
+  <ul>
+    <li>Docker</li>
+    <li>Docker Compose</li>
+    <!-- <li>Alibaba Cloud</li> -->
+  </ul>
+</details>
+
+<br>
+<br>
+
+# **Installation**
+
 ## **Run Locally**
+
+---
 
 ### **Set Up Front-End** 
 
@@ -108,9 +166,26 @@ Download setiap file csv dan jalankan setiap file python untuk memasukkan datany
 https://drive.google.com/drive/folders/1uBRGDFGFoq8SKYd-mdrb3KOBvmHrhjBx?usp=drive_link
 
 
----
+#### **Running**
+
+Terakhir setelah semuanya selesai, jalankan front-end dan back-end dengan perintah seperti berikut:
+
+Front-End
+```bash
+  npm run dev
+```
+
+Back-end
+
+```bash
+  php artisan serve
+```
+
+<br>
 
 ## **Run Locally with Docker**
+
+---
 
 ### **Set Up Front-End** 
 
@@ -132,7 +207,20 @@ Lorem Ipsum
   ipsum
 ```
 
+<br>
 
 ## **Installation Demo**
 
+---
+
 Insert gif or link to video
+
+<br>
+
+## **Akun Admin**
+
+---
+
+**Username:** admin
+
+**Password:** password123
