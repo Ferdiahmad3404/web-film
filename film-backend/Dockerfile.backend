@@ -20,6 +20,9 @@ RUN python3 -m venv /var/www/html/venv \
 # Salin proyek Laravel ke dalam container
 COPY . /var/www/html
 
+# Copy .env.example menjadi .env
+RUN cp /var/www/html/.env.example /var/www/html/.env
+
 # Set working directory
 WORKDIR /var/www/html
 
