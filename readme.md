@@ -11,16 +11,12 @@ Website ini dibuat untuk menyediakan informasi berbagai film yang ada. Informasi
 
 ## **Developer**
 
----
-
 <li>Ferdi Ahmad Ariesta - 221524041
 <li>Septyana Agustina - 221524060
 
 <br>
 
 ## **Tech Stack**
-
----
 
 <details>
   <summary><strong>Frontend<strong></summary>
@@ -74,8 +70,6 @@ Website ini dibuat untuk menyediakan informasi berbagai film yang ada. Informasi
 # **Installation**
 
 ## **Run Locally**
-
----
 
 ### **Set Up Front-End** 
 
@@ -185,8 +179,6 @@ Back-end
 
 ## **Run Locally with Docker**
 
----
-
 ### **Set Up Front-End** 
 
 #### **Pergi ke Directory Back-End**
@@ -211,15 +203,11 @@ Lorem Ipsum
 
 ## **Installation Demo**
 
----
-
 Insert gif or link to video
 
 <br>
 
 ## **Akun Admin**
-
----
 
 **Username:** admin
 
