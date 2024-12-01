@@ -176,24 +176,27 @@ Back-end
 
 ## **Run Locally with Docker**
 
-### **Set Up Front-End** 
+### **Pastikan Docker Desktop Sudah Terinstall** 
 
 #### **Pergi ke Directory Back-End**
 
-Lorem Ipsum
-
 ```bash
-  Lorem
+  cd film-backend
 ```
-    
-### **Set Up Back-End** 
-
-#### **Pergi ke Directory Back-End**
-
-Lorem Ipsum
+#### **Salin .env.example dan ubah nama menjadi.env**
 
 ```bash
-  ipsum
+  cp .env.example .env
+```
+#### **Pindah ke folder project utama**
+
+```bash
+  cd ..
+```
+#### **Buat image dan container dengan menggunakan docker compose**
+
+```bash
+  docker-compose up --build -d
 ```
 
 <br>
