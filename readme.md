@@ -7,16 +7,14 @@
 
 Website ini dibuat untuk menyediakan informasi berbagai film yang ada. Informasi detail dari setiap film disertasi dengan rating dan komentar dari user.
 
-<br>
-
-## **Developer**
+# **Developer**
 
 <li>Ferdi Ahmad Ariesta - 221524041
 <li>Septyana Agustina - 221524060
 
 <br>
 
-## **Tech Stack**
+# **Tech Stack**
 
 <details>
   <summary><strong>Frontend<strong></summary>
@@ -64,7 +62,6 @@ Website ini dibuat untuk menyediakan informasi berbagai film yang ada. Informasi
   </ul>
 </details>
 
-<br>
 <br>
 
 # **Installation**
