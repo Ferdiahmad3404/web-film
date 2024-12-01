@@ -1,0 +1,67 @@
+{
+    "version": 2,
+    "frameworks": null,
+    "functions": {
+        "api/index.php": {"runtime": "vercel-php@0.6.0"}
+    },
+    "routes": [
+        {
+            "src": "/build/(.*)",
+            "dest": "/public/build/"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/api/index.php"
+        }
+    ],
+    "public": true,
+    "buildcommand": "vite build",
+    "outputDirectory": "public",
+    "env": {
+        "APP_NAME": "Laravel",
+        "APP_ENV": "production",
+        "APP_KEY": "base64:X/2SJc1yg8h7U4+q66LVH6CGPorx3kCaZTRk2trhePs=",
+        "APP_DEBUG": "false",
+        "APP_TIMEZONE": "UTC",
+        "APP_URL": "https://your-vercel-app-url.vercel.app",
+        "DB_CONNECTION": "pgsql",
+        "DB_HOST": "bkvtqywt1wzedqum2ooo-postgresql.services.clever-cloud.com", 
+        "DB_PORT": "50013",
+        "DB_DATABASE": "bkvtqywt1wzedqum2ooo",
+        "DB_USERNAME": "urvnk7rpprk3h1n3adht", 
+        "DB_PASSWORD": "KBJTYM4eLd8di3qUG5lC", 
+        "SESSION_DRIVER": "database",
+        "SESSION_LIFETIME": "120",
+        "SESSION_ENCRYPT": "false",
+        "SESSION_PATH": "/",
+        "SESSION_DOMAIN": null,
+        "BROADCAST_CONNECTION": "log",
+        "FILESYSTEM_DISK": "local",
+        "QUEUE_CONNECTION": "database",
+        "CACHE_STORE": "database",
+        "CACHE_PREFIX": "",
+        "REDIS_CLIENT": "phpredis",
+        "REDIS_HOST": "127.0.0.1",
+        "REDIS_PASSWORD": null,
+        "REDIS_PORT": "6379",
+        "MAIL_MAILER": "log",
+        "MAIL_HOST": "127.0.0.1",
+        "MAIL_PORT": "2525",
+        "MAIL_USERNAME": null,
+        "MAIL_PASSWORD": null,
+        "MAIL_ENCRYPTION": null,
+        "MAIL_FROM_ADDRESS": "hello@example.com",
+        "MAIL_FROM_NAME": "Laravel",
+        "AWS_ACCESS_KEY_ID": "",
+        "AWS_SECRET_ACCESS_KEY": "",
+        "AWS_DEFAULT_REGION": "us-east-1",
+        "AWS_BUCKET": "",
+        "AWS_USE_PATH_STYLE_ENDPOINT": "false",
+        "VITE_APP_NAME": "Laravel",
+        "GOOGLE_CLIENT_ID": "30905211574-vajgt4np8af2j5ffpv9pkpmb1ain649a.apps.googleusercontent.com",
+        "GOOGLE_CLIENT_SECRET": "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",
+        "GOOGLE_REDIRECT_URI": "https://your-vercel-app-url.vercel.app/api/auth/google/callback",
+        "JWT_SECRET": "Ta89LYDCWxC9UTLPnJN72LUUTO2noIswyxF0BzPjlypbupzJ5vAqZFvBdo59rNOF",
+        "FRONTEND_URL": "https://web-film-self.vercel.app/"
+    }
+}
