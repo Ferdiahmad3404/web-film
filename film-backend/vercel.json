@@ -14,7 +14,6 @@
         }
     ],
     "public": true,
-    "buildcommand": "vite build",
     "outputDirectory": "public",
     "env": {
         "APP_NAME": "Laravel",
