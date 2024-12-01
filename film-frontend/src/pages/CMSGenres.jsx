@@ -25,7 +25,7 @@ const CMSGenres = () => {
 
     const fetchGenres = async () => {
         try {
-            const response = await fetch('http://localhost:8000/genres');
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/genres`);
             const data = await response.json();
             setGenres(data);
         } catch (error) {
@@ -39,7 +39,7 @@ const CMSGenres = () => {
             try {
                 const requestData = { genre: newGenre.trim() };
 
-                const response = await fetch('http://localhost:8000/genres', {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/genres`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(requestData),
@@ -64,7 +64,7 @@ const CMSGenres = () => {
 
     const updateGenre = async (id, newName) => {
         try {
-            const response = await fetch(`http://localhost:8000/genres/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/genres/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ genre: newName }),
@@ -88,7 +88,7 @@ const CMSGenres = () => {
     const deleteGenre = async (id) => {
         if (window.confirm('Are you sure you want to delete this genre?')) {
             try {
-                const response = await fetch(`http://localhost:8000/genres/${id}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/genres/${id}`, {
                     method: 'DELETE',
                 });
 

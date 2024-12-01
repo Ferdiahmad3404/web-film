@@ -18,7 +18,7 @@ const CMSUsers = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch('http://localhost:8000/users');
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/users`);
             const data = await response.json();
             setUsers(data);
             console.log(data);
@@ -35,7 +35,7 @@ const CMSUsers = () => {
         }
 
         try {
-            const response = await fetch(`http://localhost:8000/users/suspend/${userId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/users/suspend/${userId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ duration }),

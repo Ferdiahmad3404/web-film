@@ -17,7 +17,7 @@ const CMSDramas = () => {
     useEffect(() => {
         const fetchDramas = async () => {
             try {
-                const response = await fetch('http://localhost:8000/films');
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/films`);
                 const data = await response.json();
                 setDramas(data.data);
             } catch (error) {

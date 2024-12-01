@@ -19,7 +19,7 @@ const CMSComments = () => {
 
     const fetchComments = async () => {
         try {
-            const response = await fetch('http://localhost:8000/CMScomments');
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/CMScomments`);
             const data = await response.json();
             setComments(data);
         } catch (error) {
@@ -29,7 +29,7 @@ const CMSComments = () => {
 
     const updateCommentStatus = async (id, status) => {
         try {
-            await fetch(`http://localhost:8000/CMScomments/${id}/status`, {
+            await fetch(`${import.meta.env.VITE_API_URL}/${id}/status`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status }),

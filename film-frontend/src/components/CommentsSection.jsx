@@ -17,7 +17,7 @@ const CommentsSection = ({ id }) => {
 
     const fetchComments = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/films/${id}/comments`);
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/films/${id}/comments`);
             const data = await response.json();
 
             if (Array.isArray(data)) {

@@ -31,7 +31,7 @@ const CMSActors = () => {
 
     const fetchActors = async () => {
         try {
-            const response = await fetch('http://localhost:8000/actors'); 
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/actors`); 
             const data = await response.json();
             if (data.success) {
                 setActors(data.data);
@@ -43,7 +43,7 @@ const CMSActors = () => {
 
     const fetchCountries = async () => {
         try {
-            const response = await fetch('http://localhost:8000/countries'); 
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/countries`); 
             const data = await response.json();
             if (Array.isArray(data)) {
                 setCountries(data);
@@ -55,7 +55,7 @@ const CMSActors = () => {
         }
     };
 
-    const BASE_URL = 'http://localhost:8000/storage/';
+    const BASE_URL = `${import.meta.env.VITE_API_URL}/storage/`;
 
     // Fungsi untuk mendapatkan URL gambar yang benar
     const getImageUrl = (url) => {
@@ -110,7 +110,7 @@ const CMSActors = () => {
         data.append('poster', file); 
 
         try {
-            const response = await fetch('http://localhost:8000/actors', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/actors`, {
                 method: 'POST',
                 body: data,
             });
@@ -156,7 +156,7 @@ const CMSActors = () => {
         data.append('country_id', formData.country_id);
 
         try {
-            const response = await fetch(`http://localhost:8000/actors/${tempActors.id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/actors/${tempActors.id}`, {
                 method: 'POST',
                 body: data,
             });
@@ -179,7 +179,7 @@ const CMSActors = () => {
     const deleteActors = async (id) => {
         if (window.confirm('Are you sure you want to delete this actor?')) {
             try {
-                const response = await fetch(`http://localhost:8000/actors/${id}`, { 
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/actors/${id}`, { 
                     method: 'DELETE' 
                 });
     

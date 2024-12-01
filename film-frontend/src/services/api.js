@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Mengatur URL dasar API
-const API_URL = 'http://localhost:8000/api'; // Ganti dengan URL API Anda
+const API_URL = `${import.meta.env.VITE_API_ROUTE_URL}`; // Ganti dengan URL API Anda
 
 // Membuat instance Axios
 const api = axios.create({

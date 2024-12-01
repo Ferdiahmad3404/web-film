@@ -66,7 +66,7 @@ const FiltersAndSorting = ({ onFilterChange, onNameChange, genres, years, platfo
     }
   };
 
-  const BASE_URL = 'http://localhost:8000/storage/'; // Ganti dengan URL dasar Anda
+  const BASE_URL = `${import.meta.env.VITE_API_URL}/storage/`; // Ganti dengan URL dasar Anda
 
   // Fungsi untuk mendapatkan URL gambar yang benar
   const getImageUrl = (url) => {

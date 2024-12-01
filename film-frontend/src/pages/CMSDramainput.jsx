@@ -42,7 +42,7 @@ const CMSDramaInput = () => {
 
     const fetchCountries = async () => {
         try {
-            const response = await fetch('http://localhost:8000/countries');
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/countries`);
             const countriesData = await response.json(); // Get the data directly
     
             if (Array.isArray(countriesData)) { // Check if countriesData is an array
@@ -59,7 +59,7 @@ const CMSDramaInput = () => {
 
     const fetchGenres = async () => {
         try {
-            const response = await fetch('http://localhost:8000/genres');
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/genres`);
             const result = await response.json();
     
             if (Array.isArray(result)) { // Check if success is true and data is an array
@@ -76,7 +76,7 @@ const CMSDramaInput = () => {
 
     const fetchActors = async () => {
         try {
-            const response = await fetch('http://localhost:8000/actors');
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/actors`);
             const result = await response.json();
     
             if (result.success && Array.isArray(result.data)) { // Check if success is true and data is an array
@@ -93,7 +93,7 @@ const CMSDramaInput = () => {
 
     const fetchAwards = async () => {
         try {
-            const response = await fetch('http://localhost:8000/awards');
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/awards`);
             const result = await response.json()
             const filteredAwards = result.filter(award => award.drama_id === null)
             setAwards(filteredAwards)
