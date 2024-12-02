@@ -5,7 +5,7 @@ services:
       container_name: dramaku_frontend
       build:
         context: ./film-frontend
-        dockerfile: Dockerfile.frontend
+        dockerfile: Dockerfile.frontenddev
       ports:
         - "3000:80"
       environment:
