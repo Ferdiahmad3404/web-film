@@ -185,7 +185,7 @@ Back-end
 ```
 #### **hapus file `.env`**
 
-Jika melanjutkan dari run locally tanpa docker hapus terlebih dahulu file .env, namun jika langsung run dengan docker skip tahap ini
+Jika melanjutkan dari run locally tanpa docker hapus terlebih dahulu file `.env`, namun jika langsung run dengan docker skip tahap ini
 
 ```bash
   rm .env
