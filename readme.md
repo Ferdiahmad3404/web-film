@@ -205,7 +205,7 @@ Jika melanjutkan dari run locally tanpa docker hapus terlebih dahulu file `.env`
 
 ## **Installation Demo**
 
-Insert gif or link to video
+https://youtu.be/XFkHO-FmZHg
 
 <br>
 
