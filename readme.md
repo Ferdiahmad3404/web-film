@@ -183,10 +183,12 @@ Back-end
 ```bash
   cd film-backend
 ```
-#### **Salin .env.example dan ubah nama menjadi.env**
+#### **hapus file `.env`**
+
+Jika melanjutkan dari run locally tanpa docker hapus terlebih dahulu file .env, namun jika langsung run dengan docker skip tahap ini
 
 ```bash
-  cp .env.example .env
+  rm .env
 ```
 #### **Pindah ke folder project utama**
 
