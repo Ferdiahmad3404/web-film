@@ -169,7 +169,7 @@ Front-End
 Back-end
 
 ```bash
-  php artisan serve
+  php artisan serve --port=3001
 ```
 
 <br>
